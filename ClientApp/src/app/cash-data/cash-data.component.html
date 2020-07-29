@@ -1,11 +1,10 @@
 <h1>NBP</h1>
 
+<p *ngIf="!listofcash"><em>Loading...</em></p>
 
-
-<p *ngIf="!cash"><em>Loading...</em></p>
- 
-
-<table class='table table-striped ' aria-labelledby="tableLabel"  > <!--*ngIf="cash">-->
+<h4>Aktualne Kursy walut z NBP:</h4>
+<table class='table table-striped ' aria-labelledby="tableLabel" *ngIf="listofcash">
+  
   <thead>
     <tr>
       <th>Date</th>
@@ -17,7 +16,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let cash of Cash">
+    <tr *ngFor="let cash of listofcash">
       <td>{{ cash.date }}</td>
       <td>{{ cash.code}}</td>
       <td>{{ cash.bidPrice }}</td>

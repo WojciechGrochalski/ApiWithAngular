@@ -1,4 +1,4 @@
-import { Component,  Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -8,21 +8,18 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CashDataComponent  {
 
-  public cash: Cash[];
+  public listofcash: Cash[];
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<Cash[]>(baseUrl + 'cashmodel').subscribe(result => {
-      this.cash = result;
+    http.get<Cash[]>(baseUrl + 'api/Cash').subscribe(result => {
+      this.listofcash = result;
     }, error => console.error(error));
   }
 
-  //ngOnInit() {
-  //}
 
 }
 
 interface Cash {
-
 
 name: string;
 code: string;

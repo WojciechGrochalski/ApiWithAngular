@@ -1,0 +1,28 @@
+<h1>NBP</h1>
+
+
+
+<p *ngIf="!cash"><em>Loading...</em></p>
+ 
+
+<table class='table table-striped ' aria-labelledby="tableLabel"  > <!--*ngIf="cash">-->
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Code</th>
+      <th>Bid Price</th>
+      <th>Ask Price</th>
+      <th></th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cash of Cash">
+      <td>{{ cash.date }}</td>
+      <td>{{ cash.code}}</td>
+      <td>{{ cash.bidPrice }}</td>
+      <td>{{ cash.askPrice }}</td>
+    </tr>
+  </tbody>
+</table>
+

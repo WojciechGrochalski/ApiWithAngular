@@ -1,3 +1,5 @@
+using AngularApi.MyTools;
+using AngularApi.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +12,7 @@ namespace AngularApi
 {
     public class Startup
     {
+        UpdateFileService updateFile = new UpdateFileService();
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -18,7 +21,7 @@ namespace AngularApi
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services )
         {
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
@@ -26,6 +29,8 @@ namespace AngularApi
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddHostedService<UpdateFileService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

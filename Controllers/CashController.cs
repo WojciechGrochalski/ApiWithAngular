@@ -16,14 +16,14 @@ namespace AngularApi.Controllers
     [Route("api/[controller]")]
     public class CashController : Controller
     {
-        CashModel cashModel = new CashModel();
+        CashModel _cashModel = new CashModel();
 
         [HttpGet]
-        public CashModel[] Get()
+        public List<CashModel> Get()
         {
-            cashModel.GetData();
-          
-            return CashModel.cashModelsList.ToArray();
+            _cashModel.GetData();
+
+            return CashModel.cashModelsList;//.ToArray();
         }
 
        

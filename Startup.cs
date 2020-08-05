@@ -14,7 +14,7 @@ namespace AngularApi
 {
     public class Startup
     {
-        UpdateFileService updateFile = new UpdateFileService();
+       
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,6 +25,13 @@ namespace AngularApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services )
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -35,9 +42,9 @@ namespace AngularApi
             services.AddHostedService<UpdateFileService>();
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //>>>>>>>>>>>>>>>Data base >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //var connection = @"Server=(localdb)\mssqllocaldb;Database=CashDB;Trusted_Connection=True;ConnectRetryCount=0";
+            // var connection = @"Server=(localdb)\mssqllocaldb;Database=CashDB;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<CashDBContext>(options =>
-                     options.UseSqlite(Configuration.GetConnectionString("DeafultConnections")));
+                     options.UseSqlServer(Configuration.GetConnectionString("DBCashString")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -12,7 +12,7 @@ namespace AngularApi.Migrations
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
                     Code = table.Column<string>(nullable: true),
                     BidPrice = table.Column<string>(nullable: true),
@@ -29,7 +29,7 @@ namespace AngularApi.Migrations
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     Pass = table.Column<string>(nullable: true),

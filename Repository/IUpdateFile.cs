@@ -7,6 +7,7 @@ namespace AngularApi.Repository
 {
    public interface IUpdateFile
     {
-        public void UpdateCash();
+        
+        public static void SaveToFile(string path, string text, bool appendText) { }
     }
 }

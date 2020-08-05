@@ -9,12 +9,11 @@ namespace AngularApi.DataBase
 {
     public class CashDBContext : DbContext
     {
-
-        public CashDBContext(DbContextOptions<CashDBContext> options)
-            : base(options)
+      
+        public CashDBContext(DbContextOptions<CashDBContext> options) : base(options)
         {
-
         }
+
 
         public DbSet<CashDBModel> cashDBModels { get; set; }
         public DbSet<UserDBModel> userDBModels { get; set; }

@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 
 namespace AngularApi.MyTools
 {
-    public class UpdateFileService: IHostedService
+    public class UpdateFileService: IHostedService, IUpdateFile
     {
-
-      private string day { get;  set; }      
-      private static Timer updateDataBase;
-      private TimeSpan periodTime;
+        public static string IsoPath = @"Data/Iso.json";
+        public static string RecentHistoryPath = @"Data/RecentHistory.json";
+        public static string TestPath = @"Data/test.json";
+        private string day { get;  set; }      
+        private static Timer updateDataBase;
+        private TimeSpan periodTime;
 
 
         public void UpdateCash(object state)
@@ -37,19 +39,19 @@ namespace AngularApi.MyTools
 
             }
             
-            string path = @"Data/RecentHistory.json";
-            path = Path.GetFullPath(path);
-            string fileContent = File.ReadAllText(path);
-             if (fileContent==String.Empty)
-             {
-                  File.WriteAllText(path, "XD");
-             }
-             else
-             {
-                  fileContent = File.ReadAllText(path);
-                  fileContent += "\nXD";
-                  File.WriteAllText(path, fileContent);
-             }
+            //string path = @"Data/RecentHistory.json";
+            //path = Path.GetFullPath(path);
+            //string fileContent = File.ReadAllText(path);
+            // if (fileContent==String.Empty)
+            // {
+            //      File.WriteAllText(path, "XD");
+            // }
+            // else
+            // {
+            //      fileContent = File.ReadAllText(path);
+            //      fileContent += "\nXD";
+            //      File.WriteAllText(path, fileContent);
+            // }
 
         }
 
@@ -68,6 +70,48 @@ namespace AngularApi.MyTools
             return TimeSpan.FromHours(24);
         }
 
+        //public void SaveToFile(string path,string text)
+        //{
+        //    path = Path.GetFullPath(path);
+        //    string fileContent = File.ReadAllText(path);
+        //    if (fileContent == String.Empty)
+        //    {
+        //        File.WriteAllText(path, text);
+        //    }
+        //    else
+        //    {
+        //        fileContent = File.ReadAllText(path);
+        //        fileContent += "\n"+text;
+        //        File.WriteAllText(path, fileContent);
+        //    }
+        //}
+        public static void SaveToFile(string pathToFile, string text, bool appendText)
+        {
+            string path = Path.GetFullPath(pathToFile);
+            if (appendText)
+            {
+                string fileContent = File.ReadAllText(path);
+                if (fileContent == String.Empty)
+                {
+                    File.WriteAllText(path, text);
+                }
+                else
+                {
+                    fileContent = File.ReadAllText(path);
+                    fileContent += "\n"+text;
+                    File.WriteAllText(path, fileContent);
+                }
+            }
+            else
+            {
+                File.WriteAllText(path, text);
+            }
+        }
+        /// <summary>
+        /// Backgound task functions
+        /// </summary>
+        /// <param ></param>
+        /// <returns></returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
             updateDataBase = new Timer(UpdateCash, null, TimeSpan.Zero,
@@ -82,5 +126,7 @@ namespace AngularApi.MyTools
 
             return Task.CompletedTask;
         }
+
+       
     }
 }

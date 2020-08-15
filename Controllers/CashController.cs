@@ -19,7 +19,6 @@ namespace AngularApi.Controllers
     public class CashController : ControllerBase
     {
         CashModel _cashModel = new CashModel();
-        UserDBModel user;
         private readonly CashDBContext _context;
 
         public CashController(CashDBContext context)

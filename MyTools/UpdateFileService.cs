@@ -1,29 +1,40 @@
-﻿using AngularApi.Repository;
+﻿using AngularApi.DataBase;
+using AngularApi.Models;
+using AngularApi.Repository;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
 
 namespace AngularApi.MyTools
 {
-    public class UpdateFileService: IHostedService, IUpdateFile
+    public class UpdateFileService: IHostedService
     {
         public static string IsoPath = @"Data/Iso.json";
         public static string RecentHistoryPath = @"Data/RecentHistory.json";
         public static string TestPath = @"Data/test.json";
+        public static string LogsPath = @"Data/Logs.txt";
         private string day { get;  set; }      
         private static Timer updateDataBase;
         private TimeSpan periodTime;
+        IUpdateFile updateFile;
+
+        List<CashDBModel> listOfCash = new List<CashDBModel>();
+
+
 
 
         public void UpdateCash(object state)
         {
 
             this.periodTime = CheckIsItWeekend();
+
             //sprawdz jak porownać konkretną godzine
            
             if (DateTime.UtcNow.Hour< 8)
@@ -38,20 +49,11 @@ namespace AngularApi.MyTools
                 }
 
             }
-            
-            //string path = @"Data/RecentHistory.json";
-            //path = Path.GetFullPath(path);
-            //string fileContent = File.ReadAllText(path);
-            // if (fileContent==String.Empty)
-            // {
-            //      File.WriteAllText(path, "XD");
-            // }
-            // else
-            // {
-            //      fileContent = File.ReadAllText(path);
-            //      fileContent += "\nXD";
-            //      File.WriteAllText(path, fileContent);
-            // }
+            Thread.Sleep(TimeSpan.FromMinutes(16));
+
+           listOfCash=updateFile.DownloadActual();
+            updateFile.SendCurrencyToDataBase(listOfCash);
+        
 
         }
 
@@ -70,21 +72,7 @@ namespace AngularApi.MyTools
             return TimeSpan.FromHours(24);
         }
 
-        //public void SaveToFile(string path,string text)
-        //{
-        //    path = Path.GetFullPath(path);
-        //    string fileContent = File.ReadAllText(path);
-        //    if (fileContent == String.Empty)
-        //    {
-        //        File.WriteAllText(path, text);
-        //    }
-        //    else
-        //    {
-        //        fileContent = File.ReadAllText(path);
-        //        fileContent += "\n"+text;
-        //        File.WriteAllText(path, fileContent);
-        //    }
-        //}
+     
         public static void SaveToFile(string pathToFile, string text, bool appendText)
         {
             string path = Path.GetFullPath(pathToFile);
@@ -126,7 +114,8 @@ namespace AngularApi.MyTools
 
             return Task.CompletedTask;
         }
-
+      
        
+
     }
 }

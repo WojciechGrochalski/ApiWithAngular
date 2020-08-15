@@ -44,7 +44,9 @@ namespace AngularApi
             //>>>>>>>>>>>>>>>Data base >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             // var connection = @"Server=(localdb)\mssqllocaldb;Database=CashDB;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<CashDBContext>(options =>
-                     options.UseSqlServer(Configuration.GetConnectionString("DBCashString")));
+                     options.UseSqlServer(Configuration.GetConnectionString("MyAzureDataBase")));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -48,8 +48,9 @@ namespace AngularApi.MyTools
                     }
                 }
 
+                Thread.Sleep(TimeSpan.FromMinutes(16));
             }
-            Thread.Sleep(TimeSpan.FromMinutes(16));
+            
 
            listOfCash=updateFile.DownloadActual();
             updateFile.SendCurrencyToDataBase(listOfCash);

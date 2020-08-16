@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace AngularApi.MyTools
@@ -23,37 +24,38 @@ namespace AngularApi.MyTools
         private string day { get; set; }
         private static Timer updateDataBase;
         private TimeSpan periodTime;
-        IUpdateFile updateFile;
+       
+
+        MyWebParser parser = new MyWebParser();
+
+
 
         List<CashDBModel> listOfCash = new List<CashDBModel>();
-
-
 
 
         public void UpdateCash(object state)
         {
 
-            
-            periodTime = SetTimer(day);
 
-            if (!DateTime.Today.DayOfWeek.Equals("Sunday")&&
-                   !DateTime.Today.DayOfWeek.Equals("Saturnday")) {
+            periodTime = SetTimer();
 
-                if (!updateFile.CheckDatabase())
-                {
+            if (DateTime.Today.DayOfWeek.ToString() != "Sunday" &&
+                   DateTime.Today.DayOfWeek.ToString() != "Saturnday")
+            {
 
-                    listOfCash = updateFile.DownloadActual();
-                    updateFile.SendCurrencyToDataBase(listOfCash);
-                }
+
+                listOfCash = parser.DownloadActual();
+                parser.SendCurrencyToDataBase(listOfCash);
+
             }
 
         }
 
-      
 
-        private TimeSpan SetTimer(string day)
+
+        private TimeSpan SetTimer()
         {
-           
+
             return SetMinuts();
         }
 
@@ -67,7 +69,7 @@ namespace AngularApi.MyTools
                     if (acctualhour == 8)
                     {
                         break;
-                        
+
                     }
                 }
 
@@ -75,7 +77,7 @@ namespace AngularApi.MyTools
             }
             else
             {
-                int hourToSubtract=0;
+                int hourToSubtract = 0;
                 int acctualhour = DateTime.UtcNow.Hour;
                 for (int i = acctualhour; i > 0; i--)
                 {

@@ -14,7 +14,7 @@ namespace AngularApi.Repository
 
         public void SaveToFile(string pathToFile, string text, bool appendText);
 
-        public bool CheckDatabase();
+        
 
 
 

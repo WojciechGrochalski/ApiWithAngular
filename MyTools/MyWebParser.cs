@@ -12,24 +12,24 @@ using System.Threading.Tasks;
 
 namespace AngularApi.MyTools
 {
-    public class MyWebParser:IUpdateFile
+    public class MyWebParser : IUpdateFile
     {
-         readonly WebClient webClient = new WebClient();
-         List<CashDBModel> _listCashDBContexts = new List<CashDBModel>();
-         CashDBModel _cashModel = new CashDBModel();
-         private CashDBContext _context;
+        readonly WebClient webClient = new WebClient();
+        List<CashDBModel> _listCashDBContexts = new List<CashDBModel>();
+        CashDBModel _cashModel = new CashDBModel();
+        private CashDBContext _context;
 
-         string[] isoArray;
-         string url;
-         string reply;
+        string[] isoArray;
+        string url;
+        string reply;
 
 
-        
-        public MyWebParser( CashDBContext context)
+
+        public MyWebParser(CashDBContext context)
         {
             _context = context;
         }
-        public  List<CashDBModel> DownloadActual()
+        public List<CashDBModel> DownloadActual()
         {
             GetIsoFromFile(ref isoArray);
             foreach (var iso in isoArray)
@@ -50,18 +50,35 @@ namespace AngularApi.MyTools
 
         public void SendCurrencyToDataBase(List<CashDBModel> _listOfValue)
         {
+            //  CashDBModel d = _context.cashDBModels.FirstOrDefault(s => s.Data == DateTime.Now.Date);
+
             foreach (CashDBModel cash in _listOfValue)
             {
                 _context.cashDBModels.Add(cash);
                 _context.SaveChanges();
                 string LogsMessage = cash.ToString() + "Wpisano: " + DateTime.UtcNow.ToString();
                 SaveToFile(UpdateFileService.LogsPath, LogsMessage, true);
-               
+
             }
-           
         }
 
-        public  void SaveToFile(string pathToFile, string text,  bool  appendText=false)
+        public bool CheckDatabase()
+        {
+            var query = from s in _context.cashDBModels
+                        where s.Data == DateTime.Now.Date
+                        select s;
+            //today database dont be updated
+            if (query == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public void SaveToFile(string pathToFile, string text, bool appendText = false)
         {
             string path = Path.GetFullPath(pathToFile);
             if (appendText)

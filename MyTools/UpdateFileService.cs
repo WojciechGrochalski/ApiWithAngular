@@ -14,13 +14,13 @@ using System.Threading.Tasks;
 
 namespace AngularApi.MyTools
 {
-    public class UpdateFileService: IHostedService
+    public class UpdateFileService : IHostedService
     {
         public static string IsoPath = @"Data/Iso.json";
         public static string RecentHistoryPath = @"Data/RecentHistory.json";
         public static string TestPath = @"Data/test.json";
         public static string LogsPath = @"Data/Logs.txt";
-        private string day { get;  set; }      
+        private string day { get; set; }
         private static Timer updateDataBase;
         private TimeSpan periodTime;
         IUpdateFile updateFile;
@@ -33,47 +33,61 @@ namespace AngularApi.MyTools
         public void UpdateCash(object state)
         {
 
-            this.periodTime = CheckIsItWeekend();
+            
+            periodTime = SetTimer(day);
 
-            //sprawdz jak porownać konkretną godzine
-           
-            if (DateTime.UtcNow.Hour< 8)
-            {
-                int x = DateTime.UtcNow.Hour;
-                for (int i = x; i < 24; i++)
+            if (!DateTime.Today.DayOfWeek.Equals("Sunday")&&
+                   !DateTime.Today.DayOfWeek.Equals("Saturnday")) {
+
+                if (!updateFile.CheckDatabase())
                 {
-                    if (x == 8)
+
+                    listOfCash = updateFile.DownloadActual();
+                    updateFile.SendCurrencyToDataBase(listOfCash);
+                }
+            }
+
+        }
+
+      
+
+        private TimeSpan SetTimer(string day)
+        {
+           
+            return SetMinuts();
+        }
+
+        private TimeSpan SetMinuts()
+        {
+            if (DateTime.UtcNow.Hour < 8)
+            {
+                int acctualhour = DateTime.UtcNow.Hour;
+                for (int i = acctualhour; i < 24; i++)
+                {
+                    if (acctualhour == 8)
                     {
                         break;
+                        
                     }
                 }
 
-                Thread.Sleep(TimeSpan.FromMinutes(16));
+                return TimeSpan.FromHours(24) + TimeSpan.FromMinutes(16);
             }
-            
-
-           listOfCash=updateFile.DownloadActual();
-            updateFile.SendCurrencyToDataBase(listOfCash);
-        
-
-        }
-
-        private TimeSpan CheckIsItWeekend()
-        {
-            if(DateTime.Today.DayOfWeek.Equals("Sunday") )
+            else
             {
-                this.day = "Sunday";
-                
+                int hourToSubtract=0;
+                int acctualhour = DateTime.UtcNow.Hour;
+                for (int i = acctualhour; i > 0; i--)
+                {
+                    if (acctualhour == 8)
+                    {
+                        hourToSubtract = i;
+                        break;
+                    }
+                }
+                return TimeSpan.FromHours(24 - hourToSubtract) + TimeSpan.FromMinutes(16);
             }
-            else if (DateTime.Today.DayOfWeek.Equals("Saturday"))
-            {
-                this.day = "Saturday";
-                return TimeSpan.FromHours(48);
-            }
-            return TimeSpan.FromHours(24);
         }
-
-     
         public static void SaveToFile(string pathToFile, string text, bool appendText)
         {
             string path = Path.GetFullPath(pathToFile);
@@ -87,7 +101,7 @@ namespace AngularApi.MyTools
                 else
                 {
                     fileContent = File.ReadAllText(path);
-                    fileContent += "\n"+text;
+                    fileContent += "\n" + text;
                     File.WriteAllText(path, fileContent);
                 }
             }
@@ -115,8 +129,8 @@ namespace AngularApi.MyTools
 
             return Task.CompletedTask;
         }
-      
-       
+
+
 
     }
 }

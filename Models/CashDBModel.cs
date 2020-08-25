@@ -13,5 +13,18 @@ namespace AngularApi.Models
         public string BidPrice { get; set; }
         public string AskPrice { get; set; }
         public DateTime Data { get; set; }
+
+        public CashDBModel()
+        {
+
+        }
+        public CashDBModel(string name, string code, string bidPrice, string askPrice, DateTime data)
+        {
+            Name = name;
+            Code = code;
+            BidPrice = bidPrice;
+            AskPrice = askPrice;
+            Data = data;
+        }
     }
 }

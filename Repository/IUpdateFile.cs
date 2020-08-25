@@ -1,4 +1,5 @@
-﻿using AngularApi.Models;
+﻿using AngularApi.DataBase;
+using AngularApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +9,12 @@ namespace AngularApi.Repository
 {
    public interface IUpdateFile
     {
-        public List<CashDBModel> DownloadActual();
+        public CashDBModel DownloadActual(string iso);
 
-        public void SendCurrencyToDataBase(List<CashDBModel> _listOfValue);
+        public void SendCurrencyToDataBase(List<CashDBModel> _listOfValue, CashDBContext _context);
 
         public void SaveToFile(string pathToFile, string text, bool appendText);
 
-        
-
-
-
+        public string[] GetIsoFromFile(string[] isoArray);
     }
 }

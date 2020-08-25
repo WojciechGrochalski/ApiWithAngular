@@ -21,7 +21,7 @@ namespace AngularApi.MyTools
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger _logger;
-        private readonly IUpdateFile Update ;
+        private readonly IUpdateFile _update;
         public static string IsoPath = @"Data/Iso.json";
         public static string RecentHistoryPath = @"Data/RecentHistory.json";
         public static string TestPath = @"Data/test.json";
@@ -35,42 +35,35 @@ namespace AngularApi.MyTools
         {
             _logger = logger;
             _scopeFactory = scopeFactory;
+           
         }
        
 
         List<CashDBModel> listOfCash = new List<CashDBModel>();
-
+        string[] isoArray;
 
         public void UpdateCash(object state)
         {
-
+            periodTime = SetTimer();
             using (var scope = _scopeFactory.CreateScope())
             {
+                var _update = scope.ServiceProvider.GetRequiredService<IUpdateFile>();
                 var _context = scope.ServiceProvider.GetRequiredService<CashDBContext>();
-                DateTime x = DateTime.Today;
-                CashDBModel cash = new CashDBModel
+
+
+                if (DateTime.Today.DayOfWeek.ToString() != "Sunday" &&
+                       DateTime.Today.DayOfWeek.ToString() != "Saturnday")
                 {
-                    Name = "xd",
-                    BidPrice = "xd",
-                    AskPrice = "s",
-                    Code = "asd",
-                    Data = x
-                };
-                _context.cashDBModels.Add(cash);
-                _context.SaveChanges();
 
-            }
+                    isoArray = _update.GetIsoFromFile( isoArray);
+                foreach (string iso in isoArray)
+                {
+                   listOfCash.Add( _update.DownloadActual(iso));
+                }
+                    
+                 _update.SendCurrencyToDataBase(listOfCash, _context);
 
-            periodTime = SetTimer();
-            Update.SendCurrencyToDataBase(listOfCash);
-            if (DateTime.Today.DayOfWeek.ToString() != "Sunday" &&
-                   DateTime.Today.DayOfWeek.ToString() != "Saturnday")
-            {
-
-
-                listOfCash = Update.DownloadActual();
-                Update.SendCurrencyToDataBase(listOfCash);
-                
+                }
             }
 
         }

@@ -39,13 +39,14 @@ namespace AngularApi
                 configuration.RootPath = "ClientApp/dist";
             });
 
+            services.AddDbContext<CashDBContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("MyAzureDataBase")));
+
             services.AddHostedService<UpdateFileService>();
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //>>>>>>>>>>>>>>>Data base >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             // var connection = @"Server=(localdb)\mssqllocaldb;Database=CashDB;Trusted_Connection=True;ConnectRetryCount=0";
-            services.AddDbContext<CashDBContext>(options =>
-                     options.UseSqlServer(Configuration.GetConnectionString("MyAzureDataBase")));
-
+           
 
         }
 

@@ -18,20 +18,20 @@ namespace AngularApi.MyTools
          readonly WebClient webClient = new WebClient();
          List<CashDBModel> _listCashDBContexts = new List<CashDBModel>();
         CashDBModel _cashModel = new CashDBModel();
-        private   CashDBContext _context;
+        private readonly CashDBContext _context;
 
-         string[] isoArray;
+        string[] isoArray;
        string url;
         string reply;
 
 
 
-        //public MyWebParser(CashDBContext context)
-        //{
-        //    _context = context;
-        //}
+        public MyWebParser(CashDBContext context)
+        {
+            _context = context;
+        }
 
-        
+
 
         public  List<CashDBModel> DownloadActual()
         {
@@ -55,39 +55,56 @@ namespace AngularApi.MyTools
         public  void SendCurrencyToDataBase(List<CashDBModel> _listOfValue)
         {
             //  CashDBModel d = _context.cashDBModels.FirstOrDefault(s => s.Data == DateTime.Now.Date);
-            if (CheckDatabase())
-            {
-                foreach (CashDBModel cash in _listOfValue)
-                {
-                    _context.cashDBModels.Add(cash);
-                    _context.SaveChanges();
-                    string LogsMessage = cash.ToString() + "Wpisano: " + DateTime.UtcNow.ToString();
-                    SaveToFile(UpdateFileService.LogsPath, LogsMessage, true);
 
-                }
-            }
+            DateTime x = DateTime.Today;
+            CashDBModel cash = new CashDBModel
+            {
+                Name = "xd",
+                BidPrice = "xd",
+                AskPrice = "s",
+                Code = "asd",
+                Data = x
+            };
+            _context.cashDBModels.Add(cash);
+            _context.SaveChanges();
+
+            //foreach (CashDBModel cash in _listOfValue)
+            //{
+            //    _context.cashDBModels.Add(cash);
+            //    _context.SaveChanges();
+            //    string LogsMessage = cash.ToString() + "Wpisano: " + DateTime.UtcNow.ToString();
+            //    SaveToFile(UpdateFileService.LogsPath, LogsMessage, true);
+
+            //}
+
         }
 
         bool CheckDatabase()
         {
 
-            var query = from s in _context.cashDBModels
-                        where s.Data == DateTime.Today
-                        select s;
-            //CashDBModel query = _context.cashDBModels.FirstOrDefault(s => s.ID == 1);
-            //DateTime x = DateTime.Today;
-            //CashDBModel cash = new CashDBModel();
-            //cash.Data = x;
-            //_context.cashDBModels.Add(cash);
-
-
-
-
-            //today database dont be updated
-            if (query == null)
+            //var query = from s in _context.cashDBModels
+            //            where s.Data == DateTime.Today
+            //            select s;
+          //  CashDBModel query = _context.cashDBModels.FirstOrDefault(s => s.ID == 1);
+            DateTime x = DateTime.Today;
+            CashDBModel cash = new CashDBModel
             {
-                return false;
-            }
+                Name="xd",
+                BidPrice="xd",
+                AskPrice="s",
+                Code="asd",
+                Data = x
+            };
+            _context.cashDBModels.Add(cash);
+            _context.SaveChanges();
+
+
+
+            ////today database dont be updated
+            //if (query == null)
+            //{
+            //    return false;
+            //}
 
             return true;
 

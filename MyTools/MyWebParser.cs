@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace AngularApi.MyTools
 {
@@ -20,7 +21,7 @@ namespace AngularApi.MyTools
         CashDBModel _cashModel = new CashDBModel();
 
 
-        string[] isoArray;
+      
         string url;
         string reply;
 
@@ -35,7 +36,9 @@ namespace AngularApi.MyTools
             url = "http://api.nbp.pl/api/exchangerates/rates/c/" + iso + "/?today/?format=json";
             reply = webClient.DownloadString(url);
             dynamic jObject = JObject.Parse(reply);
-            DateTime date = DateTime.Today;
+            string d = DateTime.UtcNow.ToString("f");
+            DateTime date = Convert.ToDateTime(d);
+            
             string name = jObject.currency;
             string code = jObject.code;
             string askPrice = jObject.rates[0].ask;
@@ -68,12 +71,12 @@ namespace AngularApi.MyTools
         bool CheckDatabase(CashDBContext _context)
         {
 
-            var query = from s in _context.cashDBModels
-                        where s.Data == DateTime.Today
-                        select s;
+            var query = _context.cashDBModels
+                        .Where(s => s.Data.Date == DateTime.Today.Date).FirstOrDefault<CashDBModel>();
+                        
 
             //today database dont be updated
-            if (query == null)
+            if (query ==null)
             {
                 return false;
             }

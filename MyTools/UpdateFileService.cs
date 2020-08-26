@@ -21,7 +21,7 @@ namespace AngularApi.MyTools
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger _logger;
-        private readonly IUpdateFile _update;
+
         public static string IsoPath = @"Data/Iso.json";
         public static string RecentHistoryPath = @"Data/RecentHistory.json";
         public static string TestPath = @"Data/test.json";
@@ -35,9 +35,9 @@ namespace AngularApi.MyTools
         {
             _logger = logger;
             _scopeFactory = scopeFactory;
-           
+
         }
-       
+
 
         List<CashDBModel> listOfCash = new List<CashDBModel>();
         string[] isoArray;
@@ -55,13 +55,13 @@ namespace AngularApi.MyTools
                        DateTime.Today.DayOfWeek.ToString() != "Saturnday")
                 {
 
-                    isoArray = _update.GetIsoFromFile( isoArray);
-                foreach (string iso in isoArray)
-                {
-                   listOfCash.Add( _update.DownloadActual(iso));
-                }
-                    
-                 _update.SendCurrencyToDataBase(listOfCash, _context);
+                    isoArray = _update.GetIsoFromFile(isoArray);
+                    foreach (string iso in isoArray)
+                    {
+                        listOfCash.Add(_update.DownloadActual(iso));
+                    }
+
+                    _update.SendCurrencyToDataBase(listOfCash, _context);
 
                 }
             }

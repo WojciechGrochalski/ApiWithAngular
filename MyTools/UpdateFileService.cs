@@ -92,6 +92,30 @@ namespace AngularApi.MyTools
 
                 return TimeSpan.FromHours(24) + TimeSpan.FromMinutes(16);
             }
+            else if (DateTime.UtcNow.Hour >20)
+            {
+                int acctualhour = DateTime.UtcNow.Hour;
+                int hour = 0;
+                for (int i = acctualhour; i <= 24; i++)
+                {
+                    if (acctualhour == 24)
+                    {
+                        hour = i;
+                        break;
+
+                    }
+                }
+                for (int i = acctualhour; i < 24; i++)
+                {
+                    if (acctualhour == 8)
+                    {
+                        hour += i;
+                        break;
+
+                    }
+                }
+                return TimeSpan.FromHours(hour) + TimeSpan.FromMinutes(16);
+            }
             else
             {
                 int hourToSubtract = 0;

@@ -8,9 +8,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace AngularApi.MyTools
 {
@@ -19,16 +16,9 @@ namespace AngularApi.MyTools
         readonly WebClient webClient = new WebClient();
         List<CashDBModel> listOfCash = new List<CashDBModel>();
         CashDBModel _cashModel = new CashDBModel();
-
-
       
         string url;
         string reply;
-
-
-
-
-
 
         public CashDBModel DownloadActual(string iso)
         {
@@ -36,9 +26,7 @@ namespace AngularApi.MyTools
             url = "http://api.nbp.pl/api/exchangerates/rates/c/" + iso + "/?today/?format=json";
             reply = webClient.DownloadString(url);
             dynamic jObject = JObject.Parse(reply);
-            string d = DateTime.UtcNow.ToString("f");
-            DateTime date = Convert.ToDateTime(d);
-            
+            DateTime date = DateTime.Now;
             string name = jObject.currency;
             string code = jObject.code;
             string askPrice = jObject.rates[0].ask;
@@ -55,16 +43,17 @@ namespace AngularApi.MyTools
             if (!CheckDatabase(_context))
             {
                 foreach (CashDBModel cash in _listOfValue)
-            {
-                _context.cashDBModels.Add(cash);
+                {
+                     _context.cashDBModels.Add(cash);
 
-                string LogsMessage = cash.Code.ToString() + "  Wpisano: " + DateTime.UtcNow.ToString();
-                SaveToFile(UpdateFileService.LogsPath, LogsMessage, true);
+                    string LogsMessage = cash.Code.ToString() + "  Wpisano: " + DateTime.Now.ToString();
+                    SaveToFile(UpdateFileService.LogsPath, LogsMessage, true);
+
+                }
+
+              _context.SaveChanges();
 
             }
-            _context.SaveChanges();
-
-             }
 
         }
 
@@ -114,7 +103,7 @@ namespace AngularApi.MyTools
             string path = @"Data/Iso.json";
             path = Path.GetFullPath(path);
             string fileData = File.ReadAllText(path);
-            return isoArray = JsonConvert.DeserializeObject<string[]>(fileData);
+            return _ = JsonConvert.DeserializeObject<string[]>(fileData);
 
         }
     }

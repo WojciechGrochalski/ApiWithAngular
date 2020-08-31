@@ -44,15 +44,15 @@ namespace AngularApi.MyTools
 
         public void UpdateCash(object state)
         {
-            periodTime = SetTimer();
+            periodTime = SetMinuts();
             using (var scope = _scopeFactory.CreateScope())
             {
                 var _update = scope.ServiceProvider.GetRequiredService<IUpdateFile>();
                 var _context = scope.ServiceProvider.GetRequiredService<CashDBContext>();
 
 
-                if (DateTime.Today.DayOfWeek.ToString() != "Sunday" &&
-                       DateTime.Today.DayOfWeek.ToString() != "Saturnday")
+                if (DateTime.Today.DayOfWeek.ToString() !=  "Saturday" &&
+                       DateTime.Today.DayOfWeek.ToString() != "Sunday")
                 {
 
                     isoArray = _update.GetIsoFromFile(isoArray);

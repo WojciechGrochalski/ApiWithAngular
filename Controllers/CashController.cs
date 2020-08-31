@@ -36,9 +36,28 @@ namespace AngularApi.Controllers
             return CashModel.cashModelsList;//.ToArray();
         }
 
-       
+
+        [HttpGet("{iso}")]
+        public async Task<CashDBModel> GetLastCurrency()
+        {
+
+            var query = _context.cashDBModels.OrderByDescending(s => s.ID).FirstOrDefault();
+            await Task.CompletedTask;
+            return query;
+
+        }
+
+        [HttpGet("{iso}/{count}")]
+        public async Task<List<CashDBModel>> GetLastManyCurrency(int count)
+        {
+
+            var query = _context.cashDBModels.Where(s =>s.Code=="USD").OrderByDescending(s => s.ID).Take(count).ToList();
+            await Task.CompletedTask;
+            return query;
+
+        }
+
         [HttpPost("{msg}")]
-        
         public  /*Task<ActionResult<string>>*/ string Post([FromBody] string message)
         {
             //user = new UserDBModel();

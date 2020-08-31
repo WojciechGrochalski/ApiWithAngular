@@ -48,10 +48,10 @@ namespace AngularApi.Controllers
         }
 
         [HttpGet("{iso}/{count}")]
-        public async Task<List<CashDBModel>> GetLastManyCurrency(int count)
+        public async Task<List<CashDBModel>> GetLastManyCurrency(string iso, int count)
         {
 
-            var query = _context.cashDBModels.Where(s =>s.Code=="USD").OrderByDescending(s => s.ID).Take(count).ToList();
+            var query = _context.cashDBModels.Where(s =>s.Code==iso).OrderByDescending(s => s.ID).Take(count).ToList();
             await Task.CompletedTask;
             return query;
 

@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {CashService} from '../cash.service';
+import { CashService } from '../cash.service';
+import { Data } from '@angular/router';
 
 
 @Component({
@@ -8,7 +9,7 @@ import {CashService} from '../cash.service';
   templateUrl: './cash-data.component.html',
   styleUrls: ['./cash-data.component.css']
 })
-export class CashDataComponent  {
+export class CashDataComponent {
 
   public listofcash: Cash[];
   public message: string;
@@ -20,7 +21,7 @@ export class CashDataComponent  {
   }
 
   SendToBackend(message: string) {
-    this.cashService.send(message )
+    this.cashService.send(message)
       .subscribe(data => console.log("Succeeded, result = " + data),
         (err) => console.error("Failed! " + err));
   }
@@ -28,9 +29,9 @@ export class CashDataComponent  {
 
 interface Cash {
 
-name: string;
-code: string;
-bidPrice: string;
-askPrice: string;
-data: string;
+  name: string;
+  code: string;
+  bidPrice: string;
+  askPrice: string;
+  data: string;
 }

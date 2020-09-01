@@ -18,7 +18,7 @@ namespace AngularApi.Controllers
     [Route("[controller]")]
     public class CashController : ControllerBase
     {
-        CashModel _cashModel = new CashModel();
+       
         private readonly CashDBContext _context;
 
         public CashController(CashDBContext context)
@@ -29,16 +29,24 @@ namespace AngularApi.Controllers
       
 
         [HttpGet]
-        public List<CashModel> Get()
+        public async Task<List<CashModel>> GetLastCurrency()
         {
-            _cashModel.GetData();
 
-            return CashModel.cashModelsList;//.ToArray();
+            var query = _context.cashDBModels.OrderByDescending(s => s.ID).Take(13).ToList();
+            await Task.CompletedTask;
+            List<CashModel> list = new List<CashModel>();
+            CashModel cashModel;
+            foreach (CashDBModel item in query)
+            {
+                list.Add(cashModel = new CashModel(item));
+            }
+
+            return list;
         }
 
 
         [HttpGet("{iso}")]
-        public async Task<CashDBModel> GetLastCurrency()
+        public async Task<CashDBModel> GetLastOneCurrency()
         {
 
             var query = _context.cashDBModels.OrderByDescending(s => s.ID).FirstOrDefault();

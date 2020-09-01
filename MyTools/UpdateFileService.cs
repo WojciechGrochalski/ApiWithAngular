@@ -70,11 +70,7 @@ namespace AngularApi.MyTools
 
 
 
-        private TimeSpan SetTimer()
-        {
-
-            return SetMinuts();
-        }
+  
 
         private TimeSpan SetMinuts()
         {

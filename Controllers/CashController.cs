@@ -40,7 +40,7 @@ namespace AngularApi.Controllers
             {
                 list.Add(cashModel = new CashModel(item));
             }
-
+            list.Reverse();
             return list;
         }
 

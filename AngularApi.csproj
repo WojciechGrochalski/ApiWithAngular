@@ -9,8 +9,9 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
 
     <!-- Set this to true if you enable server-side prerendering -->
-    <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    <BuildServerSideRenderer>true</BuildServerSideRenderer>
     <UserSecretsId>b55bb4de-94bd-4fd7-bf30-ddd731fbb3c6</UserSecretsId>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

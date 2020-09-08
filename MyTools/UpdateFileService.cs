@@ -29,6 +29,7 @@ namespace AngularApi.MyTools
 
         private static Timer updateDataBase;
         private TimeSpan periodTime;
+        bool is_available;
 
 
         public UpdateFileService(ILogger<UpdateFileService> logger, IServiceScopeFactory scopeFactory)
@@ -54,14 +55,16 @@ namespace AngularApi.MyTools
                 if (DateTime.Today.DayOfWeek.ToString() !=  "Saturday" &&
                        DateTime.Today.DayOfWeek.ToString() != "Sunday")
                 {
-
-                    isoArray = _update.GetIsoFromFile(isoArray);
-                    foreach (string iso in isoArray)
+                    if (ChceckItIsAvailableApi())
                     {
-                        listOfCash.Add(_update.DownloadActual(iso));
-                    }
+                        isoArray = _update.GetIsoFromFile(isoArray);
+                        foreach (string iso in isoArray)
+                        {
+                            listOfCash.Add(_update.DownloadActual(iso));
+                        }
 
-                    _update.SendCurrencyToDataBase(listOfCash, _context);
+                        _update.SendCurrencyToDataBase(listOfCash, _context);
+                    }
 
                 }
             }
@@ -69,8 +72,21 @@ namespace AngularApi.MyTools
         }
 
 
+        private bool ChceckItIsAvailableApi()
+        {
+            DateTime utcNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time"));
+            if (utcNow.Hour>8 && utcNow.Hour < 22)
+            {
+                return true;
+            }
+            if (utcNow.Hour == 8 && utcNow.Minute > 16) 
+            {
+                return true;
+            }
+            return false;
+        }
 
-  
+
 
         private TimeSpan SetMinuts()
         {

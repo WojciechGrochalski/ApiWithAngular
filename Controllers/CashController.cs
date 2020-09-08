@@ -11,11 +11,13 @@ using AngularApi.Repository;
 using AngularApi.DataBase;
 using Microsoft.EntityFrameworkCore;
 using AngularApi.Models;
+using Microsoft.AspNetCore.Cors;
 
 namespace AngularApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [EnableCors("AllowOrigin")]
     public class CashController : ControllerBase
     {
        
@@ -29,6 +31,7 @@ namespace AngularApi.Controllers
       
 
         [HttpGet]
+        [EnableCors("AllowOrigin")]
         public async Task<List<CashModel>> GetLastCurrency()
         {
 
@@ -46,16 +49,19 @@ namespace AngularApi.Controllers
 
 
         [HttpGet("{iso}")]
-        public async Task<CashDBModel> GetLastOneCurrency()
+        [EnableCors("AllowOrigin")]
+        public async Task<CashModel> GetLastOneCurrency()
         {
 
-            var query = _context.cashDBModels.OrderByDescending(s => s.ID).FirstOrDefault();
+            var query = _context.cashDBModels.OrderByDescending(s => s.ID).Where(s=>s.Code=="USD").FirstOrDefault();
+            CashModel result = new CashModel(query);
             await Task.CompletedTask;
-            return query;
+            return result;
 
         }
 
         [HttpGet("{iso}/{count}")]
+        [EnableCors("AllowOrigin")]
         public async Task<List<CashDBModel>> GetLastManyCurrency(string iso, int count)
         {
 

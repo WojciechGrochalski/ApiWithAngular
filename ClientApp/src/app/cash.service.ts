@@ -1,4 +1,4 @@
-import {Inject, Injectable} from '@angular/core';
+import { Component, Inject, Input, Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
@@ -7,12 +7,23 @@ import {Observable} from 'rxjs';
 })
 export class CashService {
 
-   path: string;
+  path: string;
+  @Injectable()
   @Inject('BASE_URL') baseUrl: string;
-  constructor(private httpClient: HttpClient  ) {}
+  constructor(private http: HttpClient) { }
 
-  send( message: string): Observable<any>  {
-
-    return this.httpClient.post('http://localhost:5001/Cash', message);
+  GetLastCurrency(baseUrl: string) {
+    return this.http.get<Cash>(baseUrl + 'Cash');
   }
+
 }
+
+export interface Cash {
+
+  name: string;
+  code: string;
+  bidPrice: string;
+  askPrice: string;
+  data: string;
+}
+

@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { CashDataComponent } from './cash-data/cash-data.component';
+import { CashService } from '../app/cash.service';
 
 
 @NgModule({

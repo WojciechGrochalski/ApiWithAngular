@@ -1,7 +1,8 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CashService } from '../cash.service';
 import { Data } from '@angular/router';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -11,19 +12,27 @@ import { Data } from '@angular/router';
 })
 export class CashDataComponent {
 
+
   public listofcash: Cash[];
-  public message: string;
+  @Input() message: string;
+  public result: Cash;
+  baseUrl: string;
+  http: HttpClient;
+ public xd: string = "XDD";
 
   constructor(http: HttpClient, private cashService: CashService, @Inject('BASE_URL') baseUrl: string) {
     http.get<Cash[]>(baseUrl + 'Cash').subscribe(result => {
       this.listofcash = result;
     }, error => console.error(error));
+    this.baseUrl = baseUrl
   }
 
-  SendToBackend(message: string) {
-    this.cashService.send(message)
-      .subscribe(data => console.log("Succeeded, result = " + data),
-        (err) => console.error("Failed! " + err));
+  TakeLastCurrency() {
+    this.cashService.GetLastCurrency(this.baseUrl).subscribe(response => {
+      this.result = response;
+    }, error => console.error(error));
+ 
+
   }
 }
 

@@ -73,7 +73,9 @@ namespace AngularApi
             }
 
             app.UseRouting();
-
+           
+            
+            app.UseCors(options => options.AllowAnyOrigin());
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

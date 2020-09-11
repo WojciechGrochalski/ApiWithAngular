@@ -5,32 +5,38 @@
 <h4>Aktualne kursy walut z NBP:</h4>
 
 <label for="message"></label>
-<!--<input type="text" id="message" [(ngModel)]="message" name="message"/>-->
-<button type="button" class="btn btn-default" (click)="TakeLastCurrency()">Click</button>
+<input   #iso placeholder="ISO of currency" />
+<button type="button" class="btn btn-default" (click)="TakeLastCurrency(iso.value)">Click</button>
 
+<div *ngIf="!result; then table; else api"></div>
 
-<p *ngIf="!result"><em>Loading...</em></p>
+<ng-template #api>
+  <p *ngIf="!result"><em>Loading...</em></p>
 
-<h4> {{result[0].code}} {{result[0].data}}</h4>
-<table class='table table-striped ' aria-labelledby="tableLabel" *ngIf="listofcash">
+  <h4> {{result.code}} {{result.data}}</h4>
+</ng-template>
+  <ng-template #table>
+    <table class='table table-striped ' aria-labelledby="tableLabel">
 
-  <thead>
-    <tr>
-      <th>Data</th>
-      <th>Waluta</th>
-      <th>Cena kupna (Za tyle kupisz)</th>
-      <th>Cena sprzedaży (Za tyle sprzedasz)</th>
-      <th></th>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Waluta</th>
+          <th>Cena kupna (Za tyle kupisz)</th>
+          <th>Cena sprzedaży (Za tyle sprzedasz)</th>
+          <th></th>
 
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let cash of listofcash">
-      <td>{{ cash.data }}</td>
-      <td>{{ cash.code}}</td>
-      <td>{{ cash.askPrice }} PLN</td>
-      <td>{{ cash.bidPrice }} PLN</td>
-    </tr>
-  </tbody>
-</table>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cash of listofcash">
+          <td>{{ cash.data }}</td>
+          <td>{{ cash.code}}</td>
+          <td>{{ cash.askPrice }} PLN</td>
+          <td>{{ cash.bidPrice }} PLN</td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-template>
+
 

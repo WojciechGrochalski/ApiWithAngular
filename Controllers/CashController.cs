@@ -50,10 +50,10 @@ namespace AngularApi.Controllers
 
         [HttpGet("{iso}")]
         [EnableCors("AllowOrigin")]
-        public async Task<CashModel> GetLastOneCurrency()
+        public async Task<CashModel> GetLastOneCurrency(string iso)
         {
-
-            var query = _context.cashDBModels.OrderByDescending(s => s.ID).Where(s=>s.Code=="USD").FirstOrDefault();
+            iso.ToUpper();
+            var query = _context.cashDBModels.OrderByDescending(s => s.ID).Where(s=>s.Code==iso).FirstOrDefault();
             CashModel result = new CashModel(query);
             await Task.CompletedTask;
             return result;

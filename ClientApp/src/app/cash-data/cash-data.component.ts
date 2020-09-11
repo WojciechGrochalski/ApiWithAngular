@@ -14,11 +14,11 @@ export class CashDataComponent {
 
 
   public listofcash: Cash[];
-  @Input() message: string;
+  public message: string=" ";
   public result: Cash;
   baseUrl: string;
   http: HttpClient;
- public xd: string = "XDD";
+ 
 
   constructor(http: HttpClient, private cashService: CashService, @Inject('BASE_URL') baseUrl: string) {
     http.get<Cash[]>(baseUrl + 'Cash').subscribe(result => {
@@ -27,8 +27,9 @@ export class CashDataComponent {
     this.baseUrl = baseUrl
   }
 
-  TakeLastCurrency() {
-    this.cashService.GetLastCurrency(this.baseUrl).subscribe(response => {
+  TakeLastCurrency(message: string) {
+
+    this.cashService.GetLastCurrency(message).subscribe(response => {
       this.result = response;
     }, error => console.error(error));
  

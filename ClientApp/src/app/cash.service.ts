@@ -7,13 +7,12 @@ import {Observable} from 'rxjs';
 })
 export class CashService {
 
-  path: string;
-  @Injectable()
-  @Inject('BASE_URL') baseUrl: string;
-  constructor(private http: HttpClient) { }
+ 
+ 
+  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) { }
 
-  GetLastCurrency(baseUrl: string) {
-    return this.http.get<Cash>(baseUrl + 'Cash');
+  GetLastCurrency( message: string ) {
+    return this.http.get<Cash>('https://localhost:8081/Cash'+'/'+message);
   }
 
 }

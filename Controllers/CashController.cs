@@ -62,12 +62,19 @@ namespace AngularApi.Controllers
 
         [HttpGet("{iso}/{count}")]
         [EnableCors("AllowOrigin")]
-        public async Task<List<CashDBModel>> GetLastManyCurrency(string iso, int count)
+        public async Task<List<CashModel>> GetLastManyCurrency(string iso, int count)
         {
 
             var query = _context.cashDBModels.Where(s =>s.Code==iso).OrderByDescending(s => s.ID).Take(count).ToList();
             await Task.CompletedTask;
-            return query;
+            List<CashModel> list = new List<CashModel>();
+            CashModel cashModel;
+            foreach (CashDBModel item in query)
+            {
+                list.Add(cashModel = new CashModel(item));
+            }
+            list.Reverse();
+            return list;
 
         }
 

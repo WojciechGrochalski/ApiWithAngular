@@ -4,16 +4,56 @@
 
 <h4>Aktualne kursy walut z NBP:</h4>
 
-<label for="message"></label>
-<input   #iso placeholder="ISO of currency" />
-<button type="button" class="btn btn-default" (click)="TakeLastCurrency(iso.value)">Click</button>
+<label >ISO Waluty: </label>
+
+<select #iso>
+  <option value="USD">USD $</option>
+  <option value="EUR">EUR €</option>
+  <option value="GBP">Funt szterling £</option>
+  <option value="AUD">Dolar australijski $</option>
+  <option value="CAD">Dolar kanadyjski $</option>
+  <option value="HUF">Forint (Węgry) Ft</option>
+  <option value="CZK"> Korona czeska Kč </option>
+  <option value="CHF">Frank szwajcarski fr.</option>
+  <option value="JPY">Jen (Japonia) ¥</option>
+  <option value="DKK">Korona duńska </option>
+  <option value="NOK">Korona norweska</option>
+  <option value="SEK">Korona Szwedzka</option>
+  <option value="XDR">SDR</option>
+</select>
+<select #count >
+  <option  value="1">10</option>
+  <option value="2">20</option>
+  <option value="3">30</option>
+</select>
+<button type="button" class="btn btn-default" (click)="TakeLastCurrency(iso.value, count.value)">Click</button>
 
 <div *ngIf="!result; then table; else api"></div>
 
 <ng-template #api>
   <p *ngIf="!result"><em>Loading...</em></p>
 
-  <h4> {{result.code}} {{result.data}}</h4>
+  <table class='table table-striped ' aria-labelledby="tableLabel">
+
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Waluta</th>
+        <th>Cena kupna (Za tyle kupisz)</th>
+        <th>Cena sprzedaży (Za tyle sprzedasz)</th>
+        <th></th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cash of result">
+        <td>{{ cash.data }}</td>
+        <td>{{ cash.name}}</td>
+        <td>{{ cash.askPrice }} PLN</td>
+        <td>{{ cash.bidPrice }} PLN</td>
+      </tr>
+    </tbody>
+  </table>
 </ng-template>
   <ng-template #table>
     <table class='table table-striped ' aria-labelledby="tableLabel">
@@ -31,7 +71,7 @@
       <tbody>
         <tr *ngFor="let cash of listofcash">
           <td>{{ cash.data }}</td>
-          <td>{{ cash.code}}</td>
+          <td>{{ cash.name}}</td>
           <td>{{ cash.askPrice }} PLN</td>
           <td>{{ cash.bidPrice }} PLN</td>
         </tr>

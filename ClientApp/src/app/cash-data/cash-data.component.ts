@@ -15,21 +15,27 @@ export class CashDataComponent {
 
   public listofcash: Cash[];
   public message: string=" ";
-  public result: Cash;
+  public result: Cash[];
   baseUrl: string;
   http: HttpClient;
  
 
   constructor(http: HttpClient, private cashService: CashService, @Inject('BASE_URL') baseUrl: string) {
-    http.get<Cash[]>(baseUrl + 'Cash').subscribe(result => {
-      this.listofcash = result;
-    }, error => console.error(error));
-    this.baseUrl = baseUrl
+    //http.get<Cash[]>(baseUrl + 'Cash').subscribe(result => {
+    //  this.listofcash = result;
+    //}, error => console.error(error));
+    //this.baseUrl = baseUrl
   }
 
-  TakeLastCurrency(message: string) {
+  ngOnInit(): void {
+    this.cashService.GetDataOnInit().subscribe(response => {
+      this.listofcash = response;
+    }, error => console.error(error));
+  }
 
-    this.cashService.GetLastCurrency(message).subscribe(response => {
+  TakeLastCurrency(message: string, count : number) {
+
+    this.cashService.GetLastCurrency(message, count).subscribe(response => {
       this.result = response;
     }, error => console.error(error));
  

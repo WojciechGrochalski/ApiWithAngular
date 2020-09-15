@@ -1,8 +1,6 @@
-import { Component, Inject, Input, Injectable } from '@angular/core';
+import { Component, Inject} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CashService } from '../cash.service';
-import { Data } from '@angular/router';
-import { Observable } from 'rxjs';
 
 
 @Component({
@@ -14,31 +12,32 @@ export class CashDataComponent {
 
 
   public listofcash: Cash[];
-  public message: string=" ";
+  public message = ' ';
   public result: Cash[];
-  baseUrl: string;
+
   http: HttpClient;
- 
+
 
   constructor(http: HttpClient, private cashService: CashService, @Inject('BASE_URL') baseUrl: string) {
-    //http.get<Cash[]>(baseUrl + 'Cash').subscribe(result => {
+    // http.get<Cash[]>(baseUrl + 'Cash').subscribe(result => {
     //  this.listofcash = result;
-    //}, error => console.error(error));
-    //this.baseUrl = baseUrl
+    // }, error => console.error(error));
+    // this.baseUrl = baseUrl
   }
 
+  // tslint:disable-next-line:use-lifecycle-interface
   ngOnInit(): void {
     this.cashService.GetDataOnInit().subscribe(response => {
       this.listofcash = response;
     }, error => console.error(error));
   }
 
-  TakeLastCurrency(message: string, count : number) {
+  TakeLastCurrency(message: string, count: number) {
 
     this.cashService.GetLastCurrency(message, count).subscribe(response => {
       this.result = response;
     }, error => console.error(error));
- 
+
 
   }
 }

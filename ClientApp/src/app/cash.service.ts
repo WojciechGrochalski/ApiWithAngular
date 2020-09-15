@@ -1,15 +1,14 @@
 import { Component, Inject, Input, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
-
+@Injectable({
+  providedIn: 'root'
+})
 export class CashService {
 
-  baseUrl: string = 'https://localhost:8081/Cash';
+  baseUrl = 'https://localhost:8081/Cash';
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) { }
-
-
+  constructor(private http: HttpClient) { }
 
   GetLastCurrency(message: string, count: number) {
     return this.http.get<Cash[]>('https://localhost:8081/Cash' + '/' + message + '/' + count);
@@ -18,7 +17,7 @@ export class CashService {
   GetDataOnInit() {
 
     return this.http.get<Cash[]>(this.baseUrl );
-    
+
   }
 
 }

@@ -15,17 +15,14 @@ export class CashDataComponent {
   public message = ' ';
   public result: Cash[];
 
-  http: HttpClient;
 
 
-  constructor(http: HttpClient, private cashService: CashService, @Inject('BASE_URL') baseUrl: string) {
-    // http.get<Cash[]>(baseUrl + 'Cash').subscribe(result => {
-    //  this.listofcash = result;
-    // }, error => console.error(error));
-    // this.baseUrl = baseUrl
+
+  constructor(http: HttpClient, private cashService: CashService) {
+   
   }
 
-  // tslint:disable-next-line:use-lifecycle-interface
+
   ngOnInit(): void {
     this.cashService.GetDataOnInit().subscribe(response => {
       this.listofcash = response;

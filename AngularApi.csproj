@@ -12,6 +12,7 @@
     <BuildServerSideRenderer>true</BuildServerSideRenderer>
     <UserSecretsId>b55bb4de-94bd-4fd7-bf30-ddd731fbb3c6</UserSecretsId>
     <StartupObject></StartupObject>
+    <AspnetCompileMergeIntermediateOutputPath>c:\tem\</AspnetCompileMergeIntermediateOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

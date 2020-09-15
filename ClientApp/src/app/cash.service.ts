@@ -1,23 +1,26 @@
 import { Component, Inject, Input, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CashService {
 
-  baseUrl = 'https://localhost:8081/Cash';
+  baseUrl: string = 'https://localhost:5001/Cash';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) { }
+
+
 
   GetLastCurrency(message: string, count: number) {
-    return this.http.get<Cash[]>('https://localhost:8081/Cash' + '/' + message + '/' + count);
+    return this.http.get<Cash[]>(this.baseUrl + '/' + message + '/' + count);
   }
 
   GetDataOnInit() {
 
     return this.http.get<Cash[]>(this.baseUrl );
-
+    
   }
 
 }

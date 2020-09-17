@@ -29,8 +29,8 @@ namespace AngularApi.MyTools
             DateTime date = DateTime.Now;
             string name = jObject.currency;
             string code = jObject.code;
-            string askPrice = jObject.rates[0].ask;
-            string bidPrice = jObject.rates[0].bid;
+            float askPrice = jObject.rates[0].ask;
+            float bidPrice = jObject.rates[0].bid;
             CashDBModel _cashModel= new CashDBModel(name, code, bidPrice, askPrice, date);
 
             return _cashModel;

@@ -13,8 +13,8 @@ namespace AngularApi
     {
         public string Name { get; set; }
         public string Code { get; set; }
-        public string BidPrice { get; set; }
-        public string AskPrice { get; set; }
+        public float BidPrice { get; set; }
+        public float AskPrice { get; set; }
         public string Data { get; set; }
 
 

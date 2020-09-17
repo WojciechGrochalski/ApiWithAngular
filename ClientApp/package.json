@@ -14,7 +14,8 @@
   "dependencies": {
     "@angular-devkit/core": "^8.3.29",
     "@angular-devkit/schematics": "^8.3.29",
-    "@angular/animations": "8.2.12",
+    "@angular/animations": "8.2.9",
+    "@angular/cdk": "^8.2.0",
     "@angular/common": "8.2.12",
     "@angular/compiler": "8.2.12",
     "@angular/core": "8.2.12",
@@ -25,13 +26,14 @@
     "@angular/router": "8.2.12",
     "@nguniversal/module-map-ngfactory-loader": "8.1.1",
     "@schematics/angular": "^8.3.29",
+    "animate.css": "^4.1.1",
     "aspnet-prerendering": "^3.0.1",
     "bootstrap": "^4.5.2",
+    "canvasjs": "^1.8.3",
+    "chart.js": "^2.9.3",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "jquery": "^3.5.1",
-    "oidc-client": "^1.9.1",
-    "popper.js": "^1.16.0",
     "rxjs": "^6.6.2",
     "zone.js": "0.9.1"
   },
@@ -51,7 +53,7 @@
     "karma-coverage-istanbul-reporter": "~2.1.0",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.5.4",
-    "typescript": "3.5.3"
+    "typescript": "3.5.1"
   },
   "optionalDependencies": {
     "node-sass": "^4.12.0",

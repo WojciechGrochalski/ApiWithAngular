@@ -29,7 +29,7 @@ namespace AngularApi.MyTools
 
         private static Timer updateDataBase;
         private TimeSpan periodTime;
-        bool is_available;
+  
 
 
         public UpdateFileService(ILogger<UpdateFileService> logger, IServiceScopeFactory scopeFactory)

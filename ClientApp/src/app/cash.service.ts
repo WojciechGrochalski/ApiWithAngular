@@ -1,5 +1,6 @@
 import { Component, Inject, Input, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -22,8 +23,9 @@ export class CashService {
     return this.http.get<Cash[]>(this.baseUrl );
     
   }
-  GetChartData(iso: string, count: number) {
-    return this.http.get<string[]>(this.baseUrl + '/' + iso + '/' + count +'/DataChart');
+  GetChartData(iso: string, count: number)  {
+    return this.http.get<Chart[]>(this.baseUrl + '/' + iso + '/' + count + '/DataChart');
+     
   }
 
   GetChartAskPrice(iso: string, count: number){
@@ -49,7 +51,7 @@ export interface Chart {
 
   data: string;
   askPrice: number;
-  bidPrice: number;
+  
   
 
 }

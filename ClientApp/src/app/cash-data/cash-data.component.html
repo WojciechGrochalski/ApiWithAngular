@@ -54,10 +54,9 @@
       </tr>
     </tbody>
   </table>
-
- 
-  <!--<google-chart [title]="chart.title" [type]="chart.type" [data]="chart.data" [columns]="chart.columnNames" [options]="chart.options">
-  </google-chart>-->
+  <div *ngIf="result">
+    <apx-chart [series]="series" [chart]="chart" [title]="title" [yaxis]="yaxis" [xaxis]="xaxis"></apx-chart>
+  </div>
 
 </ng-template>
   <ng-template #table>

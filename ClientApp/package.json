@@ -27,6 +27,7 @@
     "@nguniversal/module-map-ngfactory-loader": "8.1.1",
     "@schematics/angular": "^8.3.29",
     "animate.css": "^4.1.1",
+    "apexcharts": "^3.20.2",
     "aspnet-prerendering": "^3.0.1",
     "bootstrap": "^4.5.2",
     "canvasjs": "^1.8.3",
@@ -34,6 +35,7 @@
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "jquery": "^3.5.1",
+    "ng-apexcharts": "^1.5.1",
     "rxjs": "^6.6.2",
     "zone.js": "0.9.1"
   },

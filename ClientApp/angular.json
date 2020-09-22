@@ -29,9 +29,9 @@
 
             ],
             "scripts": [
-              
+              "node_modules/apexcharts/dist/apexcharts.min.js",
               "node_modules/chart.js/dist/Chart.js"
-              
+
             ]
           },
           "configurations": {

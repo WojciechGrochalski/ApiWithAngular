@@ -25,7 +25,7 @@ export class CashDataComponent {
   public askPrice: number[] = [];
   public bidPrice: number[] = [];
 
-  @Input() MyChart: number[];
+ 
 
   constructor(http: HttpClient, private cashService: CashService) {
 
@@ -56,6 +56,7 @@ export class CashDataComponent {
 
     this.cashService.GetLastCurrency(iso, count).subscribe(response => {
       this.result = response;
+
     }, error => console.error(error));
 
     //this.cashService.GetChartData(iso, count).subscribe(response => {
@@ -74,9 +75,15 @@ export class CashDataComponent {
 
       this.bidPrice = response;
     }, error => console.error(error));
+    this.series = [{
+      name: iso,
+      data: []
+    }];
+    
+    this.title = {
+      text: iso
+    };
 
-    
-    
 
   }
 

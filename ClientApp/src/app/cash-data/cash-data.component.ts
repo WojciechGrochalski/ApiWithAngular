@@ -21,7 +21,7 @@ export class CashDataComponent {
 
   public listofcash: Cash[];
   public result: Cash[];
-  public chartData: Chart[];
+  public chartData: number[];
   public askPrice: number[] = [];
   public bidPrice: number[] = [];
 
@@ -39,7 +39,10 @@ export class CashDataComponent {
     }];
 
     this.chart = {
-      type: 'line'
+      type: 'line',
+      toolbar: {
+        show: false
+      }
     };
   
   }
@@ -59,46 +62,59 @@ export class CashDataComponent {
 
     }, error => console.error(error));
 
-    //this.cashService.GetChartData(iso, count).subscribe(response => {
-
-    //  this.chartData = response;
-    //}, error => console.error(error));
-
+   
     this.cashService.GetChartAskPrice(iso, count).subscribe(response => {
 
       this.askPrice = response;
-      this.UpdateChart(response);
+ 
     
     }, error => console.error(error));
 
     this.cashService.GetChartBidPrice(iso, count).subscribe(response => {
 
       this.bidPrice = response;
+      this.UpdateChart(this.askPrice, response, this.chartData);
     }, error => console.error(error));
-    this.series = [{
-      name: iso,
-      data: []
-    }];
+
+    this.cashService.GetChartData(iso, count).subscribe(response => {
+
+      this.chartData = response;
+      response = response.reverse()
+      this.xaxis = {
+        categories: response
+      }
+
+    }, error => console.error(error));
     
     this.title = {
       text: iso
     };
-
+  
 
   }
 
 
 
-  UpdateChart(input: number[]): void {
+  UpdateChart(askValue: number[], bidValue: number[], date: number[]): void {
   
-    input = input.reverse();
-    this.series = [{
-      name: "Moja Waluta",
-      data: input
-    }];
+    askValue = askValue.reverse();
+    bidValue = bidValue.reverse();
+    this.series = [
+    {
+      name: "Cena kupna",
+      data: askValue
+      },
+      {
+        name: "Cena sprzedaży",
+        data: bidValue
+      }
+    ];
     this.yaxis = {
-      min: Math.min.apply(null, this.askPrice) - 0.01,
-      max: Math.max.apply(null, this.askPrice) + 0.01
+      title: {
+        text: "PLN"
+      },
+      min: Math.min.apply(null, this.bidPrice) - 0.1,
+      max: Math.max.apply(null, this.askPrice) + 0.1
     };
   }
 

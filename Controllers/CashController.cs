@@ -78,24 +78,23 @@ namespace AngularApi.Controllers
             return list;
 
         }
-        //[HttpGet("{iso}/{count}/DataChart")]
-        //[EnableCors("AllowOrigin")]
-        //public async Task<List<Tuple<string,float>>> GetDataChart(string iso, int count, string type)
-        //{
-        //    var query = _context.cashDBModels.Where(s => s.Code == iso).OrderByDescending(s => s.ID).Take(count).ToList();
-        //    await Task.CompletedTask;
-        //    //string[] chartData = new string[query.Count];
-        //    //int i = 0;
-        //    List<Tuple<string, float>> ChartData = new List<Tuple<string, float>>();
-        //    Tuple<string, float> result;
-        //    foreach (CashDBModel item in query)
-        //    {
-        //        result = new Tuple<string, float>(item.Data.ToShortDateString(), item.AskPrice);
-        //        ChartData.Add(result);
-        //    }
+        [HttpGet("{iso}/{count}/DataChart")]
+        [EnableCors("AllowOrigin")]
+        public async Task<float[]> GetDataChart(string iso, int count, string type)
+        {
+            var query = _context.cashDBModels.Where(s => s.Code == iso).OrderByDescending(s => s.ID).Take(count).ToList();
+            await Task.CompletedTask;
+            float[] chartData = new float[query.Count];
+            int i = 0;
+          
+            foreach (CashDBModel item in query)
+            {
+                chartData[i] = item.Data.Day;
+                i++;
+            }
 
-        //    return ChartData;
-        //}
+            return chartData;
+        }
         [HttpGet("{iso}/{count}/{chartPrice}")]
         [EnableCors("AllowOrigin")]
         public async Task<float[]> GetPriceChart(string iso, int count, string chartPrice)

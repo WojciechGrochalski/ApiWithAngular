@@ -23,8 +23,8 @@ export class CashService {
     return this.http.get<Cash[]>(this.baseUrl );
     
   }
-  GetChartData(iso: string, count: number)  {
-    return this.http.get<Chart[]>(this.baseUrl + '/' + iso + '/' + count + '/DataChart');
+  GetChartData(iso: string, count: number) {
+    return this.http.get<number[]>(this.baseUrl + '/' + iso + '/' + count + '/DataChart');
      
   }
 

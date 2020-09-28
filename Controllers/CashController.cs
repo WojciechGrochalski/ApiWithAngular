@@ -86,7 +86,7 @@ namespace AngularApi.Controllers
             await Task.CompletedTask;
             float[] chartData = new float[query.Count];
             int i = 0;
-          
+
             foreach (CashDBModel item in query)
             {
                 chartData[i] = item.Data.Day;
@@ -122,40 +122,9 @@ namespace AngularApi.Controllers
 
             return chartData;
         }
-        [HttpGet("{iso}/{count}/Chart")]
-        [EnableCors("AllowOrigin")]
-        public async Task<List<Tuple<string, float, float>>> GetDataChart(string iso, int count)
-        {
-            var query = _context.cashDBModels.Where(s => s.Code == iso).OrderByDescending(s => s.ID).Take(count).ToList();
-            await Task.CompletedTask;
-            List<Tuple<string, float, float>> ChartData = new List<Tuple<string, float, float>>();
-            Tuple<string, float, float> result;
-            foreach (CashDBModel item in query)
-            {
-                result = new Tuple<string, float, float>(item.Data.ToString("f",
-                      CultureInfo.CreateSpecificCulture("pl-PL")), item.AskPrice, item.BidPrice);
-                ChartData.Add(result);
-            }
 
 
-            return ChartData;
 
-        }
-
-        [HttpPost("{msg}")]
-        public  /*Task<ActionResult<string>>*/ string Post([FromBody] string message)
-        {
-            //user = new UserDBModel();
-            //user.Name = message;
-            //user.Pass = message;
-            //user.Email = message;
-            //_context.userDBModels.Add(user);
-            //_context.SaveChangesAsync();
-            UpdateFileService.SaveToFile(UpdateFileService.TestPath, message, false);
-
-            return message;
-            //return CreatedAtAction(nameof(message), new { id = message }, message);
-        }
 
 
     }

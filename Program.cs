@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using AngularApi.DataBase;
 using Microsoft.Extensions.DependencyInjection;
+using Azure.Identity;
 
 namespace AngularApi
 {
@@ -42,10 +43,11 @@ namespace AngularApi
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    
+
                 });
     }
 }

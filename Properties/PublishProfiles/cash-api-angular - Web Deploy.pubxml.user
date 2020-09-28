@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Ten plik jest wykorzystywany przez proces publikowania/pakowania projektu internetowego. Możesz dostosować zachowanie tego procesu
+ poprzez edycję tego pliku MSBuild. Aby dowiedzieć się więcej o tym działaniu, odwiedź stronę https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA91aeBVYr+0GIq0CupmuM6AAAAAACAAAAAAAQZgAAAAEAACAAAABF+FaG3ben0JdxDwaYtHBl+JFSMs6RU9Xxbkd0p5K1JQAAAAAOgAAAAAIAACAAAACsCKEqRtqUssw65Z14EI/Oi+XfVQMUEb93gZtPFHC5tYAAAADGMa7GUSKfXpTIbmNl0jALmVjifKy2WyWOK7VImTivXYyCVqt8PAXAE0f0qlDrk2cM/JbVhR9X3LPa19UBuz/8i0S1BCCSq4fQUYk09LiRUdG+DcVFDu3/xLLRNjhissEJichphhFNbi8WrfxmuHT0onfeHrXb5I2QbpvNOKxUAUAAAAAzcJJWyg3KhqbJ2rKdPAJ59+HHHk9NzriY3knyuvDIoPCb3i/RiFj/uwXX6I9ZotBnCE6j3cLBaszU8jJpH+nn</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="MyAzureDataBase">
+      <Value>Data Source=tcp:photographylifedbserver.database.windows.net,1433%3bInitial Catalog=PhotographyLife_db%3bUser Id=Wojciech%40photographylifedbserver%3bPassword=Wolfman7</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

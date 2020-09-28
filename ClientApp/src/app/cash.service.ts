@@ -8,33 +8,36 @@ import { Observable } from 'rxjs';
 })
 export class CashService {
 
-  baseUrl: string = 'https://localhost:5001/Cash';
+  baseUrl: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+    this.baseUrl = baseUrl;
+
+  }
 
  
 
   GetLastCurrency(iso: string, count: number) {
-    return this.http.get<Cash[]>(this.baseUrl + '/' + iso + '/' + count);
+    return this.http.get<Cash[]>(this.baseUrl + 'cash/' + iso + '/' + count);
   }
 
   GetDataOnInit() {
 
-    return this.http.get<Cash[]>(this.baseUrl );
+    return this.http.get<Cash[]>(this.baseUrl+ 'cash/' );
     
   }
   GetChartData(iso: string, count: number) {
-    return this.http.get<number[]>(this.baseUrl + '/' + iso + '/' + count + '/DataChart');
+    return this.http.get<number[]>(this.baseUrl + 'cash/' + iso + '/' + count + '/DataChart');
      
   }
 
   GetChartAskPrice(iso: string, count: number){
-    return this.http.get<number[]>(this.baseUrl + '/' + iso + '/' + count + '/AskPrice');
+    return this.http.get<number[]>(this.baseUrl + 'cash/' + iso + '/' + count + '/AskPrice');
      
     
   }
   GetChartBidPrice(iso: string, count: number) {
-    return this.http.get<number[]>(this.baseUrl + '/' + iso + '/' + count + '/BidPrice');
+    return this.http.get<number[]>(this.baseUrl + 'cash/' + iso + '/' + count + '/BidPrice');
   }
 
 }

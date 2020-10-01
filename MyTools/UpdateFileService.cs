@@ -28,9 +28,12 @@ namespace AngularApi.MyTools
         public static string LogsPath = @"Data/Logs.txt";
 
         private static Timer updateDataBase;
-        private TimeSpan periodTime;
-  
+        private TimeSpan periodTime=TimeSpan.FromMinutes(5);
 
+        public UpdateFileService()
+        {
+
+        }
 
         public UpdateFileService(ILogger<UpdateFileService> logger, IServiceScopeFactory scopeFactory)
         {
@@ -45,7 +48,7 @@ namespace AngularApi.MyTools
 
         public void UpdateCash(object state)
         {
-            periodTime = SetMinuts();
+            periodTime = SetMinuts(DateTime.Now);
             using (var scope = _scopeFactory.CreateScope())
             {
                 var _update = scope.ServiceProvider.GetRequiredService<IUpdateFile>();
@@ -88,59 +91,54 @@ namespace AngularApi.MyTools
 
 
 
-        private TimeSpan SetMinuts()
+        public TimeSpan SetMinuts(DateTime dateTime)
         {
-            if (DateTime.UtcNow.Hour < 8)
+            if (dateTime.Hour < 8)
             {
-                int acctualhour = DateTime.UtcNow.Hour;
+                int hour = 0;
+                int acctualhour = dateTime.Hour;
                 for (int i = acctualhour; i < 24; i++)
                 {
+                    hour++;
                     if (acctualhour == 8)
                     {
                         break;
 
                     }
+                    
                 }
 
-                return TimeSpan.FromHours(24) + TimeSpan.FromMinutes(16);
+                return TimeSpan.FromHours(hour+ 24) + TimeSpan.FromMinutes(16);
             }
-            else if (DateTime.UtcNow.Hour >20)
+            else if (dateTime.Hour > 20)
             {
-                int acctualhour = DateTime.UtcNow.Hour;
+                int acctualhour = dateTime.Hour;
                 int hour = 0;
                 for (int i = acctualhour; i <= 24; i++)
                 {
+                    hour = i;
                     if (acctualhour == 24)
                     {
-                        hour = i;
                         break;
-
                     }
                 }
-                for (int i = acctualhour; i < 24; i++)
-                {
-                    if (acctualhour == 8)
-                    {
-                        hour += i;
-                        break;
-
-                    }
-                }
-                return TimeSpan.FromHours(hour) + TimeSpan.FromMinutes(16);
+             
+                return TimeSpan.FromHours(hour+ 8) + TimeSpan.FromMinutes(16);
             }
             else
             {
                 int hourToSubtract = 0;
-                int acctualhour = DateTime.UtcNow.Hour;
-                for (int i = acctualhour; i > 0; i--)
+                int acctualhour = dateTime.Hour;
+                for (int i = acctualhour; i >= 0; i--)
                 {
-                    if (acctualhour == 8)
+                   
+                    if (i == 8)
                     {
-                        hourToSubtract = i;
                         break;
                     }
+                    hourToSubtract++;
                 }
-                return TimeSpan.FromHours(24 - hourToSubtract) + TimeSpan.FromMinutes(16);
+                return TimeSpan.FromHours( hourToSubtract) + TimeSpan.FromMinutes(16);
             }
         }
         public static void SaveToFile(string pathToFile, string text, bool appendText)

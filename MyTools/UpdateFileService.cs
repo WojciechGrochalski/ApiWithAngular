@@ -108,38 +108,20 @@ namespace AngularApi.MyTools
                     
                 }
 
-                return TimeSpan.FromHours(hour+ 24) + TimeSpan.FromMinutes(16);
+                return TimeSpan.FromHours(hour + 24) + TimeSpan.FromMinutes(16);
             }
-            else if (dateTime.Hour > 20)
+            if (dateTime.Hour > 8)
             {
                 int acctualhour = dateTime.Hour;
                 int hour = 0;
-                for (int i = acctualhour; i <= 24; i++)
+                for (int i = acctualhour; i < 24; i++)
                 {
-                    hour = i;
-                    if (acctualhour == 24)
-                    {
-                        break;
-                    }
+                    hour++;
                 }
-             
-                return TimeSpan.FromHours(hour+ 8) + TimeSpan.FromMinutes(16);
+
+                return TimeSpan.FromHours(hour + 8) + TimeSpan.FromMinutes(16);
             }
-            else
-            {
-                int hourToSubtract = 0;
-                int acctualhour = dateTime.Hour;
-                for (int i = acctualhour; i >= 0; i--)
-                {
-                   
-                    if (i == 8)
-                    {
-                        break;
-                    }
-                    hourToSubtract++;
-                }
-                return TimeSpan.FromHours( hourToSubtract) + TimeSpan.FromMinutes(16);
-            }
+            return TimeSpan.FromHours(24) + TimeSpan.FromMinutes(16);
         }
         public static void SaveToFile(string pathToFile, string text, bool appendText)
         {

@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AngularApi", "AngularApi.csproj", "{E4202382-CD74-46EF-A088-092DC2A82CEE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppTest", "..\AppTest\AppTest.csproj", "{37D68F5F-0AAA-4172-AB9B-3CA55648F7EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "angularapi", "angularapi.csproj", "{E4202382-CD74-46EF-A088-092DC2A82CEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{E4202382-CD74-46EF-A088-092DC2A82CEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4202382-CD74-46EF-A088-092DC2A82CEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4202382-CD74-46EF-A088-092DC2A82CEE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{37D68F5F-0AAA-4172-AB9B-3CA55648F7EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{37D68F5F-0AAA-4172-AB9B-3CA55648F7EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{37D68F5F-0AAA-4172-AB9B-3CA55648F7EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{37D68F5F-0AAA-4172-AB9B-3CA55648F7EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -21,7 +21,7 @@ export class CashDataComponent {
 
   public listofcash: Cash[];
   public result: Cash[];
-  public chartData: number[];
+  public chartData: number[]=[];
   public askPrice: number[] = [];
   public bidPrice: number[] = [];
 
@@ -55,7 +55,7 @@ export class CashDataComponent {
 
   }
 
-  TakeLastCurrency(iso: string, count: number) {
+   async TakeLastCurrency(iso: string, count: number) {
 
     this.cashService.GetLastCurrency(iso, count).subscribe(response => {
       this.result = response;
@@ -73,24 +73,22 @@ export class CashDataComponent {
     this.cashService.GetChartBidPrice(iso, count).subscribe(response => {
 
       this.bidPrice = response;
-      this.UpdateChart(this.askPrice, response, this.chartData);
+     
     }, error => console.error(error));
 
     this.cashService.GetChartData(iso, count).subscribe(response => {
 
       this.chartData = response;
-      response = response.reverse()
-      this.xaxis = {
-        categories: response
-      }
 
     }, error => console.error(error));
     
-    this.title = {
-      text: iso
-    };
-  
+   
+     await new Promise(resolve => setTimeout(resolve, 100));
 
+     this.UpdateChart(this.askPrice, this.bidPrice, this.chartData);
+     this.title = {
+       text: iso
+     };
   }
 
 
@@ -99,6 +97,7 @@ export class CashDataComponent {
   
     askValue = askValue.reverse();
     bidValue = bidValue.reverse();
+    date = date.reverse();
     this.series = [
     {
       name: "Cena kupna",
@@ -113,9 +112,12 @@ export class CashDataComponent {
       title: {
         text: "PLN"
       },
-      min: Math.min.apply(null, this.bidPrice) - 0.1,
-      max: Math.max.apply(null, this.askPrice) + 0.1
+      min: Math.min.apply(null, this.bidPrice) - Math.min.apply(null, this.bidPrice)/100,
+      max: Math.max.apply(null, this.askPrice) + Math.max.apply(null, this.askPrice)/100
     };
+    this.xaxis = {
+      categories: date
+    }
   }
 
 

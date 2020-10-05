@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using TimeZoneConverter;
 
 namespace AngularApi.MyTools
 {
@@ -77,7 +78,8 @@ namespace AngularApi.MyTools
 
         private bool ChceckItIsAvailableApi()
         {
-            DateTime utcNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time"));
+            TimeZoneInfo tzi = TZConvert.GetTimeZoneInfo("Central Europe Standard Time");
+            DateTime utcNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tzi);
             if (utcNow.Hour>8 && utcNow.Hour < 22)
             {
                 return true;

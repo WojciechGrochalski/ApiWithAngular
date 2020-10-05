@@ -46,9 +46,6 @@ namespace AngularApi.MyTools
                 {
                      _context.cashDBModels.Add(cash);
 
-                    string LogsMessage = cash.Code.ToString() + "  Wpisano: " + DateTime.Now.ToString();
-                    SaveToFile(UpdateFileService.LogsPath, LogsMessage, true);
-
                 }
 
               _context.SaveChanges();

@@ -21,7 +21,7 @@ export class CashDataComponent {
 
   public listofcash: Cash[];
   public result: Cash[];
-  public chartData: number[]=[];
+  public chartData: string[]=[];
   public askPrice: number[] = [];
   public bidPrice: number[] = [];
 
@@ -83,21 +83,19 @@ export class CashDataComponent {
     }, error => console.error(error));
     
    
-     await new Promise(resolve => setTimeout(resolve, 100));
+     await new Promise(resolve => setTimeout(resolve, 200));
 
      this.UpdateChart(this.askPrice, this.bidPrice, this.chartData);
      this.title = {
        text: iso
      };
+   
   }
 
 
 
-  UpdateChart(askValue: number[], bidValue: number[], date: number[]): void {
+  UpdateChart(askValue: number[], bidValue: number[], date: string[]): void {
   
-    askValue = askValue.reverse();
-    bidValue = bidValue.reverse();
-    date = date.reverse();
     this.series = [
     {
       name: "Cena kupna",
@@ -108,6 +106,9 @@ export class CashDataComponent {
         data: bidValue
       }
     ];
+    this.xaxis = {
+      categories: date
+    }
     this.yaxis = {
       title: {
         text: "PLN"
@@ -115,9 +116,7 @@ export class CashDataComponent {
       min: Math.min.apply(null, this.bidPrice) - Math.min.apply(null, this.bidPrice)/100,
       max: Math.max.apply(null, this.askPrice) + Math.max.apply(null, this.askPrice)/100
     };
-    this.xaxis = {
-      categories: date
-    }
+  
   }
 
 

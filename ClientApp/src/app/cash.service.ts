@@ -27,7 +27,7 @@ export class CashService {
     
   }
   GetChartData(iso: string, count: number) {
-    return this.http.get<number[]>(this.baseUrl + 'cash/' + iso + '/' + count + '/DataChart');
+    return this.http.get<string[]>(this.baseUrl + 'cash/' + iso + '/' + count + '/DataChart');
      
   }
 

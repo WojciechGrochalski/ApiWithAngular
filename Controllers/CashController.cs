@@ -74,27 +74,40 @@ namespace AngularApi.Controllers
             {
                 list.Add(cashModel = new CashModel(item));
             }
-            // list.Reverse();
+           // list.Reverse();
             return list;
 
         }
+        /// <summary>
+        ///     return date of cash
+        /// </summary>
+        /// <param name="iso"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         [HttpGet("{iso}/{count}/DataChart")]
         [EnableCors("AllowOrigin")]
-        public async Task<float[]> GetDataChart(string iso, int count, string type)
+        public async Task<string[]> GetDataChart(string iso, int count)
         {
             var query = _context.cashDBModels.Where(s => s.Code == iso).OrderByDescending(s => s.ID).Take(count).ToList();
             await Task.CompletedTask;
-            float[] chartData = new float[query.Count];
+            string[] chartData = new string[query.Count];
             int i = 0;
 
             foreach (CashDBModel item in query)
             {
-                chartData[i] = item.Data.Day;
+                chartData[i] = item.Data.ToShortDateString();
                 i++;
             }
-
+            Array.Reverse(chartData);
             return chartData;
         }
+        /// <summary>
+        /// return Bid or Ask price
+        /// </summary>
+        /// <param name="iso"></param>
+        /// <param name="count"></param>
+        /// <param name="chartPrice"></param>
+        /// <returns></returns>
         [HttpGet("{iso}/{count}/{chartPrice}")]
         [EnableCors("AllowOrigin")]
         public async Task<float[]> GetPriceChart(string iso, int count, string chartPrice)
@@ -119,7 +132,7 @@ namespace AngularApi.Controllers
                     i++;
                 }
             }
-
+            Array.Reverse(chartData);
             return chartData;
         }
 

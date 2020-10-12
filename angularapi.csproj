@@ -10,9 +10,10 @@
 
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>true</BuildServerSideRenderer>
-    <UserSecretsId>b55bb4de-94bd-4fd7-bf30-ddd731fbb3c6</UserSecretsId>
+ 
     <StartupObject></StartupObject>
     <AspnetCompileMergeIntermediateOutputPath>c:\tem\</AspnetCompileMergeIntermediateOutputPath>
+    <UserSecretsId>f3fed2fc-76af-4b4a-894c-95dc765db86e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,8 +39,25 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
-  <!--<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
-    --><!-- Ensure Node.js is installed --><!--
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </None>
+   
+  </ItemGroup>
+  
+
+  
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+     
     <Exec Command="node version" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
     </Exec>
@@ -49,23 +67,21 @@
   </Target>
 
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
-    --><!-- As part of publishing, ensure the JS resources are freshly built in production mode --><!--
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build  prod" />
+     
+       <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
        
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr  prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
-   
-    
-    --><!-- Include the newly-built files in the publish output --><!--
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr  --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+     
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
-      --><!--<DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />--><!--
+      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
       <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </ResolvedFileToPublish>
     </ItemGroup>
-  </Target>-->
+  </Target>
 
 </Project>

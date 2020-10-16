@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using AngularApi.Models;
 using Microsoft.AspNetCore.Cors;
 using System.Globalization;
+using angularapi.MyTools;
 
 namespace AngularApi.Controllers
 {
@@ -23,6 +24,7 @@ namespace AngularApi.Controllers
     {
 
         private readonly CashDBContext _context;
+        GetDataFromDB get = new GetDataFromDB();
 
         public CashController(CashDBContext context)
         {
@@ -35,16 +37,18 @@ namespace AngularApi.Controllers
         [EnableCors("AllowOrigin")]
         public async Task<List<CashModel>> GetLastCurrency()
         {
-
-            var query = _context.cashDBModels.OrderByDescending(s => s.ID).Take(13).ToList();
-            await Task.CompletedTask;
             List<CashModel> list = new List<CashModel>();
             CashModel cashModel;
+            List<CashDBModel> query;
+            query = get.GetTodayAllCurrency(_context);
+
             foreach (CashDBModel item in query)
             {
                 list.Add(cashModel = new CashModel(item));
             }
+
             list.Reverse();
+            await Task.CompletedTask;
             return list;
         }
 
@@ -54,7 +58,7 @@ namespace AngularApi.Controllers
         public async Task<CashModel> GetLastOneCurrency(string iso)
         {
             iso.ToUpper();
-            var query = _context.cashDBModels.OrderByDescending(s => s.ID).Where(s => s.Code == iso).FirstOrDefault();
+            CashDBModel query = get.GetLastOne(iso, _context);
             CashModel result = new CashModel(query);
             await Task.CompletedTask;
             return result;
@@ -65,16 +69,17 @@ namespace AngularApi.Controllers
         [EnableCors("AllowOrigin")]
         public async Task<List<CashModel>> GetLastManyCurrency(string iso, int count)
         {
-
-            var query = _context.cashDBModels.Where(s => s.Code == iso).OrderByDescending(s => s.ID).Take(count).ToList();
-            await Task.CompletedTask;
             List<CashModel> list = new List<CashModel>();
             CashModel cashModel;
+            List<CashDBModel> query;
+
+            query = get.GetLastCountNumberOfCurrency(iso, count, _context);
+
             foreach (CashDBModel item in query)
             {
                 list.Add(cashModel = new CashModel(item));
             }
-           // list.Reverse();
+            await Task.CompletedTask;
             return list;
 
         }
@@ -88,8 +93,9 @@ namespace AngularApi.Controllers
         [EnableCors("AllowOrigin")]
         public async Task<string[]> GetDataChart(string iso, int count)
         {
-            var query = _context.cashDBModels.Where(s => s.Code == iso).OrderByDescending(s => s.ID).Take(count).ToList();
-            await Task.CompletedTask;
+            List<CashDBModel> query;
+            query = get.GetLastCountNumberOfCurrency(iso, count, _context);
+
             string[] chartData = new string[query.Count];
             int i = 0;
 
@@ -99,6 +105,7 @@ namespace AngularApi.Controllers
                 i++;
             }
             Array.Reverse(chartData);
+            await Task.CompletedTask;
             return chartData;
         }
         /// <summary>
@@ -112,8 +119,9 @@ namespace AngularApi.Controllers
         [EnableCors("AllowOrigin")]
         public async Task<float[]> GetPriceChart(string iso, int count, string chartPrice)
         {
-            var query = _context.cashDBModels.Where(s => s.Code == iso).OrderByDescending(s => s.ID).Take(count).ToList();
-            await Task.CompletedTask;
+            List<CashDBModel> query;
+            query = get.GetLastCountNumberOfCurrency(iso, count, _context);
+
             float[] chartData = new float[query.Count];
             int i = 0;
             if (chartPrice == "AskPrice")
@@ -133,6 +141,7 @@ namespace AngularApi.Controllers
                 }
             }
             Array.Reverse(chartData);
+            await Task.CompletedTask;
             return chartData;
         }
 

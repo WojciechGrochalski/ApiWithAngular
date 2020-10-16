@@ -4,11 +4,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CashDataComponent } from './cash-data/cash-data.component';
+
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NavMenuComponent } from '../nav-menu/nav-menu.component';
+import { HomeComponent } from '../home/home.component';
+import { CashDataComponent } from '../cash-data/cash-data.component';
 
 
 @NgModule({

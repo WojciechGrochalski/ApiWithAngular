@@ -1,7 +1,7 @@
 import { Component, Inject, Input, Injectable, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CashService } from '../cash.service';
 import *as apex from 'ng-apexcharts';
+import { CashService } from '../app/cash.service';
 
 
 
@@ -83,7 +83,7 @@ export class CashDataComponent {
     }, error => console.error(error));
     
    
-     await new Promise(resolve => setTimeout(resolve, 200));
+     await new Promise(resolve => setTimeout(resolve, 400));
 
      this.UpdateChart(this.askPrice, this.bidPrice, this.chartData);
      this.title = {

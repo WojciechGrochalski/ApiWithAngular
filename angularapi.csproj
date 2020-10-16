@@ -11,7 +11,7 @@
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>true</BuildServerSideRenderer>
  
-    <StartupObject></StartupObject>
+    <StartupObject>AngularApi.Program</StartupObject>
     <AspnetCompileMergeIntermediateOutputPath>c:\tem\</AspnetCompileMergeIntermediateOutputPath>
     <UserSecretsId>f3fed2fc-76af-4b4a-894c-95dc765db86e</UserSecretsId>
   </PropertyGroup>

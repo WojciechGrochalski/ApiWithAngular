@@ -83,13 +83,13 @@ export class CashDataComponent {
     }, error => console.error(error));
     
    
-     await new Promise(resolve => setTimeout(resolve, 400));
+     await new Promise(resolve => setTimeout(resolve, 100));
 
      this.UpdateChart(this.askPrice, this.bidPrice, this.chartData);
      this.title = {
        text: iso
      };
-   
+     await new Promise(resolve => setTimeout(resolve, 300));
   }
 
 
@@ -105,6 +105,7 @@ export class CashDataComponent {
         name: "Cena sprzedaży",
         data: bidValue
       }
+      
     ];
     this.xaxis = {
       categories: date
@@ -116,6 +117,7 @@ export class CashDataComponent {
       min: Math.min.apply(null, this.bidPrice) - Math.min.apply(null, this.bidPrice)/100,
       max: Math.max.apply(null, this.askPrice) + Math.max.apply(null, this.askPrice)/100
     };
+    
   
   }
 

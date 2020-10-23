@@ -26,10 +26,10 @@ import { CashDataComponent } from '../cash-data/cash-data.component';
     HttpClientModule,
     FormsModule,
     NgApexchartsModule,
-    //GoogleChartsModule.forRoot({ version: 'chart-version' }),
    
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', component: HomeComponent },
       { path: 'cash-data', component: CashDataComponent },
     ]),
     BrowserAnimationsModule

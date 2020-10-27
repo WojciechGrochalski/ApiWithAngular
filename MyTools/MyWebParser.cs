@@ -94,7 +94,7 @@ namespace AngularApi.MyTools
             }
         }
 
-        // dodać referencje
+        
         public string[] GetIsoFromFile(string[] isoArray)
         {
             string path = @"Data/Iso.json";

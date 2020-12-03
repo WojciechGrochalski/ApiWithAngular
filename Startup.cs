@@ -47,7 +47,7 @@ namespace AngularApi
                     options.UseSqlServer(Configuration.GetConnectionString("MyAzureDataBase")));
 
             services.AddHostedService<UpdateFileService>();
-            services.AddScoped<IUpdateFile,MyWebParser>();
+            services.AddScoped<IWebParser,MyWebParser>();
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //>>>>>>>>>>>>>>>Data base >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             // var connection = @"Server=(localdb)\mssqllocaldb;Database=CashDB;Trusted_Connection=True;ConnectRetryCount=0";

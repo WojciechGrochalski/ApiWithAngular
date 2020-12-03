@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AngularApi.Models
 {
-    public class CashDBModel
+    public class CurrencyDBModel
     {
         public int ID { get; set; }
         public string Name { get; set; }
@@ -14,11 +14,11 @@ namespace AngularApi.Models
         public float AskPrice { get; set; }
         public DateTime Data { get; set; }
 
-        public CashDBModel()
+        public CurrencyDBModel()
         {
 
         }
-        public CashDBModel(string name, string code, float bidPrice, float askPrice, DateTime data)
+        public CurrencyDBModel(string name, string code, float bidPrice, float askPrice, DateTime data)
         {
             Name = name;
             Code = code;

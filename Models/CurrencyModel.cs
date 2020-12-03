@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AngularApi
 {
-    public class CashModel
+    public class CurrencyModel
     {
         public string Name { get; set; }
         public string Code { get; set; }
@@ -20,13 +20,13 @@ namespace AngularApi
 
 
 
-        public static List<CashModel> cashModelsList = new List<CashModel>();
+        public static List<CurrencyModel> CurrencyList = new List<CurrencyModel>();
 
-        public CashModel()
+        public CurrencyModel()
         {
 
         }
-        public CashModel(CashDBModel modelDB)
+        public CurrencyModel(CurrencyDBModel modelDB)
         {
             Name = modelDB.Name;
             Code = modelDB.Code;
@@ -42,7 +42,7 @@ namespace AngularApi
             path = Path.GetFullPath(path);
 
             string fileData = File.ReadAllText(path);
-            cashModelsList =JsonConvert.DeserializeObject<List<CashModel>>(fileData);
+            CurrencyList =JsonConvert.DeserializeObject<List<CurrencyModel>>(fileData);
         }
     }
 }

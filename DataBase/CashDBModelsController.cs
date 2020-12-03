@@ -53,7 +53,7 @@ namespace AngularApi.DataBase
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Code,BidPrice,AskPrice,Data")] CashDBModel cashDBModel)
+        public async Task<IActionResult> Create([Bind("ID,Name,Code,BidPrice,AskPrice,Data")] CurrencyDBModel cashDBModel)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace AngularApi.DataBase
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Code,BidPrice,AskPrice,Data")] CashDBModel cashDBModel)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Code,BidPrice,AskPrice,Data")] CurrencyDBModel cashDBModel)
         {
             if (id != cashDBModel.ID)
             {

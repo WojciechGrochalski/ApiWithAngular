@@ -24,27 +24,25 @@ namespace AngularApi.Controllers
     {
 
         private readonly CashDBContext _context;
-        GetDataFromDB get = new GetDataFromDB();
+        CurrencyDBQuery get = new CurrencyDBQuery();
 
         public CashController(CashDBContext context)
         {
             _context = context;
         }
 
-
-
         [HttpGet]
         [EnableCors("AllowOrigin")]
-        public async Task<List<CashModel>> GetLastCurrency()
+        public async Task<List<CurrencyModel>> GetLastCurrency()
         {
-            List<CashModel> list = new List<CashModel>();
-            CashModel cashModel;
-            List<CashDBModel> query;
+            List<CurrencyModel> list = new List<CurrencyModel>();
+            CurrencyModel cashModel;
+            List<CurrencyDBModel> query;
             query = get.GetTodayAllCurrency(_context);
 
-            foreach (CashDBModel item in query)
+            foreach (CurrencyDBModel item in query)
             {
-                list.Add(cashModel = new CashModel(item));
+                list.Add(cashModel = new CurrencyModel(item));
             }
 
             list.Reverse();
@@ -52,14 +50,13 @@ namespace AngularApi.Controllers
             return list;
         }
 
-
         [HttpGet("{iso}")]
         [EnableCors("AllowOrigin")]
-        public async Task<CashModel> GetLastOneCurrency(string iso)
+        public async Task<CurrencyModel> GetLastOneCurrency(string iso)
         {
             iso.ToUpper();
-            CashDBModel query = get.GetLastOne(iso, _context);
-            CashModel result = new CashModel(query);
+            CurrencyDBModel query = get.GetLastOne(iso, _context);
+            CurrencyModel result = new CurrencyModel(query);
             await Task.CompletedTask;
             return result;
 
@@ -67,17 +64,17 @@ namespace AngularApi.Controllers
 
         [HttpGet("{iso}/{count}")]
         [EnableCors("AllowOrigin")]
-        public async Task<List<CashModel>> GetLastManyCurrency(string iso, int count)
+        public async Task<List<CurrencyModel>> GetLastManyCurrency(string iso, int count)
         {
-            List<CashModel> list = new List<CashModel>();
-            CashModel cashModel;
-            List<CashDBModel> query;
+            List<CurrencyModel> list = new List<CurrencyModel>();
+            CurrencyModel cashModel;
+            List<CurrencyDBModel> query;
 
-            query = get.GetLastCountNumberOfCurrency(iso, count, _context);
+            query = get.GetLastNumberOfCurrency(iso, count, _context);
 
-            foreach (CashDBModel item in query)
+            foreach (CurrencyDBModel item in query)
             {
-                list.Add(cashModel = new CashModel(item));
+                list.Add(cashModel = new CurrencyModel(item));
             }
             await Task.CompletedTask;
             return list;
@@ -88,18 +85,17 @@ namespace AngularApi.Controllers
         /// </summary>
         /// <param name="iso"></param>
         /// <param name="count"></param>
-        /// <returns></returns>
         [HttpGet("{iso}/{count}/DataChart")]
         [EnableCors("AllowOrigin")]
         public async Task<string[]> GetDataChart(string iso, int count)
         {
-            List<CashDBModel> query;
-            query = get.GetLastCountNumberOfCurrency(iso, count, _context);
+            List<CurrencyDBModel> query;
+            query = get.GetLastNumberOfCurrency(iso, count, _context);
 
             string[] chartData = new string[query.Count];
             int i = 0;
 
-            foreach (CashDBModel item in query)
+            foreach (CurrencyDBModel item in query)
             {
                 chartData[i] = item.Data.ToShortDateString();
                 i++;
@@ -114,18 +110,17 @@ namespace AngularApi.Controllers
         /// <param name="iso"></param>
         /// <param name="count"></param>
         /// <param name="chartPrice"></param>
-        /// <returns></returns>
         [HttpGet("{iso}/{count}/{chartPrice}")]
         [EnableCors("AllowOrigin")]
         public async Task<float[]> GetPriceChart(string iso, int count, string chartPrice)
         {
-            List<CashDBModel> query;
-            query = get.GetLastCountNumberOfCurrency(iso, count, _context);
+            List<CurrencyDBModel> query;
+            query = get.GetLastNumberOfCurrency(iso, count, _context);
 
             float[] chartData = new float[query.Count];
             int i = 0;
             if (chartPrice == "AskPrice")
-                foreach (CashDBModel item in query)
+                foreach (CurrencyDBModel item in query)
                 {
                     {
                         chartData[i] = item.AskPrice;
@@ -134,7 +129,7 @@ namespace AngularApi.Controllers
                 }
             else if (chartPrice == "BidPrice")
             {
-                foreach (CashDBModel item in query)
+                foreach (CurrencyDBModel item in query)
                 {
                     chartData[i] = item.BidPrice;
                     i++;
@@ -145,6 +140,10 @@ namespace AngularApi.Controllers
             return chartData;
         }
 
+
+        //TODO ASAP
+        //Dodać żądanie do subskrybcji kursów walut
+        
 
 
 

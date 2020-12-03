@@ -8,21 +8,18 @@ using System.Threading.Tasks;
 
 namespace angularapi.MyTools
 {
-    public class GetDataFromDB
+    public class CurrencyDBQuery
     {
-        List<CashModel> query = new List<CashModel>();
-   
-
-        public List<CashDBModel> GetTodayAllCurrency(CashDBContext _context)
+        public List<CurrencyDBModel> GetTodayAllCurrency(CashDBContext _context)
         {
             return _context.cashDBModels.OrderByDescending(s => s.ID).Take(13).ToList();
         }
 
-        public CashDBModel GetLastOne(string iso, CashDBContext _context)
+        public CurrencyDBModel GetLastOne(string iso, CashDBContext _context)
         {
             return _context.cashDBModels.OrderByDescending(s => s.ID).Where(s => s.Code == iso).FirstOrDefault();
         }
-        public List<CashDBModel> GetLastCountNumberOfCurrency(string iso, int count, CashDBContext _context)
+        public List<CurrencyDBModel> GetLastNumberOfCurrency(string iso, int count, CashDBContext _context)
         {
             return _context.cashDBModels.Where(s => s.Code == iso).OrderByDescending(s => s.ID).Take(count).ToList();
         }

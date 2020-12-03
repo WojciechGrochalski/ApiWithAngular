@@ -29,7 +29,7 @@ namespace AngularApi.MyTools
         public static string LogsPath = @"Data/Logs.txt";
 
         private static Timer updateDataBase;
-        private TimeSpan periodTime=TimeSpan.FromMinutes(5);
+        private TimeSpan periodTime = TimeSpan.FromMinutes(5);
 
         public UpdateFileService()
         {
@@ -43,8 +43,7 @@ namespace AngularApi.MyTools
 
         }
 
-
-        List<CashDBModel> listOfCash = new List<CashDBModel>();
+        List<CurrencyDBModel> listOfCash = new List<CurrencyDBModel>();
         string[] isoArray;
 
         public void UpdateCash(object state)
@@ -52,11 +51,11 @@ namespace AngularApi.MyTools
             periodTime = SetMinuts(DateTime.Now);
             using (var scope = _scopeFactory.CreateScope())
             {
-                var _update = scope.ServiceProvider.GetRequiredService<IUpdateFile>();
+                var _update = scope.ServiceProvider.GetRequiredService<IWebParser>();
                 var _context = scope.ServiceProvider.GetRequiredService<CashDBContext>();
 
 
-                if (DateTime.Today.DayOfWeek.ToString() !=  "Saturday" &&
+                if (DateTime.Today.DayOfWeek.ToString() != "Saturday" &&
                        DateTime.Today.DayOfWeek.ToString() != "Sunday")
                 {
                     if (ChceckItIsAvailableApi())
@@ -64,7 +63,7 @@ namespace AngularApi.MyTools
                         isoArray = _update.GetIsoFromFile(isoArray);
                         foreach (string iso in isoArray)
                         {
-                            listOfCash.Add(_update.DownloadActual(iso));
+                            listOfCash.Add(_update.DownloadActualCurrency(iso));
                         }
 
                         _update.SendCurrencyToDataBase(listOfCash, _context);
@@ -75,23 +74,20 @@ namespace AngularApi.MyTools
 
         }
 
-
         private bool ChceckItIsAvailableApi()
         {
             TimeZoneInfo tzi = TZConvert.GetTimeZoneInfo("Central Europe Standard Time");
             DateTime utcNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tzi);
-            if (utcNow.Hour>8 && utcNow.Hour < 22)
+            if (utcNow.Hour > 8 && utcNow.Hour < 22)
             {
                 return true;
             }
-            if (utcNow.Hour == 8 && utcNow.Minute > 16) 
+            if (utcNow.Hour == 8 && utcNow.Minute > 16)
             {
                 return true;
             }
             return false;
         }
-
-
 
         public TimeSpan SetMinuts(DateTime dateTime)
         {
@@ -107,7 +103,7 @@ namespace AngularApi.MyTools
                         break;
 
                     }
-                    
+
                 }
 
                 return TimeSpan.FromHours(hour + 24) + TimeSpan.FromMinutes(16);
@@ -125,6 +121,7 @@ namespace AngularApi.MyTools
             }
             return TimeSpan.FromHours(24) + TimeSpan.FromMinutes(16);
         }
+
         public static void SaveToFile(string pathToFile, string text, bool appendText)
         {
             string path = Path.GetFullPath(pathToFile);
@@ -147,11 +144,7 @@ namespace AngularApi.MyTools
                 File.WriteAllText(path, text);
             }
         }
-        /// <summary>
-        /// Backgound task functions
-        /// </summary>
-        /// <param ></param>
-        /// <returns></returns>
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             updateDataBase = new Timer(UpdateCash, null, TimeSpan.Zero,

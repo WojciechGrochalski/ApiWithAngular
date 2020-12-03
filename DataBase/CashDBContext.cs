@@ -16,7 +16,7 @@ namespace AngularApi.DataBase
 
         }
         
-        public DbSet<CashDBModel> cashDBModels { get; set; }
+        public DbSet<CurrencyDBModel> cashDBModels { get; set; }
         public DbSet<UserDBModel> userDBModels { get; set; }
 
 

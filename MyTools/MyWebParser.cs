@@ -11,38 +11,35 @@ using System.Net;
 
 namespace AngularApi.MyTools
 {
-    public class MyWebParser : IUpdateFile
+    public class MyWebParser : IWebParser
     {
         readonly WebClient webClient = new WebClient();
-        List<CashDBModel> listOfCash = new List<CashDBModel>();
-        CashDBModel _cashModel = new CashDBModel();
-      
-        string url;
-        string reply;
+        List<CurrencyDBModel> listOfCurrency = new List<CurrencyDBModel>();
+        CurrencyDBModel _currencyModel = new CurrencyDBModel();
 
-        public CashDBModel DownloadActual(string iso)
+        public CurrencyDBModel DownloadActualCurrency(string iso)
         {
 
-            url = "http://api.nbp.pl/api/exchangerates/rates/c/" + iso + "/?today/?format=json";
-            reply = webClient.DownloadString(url);
+            string url = "http://api.nbp.pl/api/exchangerates/rates/c/" + iso + "/?today/?format=json";
+            string reply = webClient.DownloadString(url);
             dynamic jObject = JObject.Parse(reply);
             DateTime date = DateTime.Now;
             string name = jObject.currency;
             string code = jObject.code;
             float askPrice = jObject.rates[0].ask;
             float bidPrice = jObject.rates[0].bid;
-            CashDBModel _cashModel= new CashDBModel(name, code, bidPrice, askPrice, date);
+            CurrencyDBModel _cashModel= new CurrencyDBModel(name, code, bidPrice, askPrice, date);
 
             return _cashModel;
 
         }
 
-        public void SendCurrencyToDataBase(List<CashDBModel> _listOfValue, CashDBContext _context)
+        public void SendCurrencyToDataBase(List<CurrencyDBModel> _listOfValue, CashDBContext _context)
         {
 
             if (!CheckDatabase(_context))
             {
-                foreach (CashDBModel cash in _listOfValue)
+                foreach (CurrencyDBModel cash in _listOfValue)
                 {
                      _context.cashDBModels.Add(cash);
 
@@ -54,14 +51,13 @@ namespace AngularApi.MyTools
 
         }
 
+        // Verify IF database was already updated today
         bool CheckDatabase(CashDBContext _context)
         {
 
             var query = _context.cashDBModels
-                        .Where(s => s.Data.Date == DateTime.Today.Date).FirstOrDefault<CashDBModel>();
+                        .Where(s => s.Data.Date == DateTime.Today.Date).FirstOrDefault();
                         
-
-            //today database dont be updated
             if (query ==null)
             {
                 return false;

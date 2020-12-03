@@ -62,13 +62,15 @@ export class CashDataComponent {
 
     }, error => console.error(error));
 
-   
+     await new Promise(resolve => setTimeout(resolve, 40));
+
     this.cashService.GetChartAskPrice(iso, count).subscribe(response => {
 
       this.askPrice = response;
  
     
     }, error => console.error(error));
+     await new Promise(resolve => setTimeout(resolve, 40));
 
     this.cashService.GetChartBidPrice(iso, count).subscribe(response => {
 
@@ -76,20 +78,22 @@ export class CashDataComponent {
      
     }, error => console.error(error));
 
+     await new Promise(resolve => setTimeout(resolve, 40));
+
     this.cashService.GetChartData(iso, count).subscribe(response => {
 
       this.chartData = response;
 
     }, error => console.error(error));
     
-   
-     await new Promise(resolve => setTimeout(resolve, 100));
+     await new Promise(resolve => setTimeout(resolve, 40));
+     
 
      this.UpdateChart(this.askPrice, this.bidPrice, this.chartData);
      this.title = {
        text: iso
      };
-     await new Promise(resolve => setTimeout(resolve, 300));
+     await new Promise(resolve => setTimeout(resolve, 100));
   }
 
 

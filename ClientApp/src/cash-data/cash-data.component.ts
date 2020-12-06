@@ -1,10 +1,7 @@
-import { Component, Inject, Input, Injectable, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Component, Inject, Input, Injectable, ViewChild} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import *as apex from 'ng-apexcharts';
-import { CashService } from '../app/cash.service';
-
-
-
+import {CashService} from '../app/cash.service';
 
 @Component({
   selector: 'app-cash-data',
@@ -19,13 +16,12 @@ export class CashDataComponent {
   yaxis: apex.ApexYAxis;
   xaxis: apex.ApexXAxis;
 
-  public listofcash: Cash[];
+  public cash_list: Cash[];
   public result: Cash[];
-  public chartData: string[]=[];
+  public chartData: string[] = [];
   public askPrice: number[] = [];
   public bidPrice: number[] = [];
 
- 
 
   constructor(http: HttpClient, private cashService: CashService) {
 
@@ -44,72 +40,55 @@ export class CashDataComponent {
         show: false
       }
     };
-  
-  }
-
-  ngOnInit(): void {
-    this.cashService.GetDataOnInit().subscribe(response => {
-      this.listofcash = response;
-    }, error => console.error(error));
-
 
   }
 
-   async TakeLastCurrency(iso: string, count: number) {
-
-    this.cashService.GetLastCurrency(iso, count).subscribe(response => {
-      this.result = response;
-
-    }, error => console.error(error));
-
-     await new Promise(resolve => setTimeout(resolve, 40));
-
-    this.cashService.GetChartAskPrice(iso, count).subscribe(response => {
-
-      this.askPrice = response;
- 
-    
-    }, error => console.error(error));
-     await new Promise(resolve => setTimeout(resolve, 40));
-
-    this.cashService.GetChartBidPrice(iso, count).subscribe(response => {
-
-      this.bidPrice = response;
-     
-    }, error => console.error(error));
-
-     await new Promise(resolve => setTimeout(resolve, 40));
-
-    this.cashService.GetChartData(iso, count).subscribe(response => {
-
-      this.chartData = response;
-
-    }, error => console.error(error));
-    
-     await new Promise(resolve => setTimeout(resolve, 40));
-     
-
-     this.UpdateChart(this.askPrice, this.bidPrice, this.chartData);
-     this.title = {
-       text: iso
-     };
-     await new Promise(resolve => setTimeout(resolve, 100));
+  async ngOnInit(): Promise<void> {
+    // this.cashService.GetDataOnInit().subscribe(response => {
+    //   this.listofcash = response;
+    // }, error => console.error(error));
+    try {
+      this.cash_list = await this.cashService.GetDataOnInit().toPromise();
+    } catch (e) {
+      console.error(e);
+      console.error(e);
+    }
+    return;
   }
 
+  async TakeLastCurrency(iso: string, count: string) {
+  let amoutOfCurrency: number = +count;
+    try {
+      this.result = await this.cashService.GetLastCurrency(iso, amoutOfCurrency).toPromise();
+
+      this.askPrice = await this.cashService.GetChartAskPrice(iso, amoutOfCurrency).toPromise();
+
+      this.bidPrice = await this.cashService.GetChartBidPrice(iso, amoutOfCurrency).toPromise();
+
+      this.chartData = await this.cashService.GetChartData(iso, amoutOfCurrency).toPromise();
+    } catch (e) {
+      console.error(e);
+    }
+    this.UpdateChart(this.askPrice, this.bidPrice, this.chartData);
+    this.title = {
+      text: iso
+    };
+
+  }
 
 
   UpdateChart(askValue: number[], bidValue: number[], date: string[]): void {
-  
+
     this.series = [
-    {
-      name: "Cena kupna",
-      data: askValue
+      {
+        name: "Cena kupna",
+        data: askValue
       },
       {
         name: "Cena sprzedaży",
         data: bidValue
       }
-      
+
     ];
     this.xaxis = {
       categories: date
@@ -118,11 +97,11 @@ export class CashDataComponent {
       title: {
         text: "PLN"
       },
-      min: Math.min.apply(null, this.bidPrice) - Math.min.apply(null, this.bidPrice)/100,
-      max: Math.max.apply(null, this.askPrice) + Math.max.apply(null, this.askPrice)/100
+      min: Math.min.apply(null, this.bidPrice) - Math.min.apply(null, this.bidPrice) / 100,
+      max: Math.max.apply(null, this.askPrice) + Math.max.apply(null, this.askPrice) / 100
     };
-    
-  
+    console.log('update Chart');
+
   }
 
 
@@ -136,6 +115,7 @@ interface Cash {
   askPrice: number;
   data: string;
 }
+
 interface Chart {
 
   data: string;

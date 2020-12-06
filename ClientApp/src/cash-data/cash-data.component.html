@@ -1,6 +1,6 @@
 <h1>NBP</h1>
 
-<p *ngIf="!listofcash"><em>Loading...</em></p>
+<p *ngIf="!cash_list"><em>Loading...</em></p>
 
 <h4>Aktualne kursy walut z NBP:</h4>
 
@@ -22,13 +22,13 @@
   <option value="XDR">SDR</option>
 </select>
 <select #count >
-  <option  value="10">10</option>
-  <option value="20">20</option>
-  <option value="30">30</option>
+  <option  value=10>10</option>
+  <option value=20>20</option>
+  <option value=30>30</option>
 </select>
-<button type="button" class="btn btn-default" (click)="TakeLastCurrency(iso.value, count.value)">Send request</button>
+<button type="button" class="btn btn-default" (click)="TakeLastCurrency(iso.value, count.value) ">Send request</button>
 
-<div *ngIf="!result; then table; else api"></div>
+<div *ngIf="!result; then table; else api;"></div>
 <ng-template #api>
   <p *ngIf="!result"><em>Loading...</em></p>
 
@@ -73,7 +73,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let cash of listofcash">
+        <tr *ngFor="let cash of cash_list">
           <td>{{ cash.data }}</td>
           <td>{{ cash.name}}</td>
           <td>{{ cash.askPrice }} PLN</td>

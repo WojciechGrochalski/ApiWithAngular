@@ -15,26 +15,27 @@ export class CashService {
 
   }
 
- 
+
 
   GetLastCurrency(iso: string, count: number) {
+
     return this.http.get<Cash[]>(this.baseUrl + 'cash/' + iso + '/' + count);
   }
 
   GetDataOnInit() {
 
     return this.http.get<Cash[]>(this.baseUrl+ 'cash/' );
-    
+
   }
   GetChartData(iso: string, count: number) {
     return this.http.get<string[]>(this.baseUrl + 'cash/' + iso + '/' + count + '/DataChart');
-     
+
   }
 
   GetChartAskPrice(iso: string, count: number){
     return this.http.get<number[]>(this.baseUrl + 'cash/' + iso + '/' + count + '/AskPrice');
-     
-    
+
+
   }
   GetChartBidPrice(iso: string, count: number) {
     return this.http.get<number[]>(this.baseUrl + 'cash/' + iso + '/' + count + '/BidPrice');
@@ -54,8 +55,8 @@ export interface Chart {
 
   data: string;
   askPrice: number;
-  
-  
+
+
 
 }
 

@@ -28,7 +28,7 @@ namespace AngularApi.MyTools
             string code = jObject.code;
             float askPrice = jObject.rates[0].ask;
             float bidPrice = jObject.rates[0].bid;
-            CurrencyDBModel _cashModel= new CurrencyDBModel(name, code, bidPrice, askPrice, date);
+            CurrencyDBModel _cashModel = new CurrencyDBModel(name, code, bidPrice, askPrice, date);
 
             return _cashModel;
 
@@ -41,11 +41,11 @@ namespace AngularApi.MyTools
             {
                 foreach (CurrencyDBModel cash in _listOfValue)
                 {
-                     _context.cashDBModels.Add(cash);
+                    _context.cashDBModels.Add(cash);
 
                 }
 
-              _context.SaveChanges();
+                _context.SaveChanges();
 
             }
 
@@ -57,8 +57,8 @@ namespace AngularApi.MyTools
 
             var query = _context.cashDBModels
                         .Where(s => s.Data.Date == DateTime.Today.Date).FirstOrDefault();
-                        
-            if (query ==null)
+
+            if (query == null)
             {
                 return false;
             }
@@ -90,7 +90,7 @@ namespace AngularApi.MyTools
             }
         }
 
-        
+
         public string[] GetIsoFromFile(string[] isoArray)
         {
             string path = @"Data/Iso.json";

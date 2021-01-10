@@ -51,7 +51,7 @@ export class CashDataComponent {
       this.cash_list = await this.cashService.GetDataOnInit().toPromise();
     } catch (e) {
       console.error(e);
-      console.error(e);
+
     }
     return;
   }

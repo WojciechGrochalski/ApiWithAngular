@@ -68,9 +68,8 @@ namespace AngularApi.Controllers
         {
             List<CurrencyModel> list = new List<CurrencyModel>();
             CurrencyModel cashModel;
-            List<CurrencyDBModel> query;
 
-            query = get.GetLastNumberOfCurrency(iso, count, _context);
+            List<CurrencyDBModel> query = get.GetLastNumberOfCurrency(iso, count, _context);
 
             foreach (CurrencyDBModel item in query)
             {
@@ -139,14 +138,6 @@ namespace AngularApi.Controllers
             await Task.CompletedTask;
             return chartData;
         }
-
-
-        //TODO ASAP
-        //Dodać żądanie do subskrybcji kursów walut
-        
-
-
-
 
     }
 }

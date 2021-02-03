@@ -4,14 +4,16 @@ using AngularApi.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AngularApi.Migrations
 {
     [DbContext(typeof(CashDBContext))]
-    partial class CashDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210203155241_Subb")]
+    partial class Subb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,7 +64,7 @@ namespace AngularApi.Migrations
                     b.Property<string>("Currency")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserID")
+                    b.Property<int?>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -97,9 +99,7 @@ namespace AngularApi.Migrations
                 {
                     b.HasOne("AngularApi.Models.UserDBModel", "User")
                         .WithMany("Subscriptions")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserID");
                 });
 #pragma warning restore 612, 618
         }

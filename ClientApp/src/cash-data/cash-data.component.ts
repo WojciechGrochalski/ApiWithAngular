@@ -2,6 +2,7 @@ import {Component, Inject, Input, Injectable, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import *as apex from 'ng-apexcharts';
 import {CashService} from '../app/cash.service';
+import { Cash } from '../Models/Cash';
 
 @Component({
   selector: 'app-cash-data',
@@ -44,9 +45,6 @@ export class CashDataComponent {
   }
 
   async ngOnInit(): Promise<void> {
-    // this.cashService.GetDataOnInit().subscribe(response => {
-    //   this.listofcash = response;
-    // }, error => console.error(error));
     try {
       this.cash_list = await this.cashService.GetDataOnInit().toPromise();
     } catch (e) {
@@ -107,20 +105,20 @@ export class CashDataComponent {
 
 }
 
-interface Cash {
+//interface Cash {
 
-  name: string;
-  code: string;
-  bidPrice: number;
-  askPrice: number;
-  data: string;
-}
+//  name: string;
+//  code: string;
+//  bidPrice: number;
+//  askPrice: number;
+//  data: string;
+//}
 
-interface Chart {
+//interface Chart {
 
-  data: string;
-  askPrice: number;
-}
+//  data: string;
+//  askPrice: number;
+//}
 
 
 

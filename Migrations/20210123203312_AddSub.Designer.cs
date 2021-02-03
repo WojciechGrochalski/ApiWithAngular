@@ -4,14 +4,16 @@ using AngularApi.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AngularApi.Migrations
 {
     [DbContext(typeof(CashDBContext))]
-    partial class CashDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210123203312_AddSub")]
+    partial class AddSub
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,32 +48,6 @@ namespace AngularApi.Migrations
                     b.ToTable("cashDBModels");
                 });
 
-            modelBuilder.Entity("AngularApi.Models.SubscriptionDBModel", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<float?>("AskPrice")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("BidPrice")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Currency")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("subscriptionDBModels");
-                });
-
             modelBuilder.Entity("AngularApi.Models.UserDBModel", b =>
                 {
                     b.Property<int>("ID")
@@ -88,18 +64,12 @@ namespace AngularApi.Migrations
                     b.Property<string>("Pass")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("Subscription")
+                        .HasColumnType("bit");
+
                     b.HasKey("ID");
 
                     b.ToTable("userDBModels");
-                });
-
-            modelBuilder.Entity("AngularApi.Models.SubscriptionDBModel", b =>
-                {
-                    b.HasOne("AngularApi.Models.UserDBModel", "User")
-                        .WithMany("Subscriptions")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

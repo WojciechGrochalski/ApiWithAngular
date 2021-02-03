@@ -20,16 +20,17 @@ namespace AngularApi.MyTools
 
     public class UpdateFileService : IHostedService
     {
-        private readonly IServiceScopeFactory _scopeFactory;
-        private readonly ILogger _logger;
-
         public static string IsoPath = @"Data/Iso.json";
         public static string RecentHistoryPath = @"Data/RecentHistory.json";
         public static string TestPath = @"Data/test.json";
         public static string LogsPath = @"Data/Logs.txt";
 
         private static Timer updateDataBase;
+
         private TimeSpan periodTime = TimeSpan.FromMinutes(5);
+
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly ILogger _logger;
 
         public UpdateFileService()
         {

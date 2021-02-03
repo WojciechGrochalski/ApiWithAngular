@@ -3,13 +3,11 @@ using AngularApi.MyTools;
 using AngularApi.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
 
 namespace AngularApi
 {
@@ -29,13 +27,7 @@ namespace AngularApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services )
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader());
-            });
+          
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -51,8 +43,7 @@ namespace AngularApi
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //>>>>>>>>>>>>>>>Data base >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             // var connection = @"Server=(localdb)\mssqllocaldb;Database=CashDB;Trusted_Connection=True;ConnectRetryCount=0";
-           
-
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,7 +61,6 @@ namespace AngularApi
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             if (!env.IsDevelopment())
             {
@@ -78,15 +68,22 @@ namespace AngularApi
             }
 
             app.UseRouting();
-           
-            
-            app.UseCors(options => options.AllowAnyOrigin());
-            app.UseEndpoints(endpoints =>
+            app.UseDefaultFiles()
+               .UseStaticFiles()
+               .UseWebSockets()
+               .UseRouting()
+               .UseAuthorization()
+           .UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
+
+
+            app.UseCors(
+                options => options.WithOrigins("http://localhost:4200")
+            .AllowAnyMethod().AllowAnyHeader());
 
             app.UseSpa(spa =>
             {

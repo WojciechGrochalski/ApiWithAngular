@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,28 +18,28 @@ export class CashService {
 
 
 
-  GetLastCurrency(iso: string, count: number) {
+  GetLastCurrency(iso: string, count: number): Observable<any>{
 
-    return this.http.get<Cash[]>(this.baseUrl + 'cash/' + iso + '/' + count);
+    return this.http.get(this.baseUrl + 'cash/' + iso + '/' + count);
   }
 
-  GetDataOnInit() {
+  GetDataOnInit(): Observable<any> {
 
-    return this.http.get<Cash[]>(this.baseUrl+ 'cash/' );
-
-  }
-  GetChartData(iso: string, count: number) {
-    return this.http.get<string[]>(this.baseUrl + 'cash/' + iso + '/' + count + '/DataChart');
+    return this.http.get(this.baseUrl+ 'cash' );
 
   }
+  GetChartData(iso: string, count: number): Observable<any> {
+    return this.http.get(this.baseUrl + 'cash/' + iso + '/' + count + '/DataChart');
 
-  GetChartAskPrice(iso: string, count: number){
-    return this.http.get<number[]>(this.baseUrl + 'cash/' + iso + '/' + count + '/AskPrice');
+  }
+
+  GetChartAskPrice(iso: string, count: number): Observable<any>{
+    return this.http.get(this.baseUrl + 'cash/' + iso + '/' + count + '/AskPrice');
 
 
   }
-  GetChartBidPrice(iso: string, count: number) {
-    return this.http.get<number[]>(this.baseUrl + 'cash/' + iso + '/' + count + '/BidPrice');
+  GetChartBidPrice(iso: string, count: number): Observable<any> {
+    return this.http.get(this.baseUrl + 'cash/' + iso + '/' + count + '/BidPrice');
   }
 
 }

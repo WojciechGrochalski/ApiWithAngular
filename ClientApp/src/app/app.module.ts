@@ -12,21 +12,21 @@ import { HomeComponent } from '../home/home.component';
 import { CashDataComponent } from '../cash-data/cash-data.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
     CashDataComponent,
-    
+
   ],
   imports: [
- 
+
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     NgApexchartsModule,
-   
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: '', component: HomeComponent },

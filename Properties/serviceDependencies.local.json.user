@@ -11,10 +11,12 @@
   },
   "parameters": {
     "mssql1.subscriptionId": {
+      "Name": "mssql1.subscriptionId",
       "Type": "subscription",
       "Value": "5205a037-e075-4676-a688-9b9575792b8e"
     },
     "mssql1.resourceGroupName": {
+      "Name": "mssql1.resourceGroupName",
       "Type": "resourceGroup",
       "Value": "Baza"
     }

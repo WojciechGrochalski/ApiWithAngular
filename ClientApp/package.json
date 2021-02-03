@@ -46,6 +46,9 @@
     "@angular/cli": "^8.3.29",
     "@angular/compiler-cli": "^8.2.14",
     "@angular/language-service": "^8.2.14",
+    "@ckeditor/ckeditor5-alignment": "^24.0.0",
+    "@ckeditor/ckeditor5-angular": "^1.2.3",
+    "@ckeditor/ckeditor5-build-classic": "^24.0.0",
     "@types/jasmine": "~3.4.4",
     "@types/jasminewd2": "~2.0.8",
     "@types/node": "~12.11.6",
@@ -58,11 +61,5 @@
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.5.4",
     "typescript": "3.5.1"
-  },
-  "optionalDependencies": {
-    "node-sass": "^4.12.0",
-    "protractor": "~5.4.2",
-    "ts-node": "~8.4.1",
-    "tslint": "~5.20.0"
   }
 }

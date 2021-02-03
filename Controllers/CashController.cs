@@ -19,12 +19,12 @@ namespace AngularApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [EnableCors("AllowOrigin")]
+ 
     public class CashController : ControllerBase
     {
 
         private readonly CashDBContext _context;
-        CurrencyDBQuery get = new CurrencyDBQuery();
+        private CurrencyDBQuery get = new CurrencyDBQuery();
 
         public CashController(CashDBContext context)
         {
@@ -32,8 +32,7 @@ namespace AngularApi.Controllers
         }
 
         [HttpGet]
-        [EnableCors("AllowOrigin")]
-        public async Task<List<CurrencyModel>> GetLastCurrency()
+        public async Task<string> GetLastCurrency()
         {
             List<CurrencyModel> list = new List<CurrencyModel>();
             CurrencyModel cashModel;
@@ -47,24 +46,24 @@ namespace AngularApi.Controllers
 
             list.Reverse();
             await Task.CompletedTask;
-            return list;
+            string result = JsonConvert.SerializeObject(list, Formatting.Indented);
+            return result;
         }
 
         [HttpGet("{iso}")]
-        [EnableCors("AllowOrigin")]
-        public async Task<CurrencyModel> GetLastOneCurrency(string iso)
+        public async Task<string> GetLastOneCurrency(string iso)
         {
             iso.ToUpper();
             CurrencyDBModel query = get.GetLastOne(iso, _context);
             CurrencyModel result = new CurrencyModel(query);
             await Task.CompletedTask;
-            return result;
+            
+            return JsonConvert.SerializeObject(result, Formatting.Indented);
 
         }
 
         [HttpGet("{iso}/{count}")]
-        [EnableCors("AllowOrigin")]
-        public async Task<List<CurrencyModel>> GetLastManyCurrency(string iso, int count)
+        public async Task<string> GetLastManyCurrency(string iso, int count)
         {
             List<CurrencyModel> list = new List<CurrencyModel>();
             CurrencyModel cashModel;
@@ -76,7 +75,8 @@ namespace AngularApi.Controllers
                 list.Add(cashModel = new CurrencyModel(item));
             }
             await Task.CompletedTask;
-            return list;
+            string result = JsonConvert.SerializeObject(list, Formatting.Indented);
+            return result;
 
         }
         /// <summary>
@@ -85,7 +85,6 @@ namespace AngularApi.Controllers
         /// <param name="iso"></param>
         /// <param name="count"></param>
         [HttpGet("{iso}/{count}/DataChart")]
-        [EnableCors("AllowOrigin")]
         public async Task<string[]> GetDataChart(string iso, int count)
         {
             List<CurrencyDBModel> query;
@@ -110,7 +109,6 @@ namespace AngularApi.Controllers
         /// <param name="count"></param>
         /// <param name="chartPrice"></param>
         [HttpGet("{iso}/{count}/{chartPrice}")]
-        [EnableCors("AllowOrigin")]
         public async Task<float[]> GetPriceChart(string iso, int count, string chartPrice)
         {
             List<CurrencyDBModel> query;

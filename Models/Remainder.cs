@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AngularApi.Models
 {
-    public class SubscriptionDBModel
+    public class Remainder
     {
         public int ID { get; set; }
         public string Currency { get; set; }

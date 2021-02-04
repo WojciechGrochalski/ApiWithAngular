@@ -1,3 +1,4 @@
+using angularapi.MyTools;
 using AngularApi.DataBase;
 using AngularApi.MyTools;
 using AngularApi.Repository;
@@ -44,6 +45,7 @@ namespace AngularApi
             //>>>>>>>>>>>>>>>Data base >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             // var connection = @"Server=(localdb)\mssqllocaldb;Database=CashDB;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddCors();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -11,7 +11,9 @@ namespace AngularApi.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+
         public string Pass { get; set; }
-        public  List<SubscriptionDBModel> Subscriptions { get; set; }
+        public bool? Subscriptions { get; set; }
+        public  List<Remainder> Remainder { get; set; }
     }
 }

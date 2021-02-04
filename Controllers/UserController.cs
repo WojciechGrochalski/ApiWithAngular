@@ -1,5 +1,7 @@
-﻿using AngularApi.DataBase;
+﻿using AngulaAapi.Models;
+using AngularApi.DataBase;
 using AngularApi.Models;
+using AngularApi.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,25 +15,47 @@ namespace angularapi.Controllers
     public class UserController : ControllerBase
     {
         private readonly CashDBContext _context;
+        private IUserService _userService;
 
-
-        public UserController(CashDBContext context)
+        public UserController(CashDBContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUser(UserDBModel user)
+        public IActionResult AddUser(UserDBModel user)
         {
-            _context.userDBModels.Add(user);
-            _context.SaveChanges();
-            await Task.CompletedTask;
-            return Ok();
+            try
+            {
+                _userService.Create(user);
+                return Ok();
+            }
+            catch (ApplicationException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+        [HttpPost("login")]
+        public IActionResult Authenticate([FromBody] AuthModel model)
+        {
+            var user = _userService.Authenticate(model.Name, model.Pass);
+            if (user == null)
+            {
+                return BadRequest(new { message = "Username or password is incorrect" });
+            }
+            return Ok(new { 
+            ID=user.ID,
+            Name=user.Name,
+            Email=user.Email,
+            Subscribtion=user.Subscriptions
+            });
         }
         [HttpPost("sub")]
-        public async Task<IActionResult> AddSubscribtion(SubscriptionDBModel subb)
+        public async Task<IActionResult> AddSubscribtion(Remainder subb)
         {
-            _context.subscriptionDBModels.Add(subb);
+            _context.Remainders.Add(subb);
             _context.SaveChanges();
             await Task.CompletedTask;
             return Ok();

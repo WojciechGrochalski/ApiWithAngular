@@ -4,14 +4,16 @@ using AngularApi.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace angularapi.Migrations
 {
     [DbContext(typeof(CashDBContext))]
-    partial class CashDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210204174035_InitialCreate3")]
+    partial class InitialCreate3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -278,14 +280,8 @@ namespace angularapi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsVerify")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -295,9 +291,6 @@ namespace angularapi.Migrations
 
                     b.Property<bool?>("Subscriptions")
                         .HasColumnType("bit");
-
-                    b.Property<string>("VeryficationToken")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 

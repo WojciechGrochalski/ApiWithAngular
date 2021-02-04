@@ -1,4 +1,5 @@
-﻿using AngularApi.Models;
+﻿using angularapi.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,10 @@ namespace AngularApi.Repository
     {
         UserDBModel Authenticate(string username, string password);
 
-        UserDBModel Create(UserDBModel user);
+        UserDBModel CreateAsync(UserDBModel user);
+        void VerifyEmail(string token);
+
+
         //void Update(User user, string password = null);
         //void Delete(int id);
     }

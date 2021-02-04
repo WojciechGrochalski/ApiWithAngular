@@ -7,9 +7,9 @@ import { AppComponent } from './app.component';
 
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NavMenuComponent } from '../nav-menu/nav-menu.component';
-import { HomeComponent } from '../home/home.component';
-import { CashDataComponent } from '../cash-data/cash-data.component';
+import { NavMenuComponent } from '../Components/nav-menu/nav-menu.component';
+import { HomeComponent } from '../Components/home/home.component';
+import { CashDataComponent } from '../Components/cash-data/cash-data.component';
 
 
 

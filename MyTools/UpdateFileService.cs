@@ -1,5 +1,4 @@
 ﻿using AngularApi.DataBase;
-using AngularApi.Models;
 using AngularApi.Repository;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
@@ -14,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using TimeZoneConverter;
+using angularapi.Models;
 
 namespace AngularApi.MyTools
 {

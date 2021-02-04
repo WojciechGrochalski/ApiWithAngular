@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace angularapi.Models
 {
-    public class RegisterModel
+    public class ForgotPasswordDto
     {
         [Required]
-        public string Name { get; set; }
-        [Required]
+        [EmailAddress]
         public string Email { get; set; }
         [Required]
-        public string Password { get; set; }
+        public string ClientURI { get; set; }
     }
 }
+

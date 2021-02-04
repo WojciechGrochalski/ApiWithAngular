@@ -1,5 +1,4 @@
 using angularapi.MyTools;
-using AngularApi.DataBase;
 using AngularApi.MyTools;
 using AngularApi.Repository;
 using Microsoft.AspNetCore.Builder;
@@ -9,12 +8,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AngularApi.DataBase;
+using Microsoft.AspNetCore.Identity;
+using System;
+using angularapi.Models;
+using angularapi.Repository;
 
 namespace AngularApi
 {
     public class Startup
     {
-        
+
         public Startup(IConfiguration configuration)
         {
 
@@ -26,32 +30,40 @@ namespace AngularApi
         public IConfiguration Configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services )
+        public void ConfigureServices(IServiceCollection services)
         {
-          
+
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-            
+
             services.AddDbContext<CashDBContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MyAzureDataBase")));
 
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+              .AddEntityFrameworkStores<CashDBContext>()
+              .AddDefaultTokenProviders();
+           
+
             services.AddHostedService<UpdateFileService>();
-            services.AddScoped<IWebParser,MyWebParser>();
+            services.AddScoped<IWebParser, MyWebParser>();
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //>>>>>>>>>>>>>>>Data base >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             // var connection = @"Server=(localdb)\mssqllocaldb;Database=CashDB;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddCors();
             services.AddScoped<IUserService, UserService>();
+
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-        
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -68,7 +80,8 @@ namespace AngularApi
             {
                 app.UseSpaStaticFiles();
             }
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseRouting();
             app.UseDefaultFiles()
                .UseStaticFiles()

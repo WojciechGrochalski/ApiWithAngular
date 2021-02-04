@@ -1,4 +1,5 @@
-﻿using AngularApi.Models;
+﻿using angularapi.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AngularApi.DataBase
 {
-    public class CashDBContext : DbContext
+    public class CashDBContext : IdentityDbContext<ApplicationUser>
     {
       
         public CashDBContext(DbContextOptions<CashDBContext> options) : base (options)
@@ -18,7 +19,6 @@ namespace AngularApi.DataBase
         public DbSet<CurrencyDBModel> cashDBModels { get; set; }
         public DbSet<UserDBModel> userDBModels { get; set; }
         public DbSet<Remainder> Remainders { get; set; }
-
 
     }
 }

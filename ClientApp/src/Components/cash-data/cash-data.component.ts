@@ -1,8 +1,8 @@
 import {Component, Inject, Input, Injectable, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import *as apex from 'ng-apexcharts';
-import {CashService} from '../app/cash.service';
-import { Cash } from '../Models/Cash';
+import {CashService} from '../../Services/cash.service';
+import { Cash } from '../../Models/Cash';
 
 @Component({
   selector: 'app-cash-data',

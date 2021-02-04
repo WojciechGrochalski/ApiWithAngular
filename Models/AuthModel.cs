@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
-namespace AngulaAapi.Models
+namespace angularapi.Models
 {
     public class AuthModel
     {

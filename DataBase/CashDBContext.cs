@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AngularApi.DataBase
 {
-    public class CashDBContext : IdentityDbContext<ApplicationUser>
+    public class CashDBContext : DbContext
     {
       
         public CashDBContext(DbContextOptions<CashDBContext> options) : base (options)

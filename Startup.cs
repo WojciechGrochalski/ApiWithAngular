@@ -13,19 +13,20 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using angularapi.Models;
 using angularapi.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace AngularApi
 {
     public class Startup
     {
-
+        private static readonly string _secret = "Superlongsupersecret!";
         public Startup(IConfiguration configuration)
         {
 
             Configuration = configuration;
         }
-
-
 
         public IConfiguration Configuration;
 
@@ -39,25 +40,37 @@ namespace AngularApi
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //>>>>>>>>>>>>>>>Data base >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            // var connection = @"Server=(localdb)\mssqllocaldb;Database=CashDB;Trusted_Connection=True;ConnectRetryCount=0";
 
             services.AddDbContext<CashDBContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MyAzureDataBase")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-              .AddEntityFrameworkStores<CashDBContext>()
-              .AddDefaultTokenProviders();
-           
-
             services.AddHostedService<UpdateFileService>();
             services.AddScoped<IWebParser, MyWebParser>();
-            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //>>>>>>>>>>>>>>>Data base >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            // var connection = @"Server=(localdb)\mssqllocaldb;Database=CashDB;Trusted_Connection=True;ConnectRetryCount=0";
+            
             services.AddCors();
             services.AddScoped<IUserService, UserService>();
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
-
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(jwtBearerOptions =>
+                {
+                  jwtBearerOptions.RequireHttpsMetadata = false;
+                  jwtBearerOptions.SaveToken = true;
+                  jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      ValidateIssuerSigningKey = true,
+                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_secret)),
+                      ValidateLifetime = true, //validate the expiration and not before values in the token
+                      ClockSkew = TimeSpan.FromMinutes(1) //1 minute tolerance for the expiration date
+                  };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

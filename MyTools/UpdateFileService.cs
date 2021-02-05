@@ -32,10 +32,10 @@ namespace AngularApi.MyTools
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger _logger;
 
-        public UpdateFileService()
-        {
+        //public UpdateFileService()
+        //{
 
-        }
+        //}
 
         public UpdateFileService(ILogger<UpdateFileService> logger, IServiceScopeFactory scopeFactory)
         {
@@ -55,7 +55,6 @@ namespace AngularApi.MyTools
                 var _update = scope.ServiceProvider.GetRequiredService<IWebParser>();
                 var _context = scope.ServiceProvider.GetRequiredService<CashDBContext>();
 
-
                 if (DateTime.Today.DayOfWeek.ToString() != "Saturday" &&
                        DateTime.Today.DayOfWeek.ToString() != "Sunday")
                 {
@@ -69,10 +68,8 @@ namespace AngularApi.MyTools
 
                         _update.SendCurrencyToDataBase(listOfCash, _context);
                     }
-
                 }
             }
-
         }
 
         private bool ChceckItIsAvailableApi()
@@ -102,11 +99,8 @@ namespace AngularApi.MyTools
                     if (acctualhour == 8)
                     {
                         break;
-
                     }
-
                 }
-
                 return TimeSpan.FromHours(hour + 24) + TimeSpan.FromMinutes(16);
             }
             if (dateTime.Hour > 8)
@@ -117,7 +111,6 @@ namespace AngularApi.MyTools
                 {
                     hour++;
                 }
-
                 return TimeSpan.FromHours(hour + 8) + TimeSpan.FromMinutes(16);
             }
             return TimeSpan.FromHours(24) + TimeSpan.FromMinutes(16);
@@ -160,8 +153,6 @@ namespace AngularApi.MyTools
 
             return Task.CompletedTask;
         }
-
-
 
     }
 }

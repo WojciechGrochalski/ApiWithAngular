@@ -13,7 +13,6 @@ export class CashService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.baseUrl = baseUrl;
-
   }
 
 
@@ -41,23 +40,6 @@ export class CashService {
   GetChartBidPrice(iso: string, count: number): Observable<any> {
     return this.http.get(this.baseUrl + 'cash/' + iso + '/' + count + '/BidPrice');
   }
-
-}
-
-export interface Cash {
-
-  name: string;
-  code: string;
-  askPrice: number;
-  bidPrice: number;
-  data: string;
-}
-export interface Chart {
-
-  data: string;
-  askPrice: number;
-
-
 
 }
 

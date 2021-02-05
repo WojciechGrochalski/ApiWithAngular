@@ -1,10 +1,15 @@
-﻿using angularapi.Models;
+﻿using angularapi.Controllers;
+using angularapi.Models;
 using angularapi.Repository;
 using AngularApi.DataBase;
 using AngularApi.Repository;
+using Hangfire;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
@@ -19,15 +24,23 @@ namespace angularapi.MyTools
     public class UserService : IUserService
     {
         private readonly CashDBContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<BackgroundService> _logger;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly AppSettings _appSettings;
+
+
+    
+
+        string subject = "Sign-up Verification API - Verify Email";
         public UserService(CashDBContext context,
-            UserManager<ApplicationUser> userManager,
-            IOptions<AppSettings> appSettings )
+            IOptions<AppSettings> appSettings,
+            ILogger<BackgroundService> logger,
+            IServiceScopeFactory scopeFactory  )
         {
             _context = context;
-            _userManager = userManager;
             _appSettings = appSettings.Value;
+            _logger = logger;
+            _scopeFactory = scopeFactory;
         }
 
 
@@ -68,40 +81,60 @@ namespace angularapi.MyTools
             {
                 throw new ApplicationException("Username " + user.Name + " is already taken");
             }
+            if (_context.userDBModels.Any(x => x.Email == user.Email))
+            {
+                throw new ApplicationException("Email " + user.Email + " is already taken");
+            }
 
             string PasswordHash = SecurePasswordHasher.Hash(user.Pass);
 
             user.Pass = PasswordHash;
-            user.Created = DateTime.UtcNow;
+            user.Created = DateTime.Now;
             user.IsVerify = false;
-            user.VeryficationToken = randomTokenString();
+            user.VeryficationToken = RandomTokenString();
             _context.userDBModels.Add(user);
             _context.SaveChanges();
 
             string message = $@"<p>Please use the below token to verify your email address with the <code>/accounts/verify-email</code> api route:</p>
-                             <p>{user.VeryficationToken} </p>";
-            string subject = "Sign-up Verification API - Verify Email";
+                             <p> <a href=""{UserController.BaseUrl}user-profile?token={TokenManager.GenerateAccessToken(user.VeryficationToken)}""> link <a/> </p>";
+           
             SendVeryficationToken("cash-service@email.com", user.Email, subject, message);
+            BackgroundTask task = new BackgroundTask(_logger, _scopeFactory);
+            Task.Factory.StartNew(() => task.RemoveUnverifiedUserAsync(user.VeryficationToken));
+           
             return user;
         }
-        public void VerifyEmail(string token)
+        public bool VerifyEmail(string token)
         {
-            var account = _context.userDBModels.SingleOrDefault(x => x.VeryficationToken == token);
-
-            if (account == null)
+            try
             {
-                throw new ApplicationException("Verification failed");
+                string verifyToken = TokenManager.ValidateJwtToken(token);
+                if (verifyToken == null)
+                {
+                    return false;
+                }
+                var account = _context.userDBModels.SingleOrDefault(x => x.VeryficationToken == verifyToken);
+
+                if (account == null)
+                {
+                    return false;
+                }
+                account.IsVerify = true;
+                account.VeryficationToken = null;
+
+                _context.userDBModels.Update(account);
+                _context.SaveChanges();
+                return true;
             }
-
-            account.IsVerify = true;
-            account.VeryficationToken = null;
-
-            _context.userDBModels.Update(account);
-            _context.SaveChanges();
+            catch (ApplicationException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+           
         }
 
 
-        private string randomTokenString()
+        private string RandomTokenString()
         {
             using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
             var randomBytes = new byte[40];

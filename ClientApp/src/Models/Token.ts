@@ -1,4 +1,4 @@
-export class VerifyEmailRequest{
+export class Token{
 
   Token:string;
 

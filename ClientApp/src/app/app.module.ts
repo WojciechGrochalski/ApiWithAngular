@@ -4,12 +4,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
+import { FlashMessagesModule } from 'angular2-flash-messages';
 
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavMenuComponent } from '../Components/nav-menu/nav-menu.component';
 import { HomeComponent } from '../Components/home/home.component';
 import { CashDataComponent } from '../Components/cash-data/cash-data.component';
+import {UserProfileComponent} from "../Components/user-profile/user-profile.component";
+import {ForgetPasswordComponent} from "../Components/forget-password/forget-password.component";
 
 
 
@@ -19,6 +22,8 @@ import { CashDataComponent } from '../Components/cash-data/cash-data.component';
     NavMenuComponent,
     HomeComponent,
     CashDataComponent,
+    UserProfileComponent,
+    ForgetPasswordComponent,
 
   ],
   imports: [
@@ -27,10 +32,12 @@ import { CashDataComponent } from '../Components/cash-data/cash-data.component';
     HttpClientModule,
     FormsModule,
     NgApexchartsModule,
+    FlashMessagesModule.forRoot(),
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: '', component: HomeComponent },
       { path: 'cash-data', component: CashDataComponent },
+      { path: 'user-profile', component: UserProfileComponent },
     ]),
     BrowserAnimationsModule
   ],

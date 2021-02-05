@@ -1,1 +1,6 @@
-<p>user-profile works!</p>
+
+<p *ngIf="!UserIsVerify"><em>Loading...</em></p>
+<div *ngIf="UserIsVerify">
+<p>{{message}}</p>
+</div>
+

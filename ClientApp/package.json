@@ -27,6 +27,7 @@
     "@nguniversal/module-map-ngfactory-loader": "8.1.1",
     "@schematics/angular": "^8.3.29",
     "angular-fusioncharts": "^3.0.4",
+    "angular2-flash-messages": "^3.0.1",
     "animate.css": "^4.1.1",
     "apexcharts": "^3.20.2",
     "aspnet-prerendering": "^3.0.1",

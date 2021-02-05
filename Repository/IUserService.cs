@@ -12,7 +12,7 @@ namespace AngularApi.Repository
         UserDBModel Authenticate(string username, string password);
 
         UserDBModel CreateAsync(UserDBModel user);
-        void VerifyEmail(string token);
+        bool VerifyEmail(string token);
 
 
         //void Update(User user, string password = null);

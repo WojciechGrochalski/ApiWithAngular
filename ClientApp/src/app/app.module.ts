@@ -13,6 +13,8 @@ import { HomeComponent } from '../Components/home/home.component';
 import { CashDataComponent } from '../Components/cash-data/cash-data.component';
 import {UserProfileComponent} from "../Components/user-profile/user-profile.component";
 import {ForgetPasswordComponent} from "../Components/forget-password/forget-password.component";
+import {LogInComponent} from "../Components/log-in/log-in.component";
+import {RegisterComponent} from "../Components/register/register.component";
 
 
 
@@ -24,10 +26,12 @@ import {ForgetPasswordComponent} from "../Components/forget-password/forget-pass
     CashDataComponent,
     UserProfileComponent,
     ForgetPasswordComponent,
+    LogInComponent,
+    RegisterComponent
 
   ],
   imports: [
-
+    ReactiveFormsModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
@@ -38,6 +42,9 @@ import {ForgetPasswordComponent} from "../Components/forget-password/forget-pass
       { path: '', component: HomeComponent },
       { path: 'cash-data', component: CashDataComponent },
       { path: 'user-profile', component: UserProfileComponent },
+      { path: 'login', component: LogInComponent},
+      { path: 'register', component: RegisterComponent},
+      { path: 'forgot-password', component: ForgetPasswordComponent},
     ]),
     BrowserAnimationsModule
   ],

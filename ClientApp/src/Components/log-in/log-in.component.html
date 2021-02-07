@@ -1,0 +1,79 @@
+
+
+
+<!--  <div class="wrapper">-->
+
+<!--    <div class="container">-->
+<!--      <h2>Zaloguj się</h2>-->
+
+<!--      <flash-messages></flash-messages>-->
+<!--      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">-->
+<!--        <div class="form-group">-->
+<!--          <label attr.for="username">Nazwa użytkownika</label>-->
+<!--          <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />-->
+<!--          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">-->
+<!--            <div *ngIf="f.username.errors.required">To pole jest wymagane</div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--          <label attr.for="password" > Hasło</label>-->
+<!--          <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />-->
+<!--          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">-->
+<!--            <div *ngIf="f.password.errors.required">To pole jest wymagane</div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--          <button [disabled]="loading" class="btn btn-primary log-in">-->
+<!--            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>-->
+<!--            Zaloguj-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </form>-->
+<!--      <span>Nie masz konta?<a routerLink='/reg' class="btn btn-link">Zarejestruj się</a></span>-->
+<!--    </div>-->
+<!--  </div>-->
+
+  <div class="wrapper fadeInDown">
+    <div id="formContent">
+      <!-- Tabs Titles -->
+      <h2 class="active"> Sign In </h2>
+
+      <!-- Icon -->
+      <div class="fadeIn first">
+        <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
+      </div>
+      <flash-messages></flash-messages>
+      <!-- Login Form -->
+      <flash-messages></flash-messages>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+
+          <input attr.for="username"  placeholder="Login" type="text" formControlName="username" class="fadeIn second" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+            <div *ngIf="f.username.errors.required">To pole jest wymagane</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <input attr.for="password" placeholder="Password" type="password" formControlName="password" class="fadeIn third" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors.required">To pole jest wymagane</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <button [disabled]="loading" class="btn btn-primary log-in">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Zaloguj
+          </button>
+        </div>
+      </form>
+
+      <!-- Remind Passowrd -->
+      <div id="formFooter">
+        <a class="underlineHover" href="#">Forgot Password?</a>
+      </div>
+
+      <p class="login__signup">Don't have an account? &nbsp;
+        <a routerLink="/register">Sign up</a></p>
+
+    </div>
+  </div>

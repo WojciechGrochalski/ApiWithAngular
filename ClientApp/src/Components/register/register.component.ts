@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+import {UserService} from "../../Services/User.service";
+import {FlashMessagesService} from "angular2-flash-messages";
 
 @Component({
   selector: 'app-register',
@@ -7,9 +12,50 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor() { }
+  registerForm: FormGroup;
+  loading = false;
+  submitted = false;
+  constructor( private formBuilder: FormBuilder,
+               private router: Router,
+               private userService: UserService,
+               private flashMessagesService: FlashMessagesService ) {
 
-  ngOnInit() {
+    // if (this.userService.currentUserValue) {
+    //   this.router.navigate(['/']);
+    // }
   }
 
-}
+  ngOnInit() {
+    this.registerForm = this.formBuilder.group({
+      Name: ['', Validators.required],
+      Email: ['', Validators.required],
+      Pass: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
+    get f() { return this.registerForm.controls; }
+
+    onSubmit() {
+      this.submitted = true;
+
+      // stop here if form is invalid
+      if (this.registerForm.invalid) {
+        return;
+      }
+
+      this.loading = true;
+      this.userService.register(this.registerForm.value)
+        .pipe(first())
+        .subscribe(
+          data => {
+            this.flashMessagesService.show('Profil został utworzony, sprawdź maila z linkiem aktywacyjnym', {cssClass: 'alert-success', timeout: 5000})
+            this.router.navigate(['/login']);
+          },
+          error => {
+            this.flashMessagesService.show(error.error.message, {cssClass: 'alert-danger', timeout: 3000})
+            this.loading = false;
+          });
+    }
+  }
+
+
+

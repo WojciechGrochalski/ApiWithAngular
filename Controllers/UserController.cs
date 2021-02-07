@@ -29,7 +29,7 @@ namespace angularapi.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddUser(UserDBModel user)
+        public IActionResult Register(UserDBModel user)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace angularapi.Controllers
             }
         }
         [HttpPost("login")]
-        public IActionResult Authenticate([FromBody] AuthModel model)
+        public IActionResult Login( AuthModel model)
         {
             var user = _userService.Authenticate(model.Name, model.Pass);
             if (user == null)

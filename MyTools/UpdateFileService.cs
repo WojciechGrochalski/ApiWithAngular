@@ -32,16 +32,12 @@ namespace AngularApi.MyTools
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger _logger;
 
-        //public UpdateFileService()
-        //{
 
-        //}
 
         public UpdateFileService(ILogger<UpdateFileService> logger, IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
             _scopeFactory = scopeFactory;
-
         }
 
         List<CurrencyDBModel> listOfCash = new List<CurrencyDBModel>();
@@ -53,6 +49,7 @@ namespace AngularApi.MyTools
             using (var scope = _scopeFactory.CreateScope())
             {
                 var _update = scope.ServiceProvider.GetRequiredService<IWebParser>();
+                var _mailService = scope.ServiceProvider.GetRequiredService<IMailService>();
                 var _context = scope.ServiceProvider.GetRequiredService<CashDBContext>();
 
                 if (DateTime.Today.DayOfWeek.ToString() != "Saturday" &&
@@ -67,11 +64,44 @@ namespace AngularApi.MyTools
                         }
 
                         _update.SendCurrencyToDataBase(listOfCash, _context);
+                        SendTodayCurrencyToSubscribers(_context, _mailService);
                     }
                 }
             }
         }
 
+        private string MakeMessage()
+        {
+            string table = $@"";
+            foreach (CurrencyDBModel item in listOfCash)
+            {
+                table += $@" < td >{item.Data}</ td >
+                             < td >{item.Name}</ td >
+                             < td >{item.AskPrice } PLN </ td >
+                             < td >{item.BidPrice} PLN </ td >";
+            }
+            string message = $@"<p>Dzisiejsze kursy walut:</p><br><br><br><br>
+                              <thead> <tr>
+                             <th>Data</th>
+                            <th>Waluta</th>
+                            <th>Cena kupna (Za tyle kupisz)</th>
+                            <th>Cena sprzedaży (Za tyle sprzedasz)</th>
+                             <th></th>";
+
+           return message += table + $@"</ tr ></ tbody > ";
+        }
+        private void SendTodayCurrencyToSubscribers(CashDBContext _context, IMailService _mailService)
+        {
+            string message = MakeMessage();
+            var users = _context.userDBModels.Where(s => s.IsVerify).ToList();
+            if (users != null)
+            {
+                foreach (UserDBModel item in users)
+                {
+                    _mailService.SendMail(item.Email, "Kurs walut", message);
+                }
+            }
+        }
         private bool ChceckItIsAvailableApi()
         {
             TimeZoneInfo tzi = TZConvert.GetTimeZoneInfo("Central Europe Standard Time");

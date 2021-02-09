@@ -12,6 +12,10 @@ import {FlashMessagesService} from "angular2-flash-messages";
 export class UserProfileComponent implements OnInit {
   UserIsVerify:boolean=false;
   message:string;
+  public askPrice: number[] = [];
+  public bidPrice: number[] = [];
+  alert:boolean;
+  subscribtion:boolean;
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
@@ -19,15 +23,33 @@ export class UserProfileComponent implements OnInit {
               private flashMessagesService: FlashMessagesService ) { }
 
   ngOnInit() {
-    let token= this.route.snapshot.queryParamMap.get('token');
-      console.log("token: ",token);
+    // let token= this.route.snapshot.queryParamMap.get('token');
+    //   console.log("token: ",token);
+    //
+    //   this.userService.VerifyUser(token).subscribe(res => {
+    //     this.message=res;
+    //     this.UserIsVerify=true;
+    //     this.router.navigate([''])
+    //     this.flashMessagesService.show('Profil został zaktualizowany', {cssClass: 'alert-success', timeout: 3000})
+    //     });
+  }
 
-      this.userService.VerifyUser(token).subscribe(res => {
-        this.message=res;
-        this.UserIsVerify=true;
-        this.router.navigate([''])
-        this.flashMessagesService.show('Profil został zaktualizowany', {cssClass: 'alert-success', timeout: 3000})
-        });
+  SetAlert(){
+    this.subscribtion=false;
+    this.alert=true;
+  }
+  SetSubscribtion(){
+    this.subscribtion=true;
+    this.alert=false;
+  }
+
+  GetSubscribtion(){
+    let user=JSON.parse(localStorage.getItem('currentUser'));
+    console.log(user);
+    this.userService.GetSubscribtion(user.id).subscribe( res =>
+    {
+      this.flashMessagesService.show(res.message, {cssClass: 'alert-success', timeout: 3000})
+    });
 
   }
 

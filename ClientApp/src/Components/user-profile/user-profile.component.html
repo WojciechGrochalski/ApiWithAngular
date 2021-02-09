@@ -1,6 +1,64 @@
+<div class="container-fluid">
+<main class="mh-100">
+  <div class="sidebar">
+    <h2 class="header-title">Panel użytkownika</h2>
+    <a routerLink="/dashboard">
+      <div  class="user-detail">
+        <img  alt=""  class="rounded-circle ">
+        <br>
+        <br>
 
-<p *ngIf="!UserIsVerify"><em>Loading...</em></p>
-<div *ngIf="UserIsVerify">
-<p>{{message}}</p>
+      </div>
+
+    </a>
+    <p>Blog</p>
+    <hr class="separator">
+    <ul class="sidemenu nav">
+      <li><i class="fas fa-th-list"></i><a (click)="SetSubscribtion()">Subskrybcja</a></li>
+      <li><i class="fas fa-th-list"></i><a (click)="SetAlert()">Alert</a></li>
+    </ul>
+
+    <p>Profil</p>
+    <hr class="separator">
+    <ul class="sidemenu">
+      <li><a >Edytuj</a></li>
+      <li><a> Wyloguj</a></li>
+    </ul>
+  </div>
+  <div class="main-panel">
+    <flash-messages></flash-messages>
+    <div *ngIf="alert">
+      <div class="row">
+        <div class="albums">
+          <div class="card-columns">
+            <div class="card" >
+              <div class="card-body" >
+                <h5 class="card-title"> EUR / PLN </h5>
+                <span class="card-text"> Bid Price </span>
+                <span class="card-text"> Ask Price </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="subscribtion">
+       <h3>Dodaj subskrybcje codziennego kursu waluty</h3>
+        <input type="submit" (click)="GetSubscribtion()" >
+        <label>Akceptuj subskrybcje</label>
+    </div>
+    <router-outlet></router-outlet>
+  </div>
+
+</main>
 </div>
+<script>
+  function onlyNumberKey(evt) {
 
+    // Only ASCII charactar in that range allowed
+    var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+      return false;
+    return true;
+  }
+</script>

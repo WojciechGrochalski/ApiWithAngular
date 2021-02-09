@@ -111,5 +111,19 @@ namespace angularapi.Controllers
             BaseUrl = baseUrl.BaseUrl;   
             return Ok();
         }
+
+        [HttpGet("sub/{userID}")]
+        public IActionResult AddSubscriptions(int userID)
+        {
+            var user = _context.userDBModels.FirstOrDefault(s => s.ID == userID);
+            if (user == null)
+            {
+                return BadRequest(new { message = "Username or password is incorrect" });
+            }
+            user.Subscriptions = true;
+            _context.Entry(user).CurrentValues.SetValues(user);
+            _context.SaveChanges();
+            return Ok(new { message = "Zostałeś dodany do subskrybcji" });
+        }
     }
 }

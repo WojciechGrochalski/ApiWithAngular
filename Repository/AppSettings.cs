@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace angularapi.Repository
+namespace AngularApi.Repository
 {
     public class AppSettings
     {

@@ -47,7 +47,6 @@ export class UserService {
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.currentUserSubject.next(user);
         }
-
         return user;
       }));
   }
@@ -55,5 +54,8 @@ export class UserService {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
+  }
+  GetSubscribtion(userID: number){
+    return this.http.get<any>(this.BaseUrl + 'User/sub/'+userID);
   }
 }

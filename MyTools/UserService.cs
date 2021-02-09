@@ -1,20 +1,11 @@
 ﻿using angularapi.Controllers;
 using angularapi.Models;
-using angularapi.Repository;
 using AngularApi.DataBase;
 using AngularApi.Repository;
-using Hangfire;
-using MailKit.Net.Smtp;
-using MailKit.Security;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using MimeKit;
-using MimeKit.Text;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -26,21 +17,18 @@ namespace angularapi.MyTools
         private readonly CashDBContext _context;
         private readonly ILogger<BackgroundService> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly AppSettings _appSettings;
-
-
-    
+        private IMailService _mailService;
 
         string subject = "Sign-up Verification API - Verify Email";
         public UserService(CashDBContext context,
-            IOptions<AppSettings> appSettings,
             ILogger<BackgroundService> logger,
-            IServiceScopeFactory scopeFactory  )
+            IServiceScopeFactory scopeFactory,
+               IMailService mailService )
         {
             _context = context;
-            _appSettings = appSettings.Value;
             _logger = logger;
             _scopeFactory = scopeFactory;
+            _mailService = mailService;
         }
 
 
@@ -98,7 +86,7 @@ namespace angularapi.MyTools
             string message = $@"<p>Please use the below token to verify your email address with the <code>/accounts/verify-email</code> api route:</p>
                              <p> <a href=""{UserController.BaseUrl}user-profile?token={TokenManager.GenerateAccessToken(user.VeryficationToken)}""> link <a/> </p>";
            
-            SendVeryficationToken("cash-service@email.com", user.Email, subject, message);
+            _mailService.SendMail(user.Email, subject, message);
             BackgroundTask task = new BackgroundTask(_logger, _scopeFactory);
             Task.Factory.StartNew(() => task.RemoveUnverifiedUserAsync(user.VeryficationToken));
            
@@ -143,21 +131,5 @@ namespace angularapi.MyTools
             return BitConverter.ToString(randomBytes).Replace("-", "");
         }
 
-        public void SendVeryficationToken(string from, string to, string subject, string html)
-        {
-            // create message
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(from));
-            email.To.Add(MailboxAddress.Parse(to));
-            email.Subject = subject;
-            email.Body = new TextPart(TextFormat.Html) { Text = html };
-
-            // send email
-            using var smtp = new SmtpClient();
-            smtp.Connect(_appSettings.SmtpHost, _appSettings.SmtpPort, SecureSocketOptions.StartTls);
-            smtp.Authenticate(_appSettings.SmtpUser, _appSettings.SmtpPass);
-            smtp.Send(email);
-            smtp.Disconnect(true);
-        }
     }
 }

@@ -36,19 +36,15 @@ namespace AngularApi.MyTools
 
         public void SendCurrencyToDataBase(List<CurrencyDBModel> _listOfValue, CashDBContext _context)
         {
-
             if (!CheckDatabase(_context))
             {
                 foreach (CurrencyDBModel cash in _listOfValue)
                 {
                     _context.cashDBModels.Add(cash);
-
                 }
 
                 _context.SaveChanges();
-
             }
-
         }
 
         // Verify IF database was already updated today
@@ -64,7 +60,6 @@ namespace AngularApi.MyTools
             }
 
             return true;
-
         }
 
         public void SaveToFile(string pathToFile, string text, bool appendText = false)
@@ -89,7 +84,6 @@ namespace AngularApi.MyTools
                 File.WriteAllText(path, text);
             }
         }
-
 
         public string[] GetIsoFromFile(string[] isoArray)
         {

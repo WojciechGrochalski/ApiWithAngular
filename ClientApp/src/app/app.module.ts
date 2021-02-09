@@ -13,7 +13,7 @@ import { HomeComponent } from '../Components/home/home.component';
 import { CashDataComponent } from '../Components/cash-data/cash-data.component';
 import {UserProfileComponent} from "../Components/user-profile/user-profile.component";
 import {ForgetPasswordComponent} from "../Components/forget-password/forget-password.component";
-import {LogInComponent} from "../Components/log-in/log-in.component";
+import {LogInComponent} from "../Components/Login/log-in.component";
 import {RegisterComponent} from "../Components/register/register.component";
 
 

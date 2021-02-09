@@ -30,9 +30,9 @@ export class LogInComponent implements OnInit {
     private flashMessagesService: FlashMessagesService) {
 
     //redirect to home if already logged in
-    if (this.userService.currentUserValue) {
-      this.router.navigate(['/']);
-    }
+    // if (this.userService.currentUserValue) {
+    //   this.router.navigate(['/']);
+    // }
 
   }
 

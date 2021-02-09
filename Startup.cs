@@ -9,13 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AngularApi.DataBase;
-using Microsoft.AspNetCore.Identity;
 using System;
-using angularapi.Models;
-using angularapi.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AngulArapi.MyTools;
 
 namespace AngularApi
 {
@@ -49,9 +47,10 @@ namespace AngularApi
 
             services.AddHostedService<UpdateFileService>();
             services.AddScoped<IWebParser, MyWebParser>();
-            
-            services.AddCors();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IMailService, MailService>();
+            services.AddCors();
+          
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddAuthentication(x =>
@@ -93,6 +92,7 @@ namespace AngularApi
             {
                 app.UseSpaStaticFiles();
             }
+
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseRouting();

@@ -66,6 +66,7 @@ namespace AngularApi.MyTools
                         _update.SendCurrencyToDataBase(listOfCash, _context);
                         SendTodayCurrencyToSubscribers(_context, _mailService);
                     }
+                   
                 }
             }
         }
@@ -75,25 +76,26 @@ namespace AngularApi.MyTools
             string table = $@"";
             foreach (CurrencyDBModel item in listOfCash)
             {
-                table += $@" < td >{item.Data}</ td >
-                             < td >{item.Name}</ td >
-                             < td >{item.AskPrice } PLN </ td >
-                             < td >{item.BidPrice} PLN </ td >";
+                table += $@" <tr><td>{item.Data.ToShortDateString()}</td>
+                             <td>{item.Name}</td >
+                             <td>{item.AskPrice } PLN </td>
+                             <td>{item.BidPrice} PLN </td></tr>";
             }
-            string message = $@"<p>Dzisiejsze kursy walut:</p><br><br><br><br>
-                              <thead> <tr>
+            string message = $@"<font face='Arial' size='6px'><p>Dzisiejsze kursy walut:</p></font><br>
+                              <font face='Arial' size='5px'>
+                              <table  border="" + 1 + "" cellpadding="" + 0 + "" cellspacing="" + 0 + "" width = "" + 500""><thead><tr>
                              <th>Data</th>
-                            <th>Waluta</th>
-                            <th>Cena kupna (Za tyle kupisz)</th>
-                            <th>Cena sprzedaży (Za tyle sprzedasz)</th>
-                             <th></th>";
+                             <th>Waluta</th>
+                             <th>Cena kupna </th>
+                             <th>Cena sprzedaży </th>
+                             </tr></thead><tbody>";
 
-           return message += table + $@"</ tr ></ tbody > ";
+           return message += table + $@"</tr></tbody></table></font>";
         }
         private void SendTodayCurrencyToSubscribers(CashDBContext _context, IMailService _mailService)
         {
             string message = MakeMessage();
-            var users = _context.userDBModels.Where(s => s.IsVerify).ToList();
+            var users = _context.userDBModels.Where(s => s.IsVerify==true).ToList();
             if (users != null)
             {
                 foreach (UserDBModel item in users)

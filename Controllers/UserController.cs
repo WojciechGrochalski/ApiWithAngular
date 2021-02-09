@@ -125,5 +125,18 @@ namespace angularapi.Controllers
             _context.SaveChanges();
             return Ok(new { message = "Zostałeś dodany do subskrybcji" });
         }
+        [HttpGet("remove/sub/{userID}")]
+        public IActionResult RemoveSubscriptions(int userID)
+        {
+            var user = _context.userDBModels.FirstOrDefault(s => s.ID == userID);
+            if (user == null)
+            {
+                return BadRequest(new { message = "Username or password is incorrect" });
+            }
+            user.Subscriptions = false;
+            _context.Entry(user).CurrentValues.SetValues(user);
+            _context.SaveChanges();
+            return Ok(new { message = "Usnieto cię z subskrybcji" });
+        }
     }
 }

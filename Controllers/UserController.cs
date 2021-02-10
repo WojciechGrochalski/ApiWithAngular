@@ -43,7 +43,7 @@ namespace angularapi.Controllers
             }
         }
         [HttpPost("login")]
-        public IActionResult Login( AuthModel model)
+        public IActionResult Login(AuthModel model)
         {
             var user = _userService.Authenticate(model.Name, model.Pass);
             if (user == null)
@@ -97,7 +97,7 @@ namespace angularapi.Controllers
         [HttpPost("verify-email")]
         public IActionResult VerifyEmail([FromBody] VerifyEmailRequest verifyEmail)
         {
-            bool result= _userService.VerifyEmail(verifyEmail.Token);
+            bool result = _userService.VerifyEmail(verifyEmail.Token);
             if (result)
             {
                 return Ok(new { message = "Verification successful, you can now login" });
@@ -108,7 +108,7 @@ namespace angularapi.Controllers
         [HttpPost("baseUrl")]
         public IActionResult GetBaseUrl([FromBody] BaseUrlModel baseUrl)
         {
-            BaseUrl = baseUrl.BaseUrl;   
+            BaseUrl = baseUrl.BaseUrl;
             return Ok();
         }
 
@@ -137,6 +137,29 @@ namespace angularapi.Controllers
             _context.Entry(user).CurrentValues.SetValues(user);
             _context.SaveChanges();
             return Ok(new { message = "Usnieto cię z subskrybcji" });
+        }
+
+        [HttpPost("addAlert")]
+        public IActionResult AddAlert([FromBody] Remainder remainder)
+        {
+            try
+            {
+                var user = _context.userDBModels.FirstOrDefault(s => s.ID == remainder.UserID);
+                if (user != null)
+                {
+                    _context.Remainders.Add(remainder);
+                  //  _context.Entry(user).CurrentValues.SetValues(user);
+                    _context.SaveChanges();
+                    return Ok(new { message = "Pomyślnie ustawiono alert" });
+                }
+                return BadRequest(new { message = "Nie udało się ustawić alertu, spróbuj ponownie" });
+            }
+            catch (ApplicationException e)
+            {
+                _logger.LogError(e.Message);
+                return BadRequest(new { message = "Nie udało się ustawić alertu, spróbuj ponownie" });
+            }
+
         }
     }
 }

@@ -1,1 +1,30 @@
-<p>set-alert works!</p>
+
+<script>
+  function onlyNumberKey(evt) {
+
+    // Only ASCII charactar in that range allowed
+    var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+      return false;
+    return true;
+  }
+</script>
+
+<div class="container">
+
+
+
+<h3>Poniżej jakiej ceny chcesz ustawić alert?</h3>
+  <flash-messages></flash-messages>
+  <br>
+  <br>
+  <input type="number"  #price id="price"
+         maxlength="5"
+         size="20%" />
+  <br>
+<input type="submit" value="Zatwierdź" (click)="AddAlert(price.value)"/>
+
+
+
+</div>
+

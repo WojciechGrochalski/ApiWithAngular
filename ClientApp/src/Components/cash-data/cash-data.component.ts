@@ -24,7 +24,7 @@ export class CashDataComponent {
   public bidPrice: number[] = [];
 
 
-  constructor(http: HttpClient, private cashService: CashService) {
+  constructor( private cashService: CashService) {
 
     this.title = {
       text: 'Waluty'

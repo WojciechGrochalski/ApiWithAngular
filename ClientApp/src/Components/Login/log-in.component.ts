@@ -41,8 +41,15 @@ export class LogInComponent implements OnInit {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
-
-    // get return url from route parameters or default to '/'
+    try {
+      let message = this.route.snapshot.paramMap.get('confirm');
+      if(message) {
+        this.flashMessagesService.show(message, {cssClass: 'alert-success', timeout: 5000})
+      }
+    } catch (e) {
+      console.error(e);
+    }
+      // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
   }

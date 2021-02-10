@@ -44,14 +44,12 @@ export class RegisterComponent implements OnInit {
 
       this.loading = true;
       this.userService.register(this.registerForm.value)
-        .pipe(first())
         .subscribe(
           data => {
-            this.flashMessagesService.show('Profil został utworzony, sprawdź maila z linkiem aktywacyjnym', {cssClass: 'alert-success', timeout: 5000})
-            this.router.navigate(['/login']);
+            this.router.navigate(['/login/'+data.message]);
           },
           error => {
-            this.flashMessagesService.show(error.error.message, {cssClass: 'alert-danger', timeout: 3000})
+            this.flashMessagesService.show(error.error.message, {cssClass: 'alert-danger', timeout: 5000})
             this.loading = false;
           });
     }

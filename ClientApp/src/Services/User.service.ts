@@ -6,6 +6,7 @@ import {Token} from "../Models/Token";
 import {User} from "../Models/User";
 import {map} from "rxjs/operators";
 import {AuthModel} from "../Models/AuthModel";
+import {Remainder} from "../Models/Remainder";
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +58,8 @@ export class UserService {
   }
   GetSubscribtion(userID: number){
     return this.http.get<any>(this.BaseUrl + 'User/sub/'+userID);
+  }
+  SetAlert(alert :Remainder){
+    return this.http.post<any>(this.BaseUrl + 'User/addAlert', alert);
   }
 }

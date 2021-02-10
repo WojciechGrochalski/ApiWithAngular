@@ -16,7 +16,12 @@ namespace AngularApi.MyTools
         readonly WebClient webClient = new WebClient();
         List<CurrencyDBModel> listOfCurrency = new List<CurrencyDBModel>();
         CurrencyDBModel _currencyModel = new CurrencyDBModel();
+        private IMailService _mailService;
 
+        public MyWebParser(IMailService mailService)
+        {
+            _mailService = mailService;
+        }
         public CurrencyDBModel DownloadActualCurrency(string iso)
         {
 
@@ -42,9 +47,9 @@ namespace AngularApi.MyTools
                 {
                     _context.cashDBModels.Add(cash);
                 }
-
                 _context.SaveChanges();
-            }
+                SendTodayCurrencyToSubscribers(_context, _mailService, _listOfValue);
+            } 
         }
 
         // Verify IF database was already updated today
@@ -60,6 +65,39 @@ namespace AngularApi.MyTools
             }
 
             return true;
+        }
+        private string MakeMessage(List<CurrencyDBModel> listOfCash)
+        {
+            string table = $@"";
+            foreach (CurrencyDBModel item in listOfCash)
+            {
+                table += $@" <tr><td>{item.Data.ToShortDateString()}</td>
+                             <td>{item.Name}</td >
+                             <td>{item.AskPrice } PLN </td>
+                             <td>{item.BidPrice} PLN </td></tr>";
+            }
+            string message = $@"<font face='Arial' size='6px'><p>Dzisiejsze kursy walut:</p></font><br>
+                              <font face='Arial' size='5px'>
+                              <table  border="" + 1 + "" cellpadding="" + 0 + "" cellspacing="" + 0 + "" width = "" + 500""><thead><tr>
+                             <th>Data</th>
+                             <th>Waluta</th>
+                             <th>Cena kupna </th>
+                             <th>Cena sprzedaży </th>
+                             </tr></thead><tbody>";
+
+            return message += table + $@"</tr></tbody></table></font>";
+        }
+        private void SendTodayCurrencyToSubscribers(CashDBContext _context, IMailService _mailService, List<CurrencyDBModel> listOfCash)
+        {
+            string message = MakeMessage(listOfCash);
+            var users = _context.userDBModels.Where(s => s.IsVerify == true).ToList();
+            if (users != null)
+            {
+                foreach (UserDBModel item in users)
+                {
+                    _mailService.SendMail(item.Email, "Kurs walut", message);
+                }
+            }
         }
 
         public void SaveToFile(string pathToFile, string text, bool appendText = false)

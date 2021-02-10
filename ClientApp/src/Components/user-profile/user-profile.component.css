@@ -201,11 +201,18 @@ img{
 
   }
   .card{
-    width: 300px;
+    width: 20%;
     display: block;
   }
+  .card-body{
 
-
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+}
+.container{
+  margin-top: 5rem;
 }
 
 

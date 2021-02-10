@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../Services/User.service";
 import {FlashMessagesService} from "angular2-flash-messages";
+import {Cash} from "../../Models/Cash";
+import {CashService} from "../../Services/cash.service";
 
 
 @Component({
@@ -10,7 +12,7 @@ import {FlashMessagesService} from "angular2-flash-messages";
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
-  UserIsVerify:boolean=false;
+  public cash_list: Cash[];
   message:string;
   public askPrice: number[] = [];
   public bidPrice: number[] = [];
@@ -20,15 +22,21 @@ export class UserProfileComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private userService: UserService,
               private router: Router,
-              private flashMessagesService: FlashMessagesService ) { }
+              private flashMessagesService: FlashMessagesService,
+              private cashService: CashService  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    try {
+      this.cash_list = await this.cashService.GetDataOnInit().toPromise();
+    } catch (e) {
+      console.error(e);
+
+    }
     // let token= this.route.snapshot.queryParamMap.get('token');
     //   console.log("token: ",token);
     //
     //   this.userService.VerifyUser(token).subscribe(res => {
     //     this.message=res;
-    //     this.UserIsVerify=true;
     //     this.router.navigate([''])
     //     this.flashMessagesService.show('Profil został zaktualizowany', {cssClass: 'alert-success', timeout: 3000})
     //     });
@@ -50,7 +58,11 @@ export class UserProfileComponent implements OnInit {
     {
       this.flashMessagesService.show(res.message, {cssClass: 'alert-success', timeout: 3000})
     });
-
   }
+  SetPriceAlert(iso: string, price:string){
+    this.router.navigate(['/set-alert/'+iso+'/'+price]);
+  }
+
+
 
 }

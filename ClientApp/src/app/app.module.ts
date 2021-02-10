@@ -15,6 +15,7 @@ import {UserProfileComponent} from "../Components/user-profile/user-profile.comp
 import {ForgetPasswordComponent} from "../Components/forget-password/forget-password.component";
 import {LogInComponent} from "../Components/Login/log-in.component";
 import {RegisterComponent} from "../Components/register/register.component";
+import {SetAlertComponent} from "../Components/set-alert/set-alert.component";
 
 
 
@@ -27,7 +28,8 @@ import {RegisterComponent} from "../Components/register/register.component";
     UserProfileComponent,
     ForgetPasswordComponent,
     LogInComponent,
-    RegisterComponent
+    RegisterComponent,
+    SetAlertComponent
 
   ],
   imports: [
@@ -43,8 +45,10 @@ import {RegisterComponent} from "../Components/register/register.component";
       { path: 'cash-data', component: CashDataComponent },
       { path: 'user-profile', component: UserProfileComponent },
       { path: 'login', component: LogInComponent},
+      { path: 'login/:confirm', component: LogInComponent},
       { path: 'register', component: RegisterComponent},
       { path: 'forgot-password', component: ForgetPasswordComponent},
+      {path: 'set-alert/:iso/:price', component: SetAlertComponent}
     ]),
     BrowserAnimationsModule
   ],

@@ -19,7 +19,7 @@ export class UserService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.BaseUrl = baseUrl;
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(sessionStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
@@ -45,7 +45,7 @@ export class UserService {
       .pipe(map(user => {
         if (user ) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(user));
+          sessionStorage.setItem('currentUser', JSON.stringify(user));
           this.currentUserSubject.next(user);
         }
         return user;
@@ -53,10 +53,10 @@ export class UserService {
   }
   logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('currentUser');
+    sessionStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }
-  GetSubscribtion(userID: number){
+  GetSubscription(userID: number){
     return this.http.get<any>(this.BaseUrl + 'User/sub/'+userID);
   }
   SetAlert(alert :Remainder){

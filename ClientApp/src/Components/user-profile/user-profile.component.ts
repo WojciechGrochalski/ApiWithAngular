@@ -14,10 +14,10 @@ import {CashService} from "../../Services/cash.service";
 export class UserProfileComponent implements OnInit {
   public cash_list: Cash[];
   message:string;
-  public askPrice: number[] = [];
-  public bidPrice: number[] = [];
+  askPrice: number[] = [];
+ bidPrice: number[] = [];
   alert:boolean;
-  subscribtion:boolean;
+  subscription:boolean;
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
@@ -43,18 +43,18 @@ export class UserProfileComponent implements OnInit {
   }
 
   SetAlert(){
-    this.subscribtion=false;
+    this.subscription=false;
     this.alert=true;
   }
-  SetSubscribtion(){
-    this.subscribtion=true;
+  SetSubscription(){
+    this.subscription=true;
     this.alert=false;
   }
 
-  GetSubscribtion(){
+  GetSubscription(){
     let user=JSON.parse(localStorage.getItem('currentUser'));
     console.log(user);
-    this.userService.GetSubscribtion(user.id).subscribe( res =>
+    this.userService.GetSubscription(user.id).subscribe(res =>
     {
       this.flashMessagesService.show(res.message, {cssClass: 'alert-success', timeout: 3000})
     });

@@ -1,5 +1,4 @@
-import {Component, Inject, Input, Injectable, ViewChild} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {Component} from '@angular/core';
 import *as apex from 'ng-apexcharts';
 import {CashService} from '../../Services/cash.service';
 import { Cash } from '../../Models/Cash';
@@ -55,15 +54,15 @@ export class CashDataComponent {
   }
 
   async TakeLastCurrency(iso: string, count: string) {
-  let amoutOfCurrency: number = +count;
+  let amountOfCurrency: number = +count;
     try {
-      this.result = await this.cashService.GetLastCurrency(iso, amoutOfCurrency).toPromise();
+      this.result = await this.cashService.GetLastCurrency(iso, amountOfCurrency).toPromise();
 
-      this.askPrice = await this.cashService.GetChartAskPrice(iso, amoutOfCurrency).toPromise();
+      this.askPrice = await this.cashService.GetChartAskPrice(iso, amountOfCurrency).toPromise();
 
-      this.bidPrice = await this.cashService.GetChartBidPrice(iso, amoutOfCurrency).toPromise();
+      this.bidPrice = await this.cashService.GetChartBidPrice(iso, amountOfCurrency).toPromise();
 
-      this.chartData = await this.cashService.GetChartData(iso, amoutOfCurrency).toPromise();
+      this.chartData = await this.cashService.GetChartData(iso, amountOfCurrency).toPromise();
     } catch (e) {
       console.error(e);
     }

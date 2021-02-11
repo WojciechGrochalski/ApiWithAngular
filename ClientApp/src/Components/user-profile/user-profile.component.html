@@ -7,7 +7,7 @@
     <p>Zarządzanie Alertami</p>
     <hr class="separator">
     <ul class="sidemenu nav">
-      <li><i class="fas fa-th-list"></i><a (click)="SetSubscribtion()">Subskrybcja</a></li>
+      <li><i class="fas fa-th-list"></i><a (click)="SetSubscription()">Subskrybcja</a></li>
       <li><i class="fas fa-th-list"></i><a (click)="SetAlert()">Alert</a></li>
     </ul>
 
@@ -39,9 +39,9 @@
         </div>
       </div>
     </div>
-    <div *ngIf="subscribtion">
+    <div *ngIf="subscription">
        <h3>Dodaj subskrybcje codziennego kursu waluty</h3>
-        <input type="submit" (click)="GetSubscribtion()" >
+        <input type="submit" (click)="GetSubscription()" >
         <label>Akceptuj subskrybcje</label>
     </div>
 <!--    <router-outlet></router-outlet>-->

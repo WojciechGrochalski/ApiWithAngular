@@ -148,7 +148,6 @@ namespace angularapi.Controllers
                 if (user != null)
                 {
                     _context.Remainders.Add(remainder);
-                  //  _context.Entry(user).CurrentValues.SetValues(user);
                     _context.SaveChanges();
                     return Ok(new { message = "Pomyślnie ustawiono alert" });
                 }

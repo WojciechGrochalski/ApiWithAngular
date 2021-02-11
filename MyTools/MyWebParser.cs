@@ -17,7 +17,8 @@ namespace AngularApi.MyTools
         List<CurrencyDBModel> listOfCurrency = new List<CurrencyDBModel>();
         CurrencyDBModel _currencyModel = new CurrencyDBModel();
         private IMailService _mailService;
-
+  
+           
         public MyWebParser(IMailService mailService)
         {
             _mailService = mailService;
@@ -87,15 +88,55 @@ namespace AngularApi.MyTools
 
             return message += table + $@"</tr></tbody></table></font>";
         }
+        private string MakeMessageForAlert(string iso, string price,float value)
+        {
+            return $@"<h4>Alert walutowy dla {iso}</h4>
+                             <h5> Cena {price} {iso} z dnia {DateTime.Now.ToShortDateString()} to: </h5>
+                                <h3>{value}</h3>";
+                             
+        }
         private void SendTodayCurrencyToSubscribers(CashDBContext _context, IMailService _mailService, List<CurrencyDBModel> listOfCash)
         {
             string message = MakeMessage(listOfCash);
-            var users = _context.userDBModels.Where(s => s.IsVerify == true).ToList();
+            var users = _context.userDBModels.Where(s => s.Subscriptions == true).ToList();
             if (users != null)
             {
                 foreach (UserDBModel item in users)
                 {
                     _mailService.SendMail(item.Email, "Kurs walut", message);
+                }
+            }
+        }
+
+        private void CheckAndSendAlert(CashDBContext _context, IMailService _mailService, List<CurrencyDBModel> listOfCash)
+        {
+            var alerts = _context.Remainders.ToList();
+            foreach (Remainder item in alerts )
+            {
+                if (item.Price == "less")
+                {
+                    CurrencyDBModel todayPrice = listOfCash.FirstOrDefault(s => s.Code == item.Code);
+                    if (item.BidPrice > todayPrice.BidPrice)
+                    {
+                        var user = _context.userDBModels.FirstOrDefault(s => s.ID == item.UserID);
+                        _mailService.SendMail(user.Email, "Alert kursu", MakeMessageForAlert(todayPrice.Code,"sprzedaży", todayPrice.BidPrice));
+                    }
+
+                }
+                if (item.Price == "more")
+                {
+                    CurrencyDBModel todayPrice = listOfCash.FirstOrDefault(s => s.Code == item.Code);
+                    if (item.AskPrice < todayPrice.AskPrice)
+                    {
+                        var user = _context.userDBModels.FirstOrDefault(s => s.ID == item.UserID);
+                        _mailService.SendMail(user.Email, "Alert kursu", MakeMessageForAlert(todayPrice.Code, "kupna", todayPrice.AskPrice));
+                    }
+
+                }
+                if (item.EndDateOfAlert < DateTime.Now)
+                {
+                    _context.Remove(item);
+                    _context.SaveChanges();
                 }
             }
         }

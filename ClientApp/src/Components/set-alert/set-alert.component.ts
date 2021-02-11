@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {UserService} from "../../Services/User.service";
 import {ActivatedRoute} from "@angular/router";
 import {Remainder} from "../../Models/Remainder";
-import {User} from "../../Models/User";
 import {FlashMessagesService} from "angular2-flash-messages";
 
 @Component({
@@ -24,12 +23,9 @@ export class SetAlertComponent implements OnInit {
   ngOnInit() {
     this.userID= +JSON.parse(localStorage.getItem('currentUser')).id;
     console.log(this.userID)
-    let price="";
-      this.iso = this.route.snapshot.paramMap.get('iso');
-       price= this.route.snapshot.paramMap.get('price');
-      console.log("iso: ",this.iso);
 
-       console.log("price: ",price);
+      this.iso = this.route.snapshot.paramMap.get('iso');
+       let price= this.route.snapshot.paramMap.get('price');
        if(price=='less'){
          this.priceLessThan=false;
        }
@@ -38,18 +34,18 @@ export class SetAlertComponent implements OnInit {
        }
   }
 
-  AddAlert(value:number){
+  AddAlert(value: string, date: string){
     let alert = new Remainder();
     if(this.priceLessThan){
-      alert.AskPrice= +value;
       alert.Price='More';
+      alert.AskPrice= +value;
     }
     else{
       alert.Price='Less';
       alert.BidPrice= +value;
-      console.log('bidPrice '+alert.BidPrice)
     }
-    alert.Currency=this.iso;
+    alert.EndDateOfAlert=new Date(date);
+    alert.Code=this.iso;
     alert.UserID=  this.userID;
 
     this.userService.SetAlert(alert).subscribe(res =>{

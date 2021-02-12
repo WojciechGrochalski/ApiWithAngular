@@ -6,7 +6,8 @@ export class User {
   Name: string;
   Email: string;
   Pass: string;
-  VeryficationToken: string;
+  Role:string;
+  VerificationToken: string;
   IsVerify: boolean;
   Created: any;
   Subscriptions: boolean;

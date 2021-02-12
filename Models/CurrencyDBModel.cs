@@ -12,8 +12,6 @@ namespace angularapi.Models
         public string Code { get; set; }
         public float BidPrice { get; set; }
         public float AskPrice { get; set; }
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Data { get; set; }
 
         public CurrencyDBModel()

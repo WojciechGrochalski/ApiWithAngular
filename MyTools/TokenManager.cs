@@ -14,13 +14,35 @@ namespace angularapi.MyTools
     {
         private static readonly string _secret = "Superlongsupersecret!";
 
-        public static string GenerateAccessToken(string token)
+        public static string GenerateRegisterToken(string token)
         {
             return new JwtBuilder()
                 .WithAlgorithm(new HMACSHA256Algorithm())
                 .WithSecret(Encoding.ASCII.GetBytes(_secret))
                 .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(10).ToUnixTimeSeconds())
                 .AddClaim("token", token)
+                .Encode();
+        }
+
+        public static string GenerateAccessToken(string user)
+        {
+            return new JwtBuilder()
+                .WithAlgorithm(new HMACSHA256Algorithm())
+                .WithSecret(Encoding.ASCII.GetBytes(_secret))
+                .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(30).ToUnixTimeSeconds())
+                .AddClaim("user", user)
+                  .Audience("access")
+                .Encode();
+        }
+        public static string GenerateRefreshToken(string user, string key)
+        {
+            return new JwtBuilder()
+                .WithAlgorithm(new HMACSHA256Algorithm())
+                .WithSecret(Encoding.ASCII.GetBytes(_secret))
+                .AddClaim("exp", DateTimeOffset.UtcNow.AddHours(2).ToUnixTimeSeconds())
+                .AddClaim("refresh", key)
+                .AddClaim("user", user)
+                .Audience("refresh")
                 .Encode();
         }
 

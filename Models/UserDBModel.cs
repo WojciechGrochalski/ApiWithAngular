@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace angularapi.Models
@@ -16,10 +17,10 @@ namespace angularapi.Models
         public string Pass { get; set; }
         public string VeryficationToken { get; set; }
         public bool IsVerify { get; set; }
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Created { get; set; }
         public bool? Subscriptions { get; set; }
         public  List<Remainder> Remainder { get; set; }
+
+        public List<RefreshToken> RefreshTokens { get; set; }
     }
 }

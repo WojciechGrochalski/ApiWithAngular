@@ -8,10 +8,14 @@ using AngularApi.Repository;
 using Microsoft.AspNetCore.Mvc;
 using angularapi.MyTools;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace angularapi.Controllers
 {
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
@@ -29,6 +33,7 @@ namespace angularapi.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Register(UserDBModel user)
         {
             try
@@ -43,9 +48,10 @@ namespace angularapi.Controllers
             }
         }
         [HttpPost("login")]
+        [AllowAnonymous]
         public IActionResult Login(AuthModel model)
         {
-            var user = _userService.Authenticate(model.Name, model.Pass);
+            (var user, string refreshToken) = _userService.AuthenticateLogin(model.Name, model.Pass);
             if (user == null)
             {
                 return BadRequest(new { message = "Username or password is incorrect" });
@@ -54,9 +60,29 @@ namespace angularapi.Controllers
             {
                 ID = user.ID,
                 Name = user.Name,
-                Email = user.Email,
-                Subscribtion = user.Subscriptions
+                AccessToken = TokenManager.GenerateAccessToken(user.Name),
+                RefreshToken = refreshToken
             });
+        }
+        [Authorize(AuthenticationSchemes = "refresh")]
+        [HttpPut("refreshToken", Name = "refresh")]
+        public IActionResult RefreshToken()
+        {
+            Claim refreshtoken = User.Claims.FirstOrDefault(x => x.Type == "refresh");
+            Claim username = User.Claims.FirstOrDefault(x => x.Type == "user");
+            try
+            {
+                Tokens tokens = _userService.Refresh(username, refreshtoken);
+                return Ok(new
+                {
+                    AccessToken = tokens.AccessToken,
+                    RefreshToken = tokens.RefreshToken
+                }) ;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpPost("sub")]
         public async Task<IActionResult> AddSubscribtion(Remainder subb)
@@ -106,6 +132,7 @@ namespace angularapi.Controllers
         }
 
         [HttpPost("baseUrl")]
+        [AllowAnonymous]
         public IActionResult GetBaseUrl([FromBody] BaseUrlModel baseUrl)
         {
             BaseUrl = baseUrl.BaseUrl;
@@ -113,6 +140,7 @@ namespace angularapi.Controllers
         }
 
         [HttpGet("sub/{userID}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult AddSubscriptions(int userID)
         {
             var user = _context.userDBModels.FirstOrDefault(s => s.ID == userID);

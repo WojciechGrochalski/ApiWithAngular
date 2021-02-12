@@ -6,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
@@ -23,7 +25,7 @@ namespace angularapi.MyTools
         public UserService(CashDBContext context,
             ILogger<BackgroundService> logger,
             IServiceScopeFactory scopeFactory,
-               IMailService mailService )
+               IMailService mailService)
         {
             _context = context;
             _logger = logger;
@@ -32,11 +34,11 @@ namespace angularapi.MyTools
         }
 
 
-        public UserDBModel Authenticate(string username, string password)
+        public (UserDBModel,string ) AuthenticateLogin(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                return null;
+                return (null,null);
             }
 
             var user = _context.userDBModels.SingleOrDefault(x => x.Name == username);
@@ -44,18 +46,22 @@ namespace angularapi.MyTools
             // check if username exists
             if (user == null)
             {
-                return null;
+                return (null, null);
             }
 
             // check if password is correct
             if (!SecurePasswordHasher.Verify(password, user.Pass))
             {
-                return null;
+                return (null, null);
             }
 
             // authentication successful
-            //user.Pass = null;
-            return user;
+            RefreshToken newToken = new RefreshToken();
+            newToken.Token = TokenManager.GenerateRefreshToken(user.Name, RandomTokenString());
+            //newToken.UserID = user.ID;
+            //_context.refreshTokens.Add(newToken);
+            //_context.SaveChanges();
+            return (user, newToken.Token);
         }
         public UserDBModel CreateAsync(UserDBModel user)
         {
@@ -84,12 +90,12 @@ namespace angularapi.MyTools
             _context.SaveChanges();
 
             string message = $@"<p>Please use the below token to verify your email address with the <code>/accounts/verify-email</code> api route:</p>
-                             <p> <a href=""{UserController.BaseUrl}user-profile?token={TokenManager.GenerateAccessToken(user.VeryficationToken)}""> link <a/> </p>";
-           
+                             <p> <a href=""{UserController.BaseUrl}user-profile?token={TokenManager.GenerateRegisterToken(user.VeryficationToken)}""> link <a/> </p>";
+
             _mailService.SendMail(user.Email, subject, message);
             BackgroundTask task = new BackgroundTask(_logger, _scopeFactory);
             Task.Factory.StartNew(() => task.RemoveUnverifiedUserAsync(user.VeryficationToken));
-           
+
             return user;
         }
         public bool VerifyEmail(string token)
@@ -118,11 +124,9 @@ namespace angularapi.MyTools
             {
                 throw new ApplicationException(e.Message);
             }
-           
+
         }
-
-
-        private string RandomTokenString()
+        public string RandomTokenString()
         {
             using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
             var randomBytes = new byte[40];
@@ -131,5 +135,34 @@ namespace angularapi.MyTools
             return BitConverter.ToString(randomBytes).Replace("-", "");
         }
 
+        public Tokens Refresh(Claim userClaim, Claim refreshClaim)
+        {
+            var user = _context.userDBModels.FirstOrDefault(s => s.Name == userClaim.Value);
+            if (user == null)
+            {
+                throw new ApplicationException("User doesn't exist");
+            }
+            RefreshToken token = _context.refreshTokens.FirstOrDefault(s => s.UserID == user.ID && s.Token == refreshClaim.Value);
+
+            if (token != null)
+            {
+                RefreshToken newToken = new RefreshToken();
+                newToken.Token = TokenManager.GenerateRefreshToken(user.Name, RandomTokenString());
+                newToken.UserID = user.ID;
+                _context.refreshTokens.Add(newToken);
+
+                user.RefreshTokens.Remove(token);
+
+                return new Tokens
+                {
+                    AccessToken = TokenManager.GenerateAccessToken(user.Name),
+                    RefreshToken = newToken.Token
+                };
+            }
+            else
+            {
+                throw new ApplicationException("Refresh token incorrect");
+            }
+        }
     }
 }

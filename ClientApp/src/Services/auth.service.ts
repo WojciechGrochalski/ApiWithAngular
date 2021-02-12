@@ -1,11 +1,11 @@
 import {Inject, Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import { map} from 'rxjs/operators';
 import {CreatedUser} from "../Models/CreatedUser";
 import {Token} from "../Models/Token";
 import {AuthModel} from "../Models/AuthModel";
-import {LoginUser} from "../Models/LoginUser";
+
 
 
 
@@ -20,7 +20,7 @@ export class AuthService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.BaseUrl = baseUrl;
-    this.currentUserSubject = new BehaviorSubject<CreatedUser>(JSON.parse(sessionStorage.getItem('currentUser')));
+    this.currentUserSubject = new BehaviorSubject<CreatedUser>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
@@ -42,7 +42,8 @@ export class AuthService {
       .pipe(map(user => {
         if (user) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          sessionStorage.setItem('currentUser', JSON.stringify(user));
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          localStorage.setItem('authToken',JSON.stringify((user.accessToken)));
           this.currentUserSubject.next(user);
         }
         return user;
@@ -51,7 +52,7 @@ export class AuthService {
 
   logout() {
     // remove user from local storage to log user out
-    sessionStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }
 }

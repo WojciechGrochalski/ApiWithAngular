@@ -119,9 +119,11 @@ namespace AngularApi.MyTools
                     if (item.BidPrice > todayPrice.BidPrice)
                     {
                         var user = _context.userDBModels.FirstOrDefault(s => s.ID == item.UserID);
-                        _mailService.SendMail(user.Email, "Alert kursu", MakeMessageForAlert(todayPrice.Code,"sprzedaży", todayPrice.BidPrice));
+                        if (user != null)
+                        {
+                            _mailService.SendMail(user.Email, "Alert kursu", MakeMessageForAlert(todayPrice.Code, "sprzedaży", todayPrice.BidPrice));
+                        }
                     }
-
                 }
                 if (item.Price == "more")
                 {
@@ -129,9 +131,11 @@ namespace AngularApi.MyTools
                     if (item.AskPrice < todayPrice.AskPrice)
                     {
                         var user = _context.userDBModels.FirstOrDefault(s => s.ID == item.UserID);
-                        _mailService.SendMail(user.Email, "Alert kursu", MakeMessageForAlert(todayPrice.Code, "kupna", todayPrice.AskPrice));
+                        if (user != null)
+                        {
+                            _mailService.SendMail(user.Email, "Alert kursu", MakeMessageForAlert(todayPrice.Code, "kupna", todayPrice.AskPrice));
+                        }
                     }
-
                 }
                 if (item.EndDateOfAlert < DateTime.Now)
                 {

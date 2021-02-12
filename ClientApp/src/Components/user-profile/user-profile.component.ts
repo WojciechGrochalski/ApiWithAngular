@@ -4,6 +4,7 @@ import {UserService} from "../../Services/User.service";
 import {FlashMessagesService} from "angular2-flash-messages";
 import {Cash} from "../../Models/Cash";
 import {CashService} from "../../Services/cash.service";
+import {AuthService} from "../../Services/auth.service";
 
 
 @Component({
@@ -22,6 +23,7 @@ export class UserProfileComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private userService: UserService,
               private router: Router,
+              private _authService:AuthService,
               private flashMessagesService: FlashMessagesService,
               private cashService: CashService  ) { }
 
@@ -62,7 +64,9 @@ export class UserProfileComponent implements OnInit {
   SetPriceAlert(iso: string, price:string){
     this.router.navigate(['/set-alert/'+iso+'/'+price]);
   }
-
+Logout(){
+    this._authService.logout();
+}
 
 
 }

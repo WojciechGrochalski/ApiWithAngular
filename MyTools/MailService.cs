@@ -2,7 +2,6 @@
 using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;

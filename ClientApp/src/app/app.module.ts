@@ -16,6 +16,8 @@ import {ForgetPasswordComponent} from "../Components/forget-password/forget-pass
 import {LogInComponent} from "../Components/Login/log-in.component";
 import {RegisterComponent} from "../Components/register/register.component";
 import {SetAlertComponent} from "../Components/set-alert/set-alert.component";
+import {HttpInterceptorService} from "../Services/http-interceptor.service";
+import {ErrorInterceptorService} from "../Services/error-interceptor.service";
 
 
 
@@ -52,7 +54,9 @@ import {SetAlertComponent} from "../Components/set-alert/set-alert.component";
     ]),
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

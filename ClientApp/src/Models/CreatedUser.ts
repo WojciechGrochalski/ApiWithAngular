@@ -1,6 +1,6 @@
 import {Remainder} from "./Remainder";
 
-export class User {
+export class CreatedUser {
 
   ID: number;
   Name: string;

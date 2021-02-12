@@ -4,6 +4,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from "../../Services/User.service";
 import {FlashMessagesService} from "angular2-flash-messages";
 import {AuthModel} from "../../Models/AuthModel";
+import {AuthService} from "../../Services/auth.service";
 
 
 @Component({
@@ -26,13 +27,13 @@ export class LogInComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService,
+    private _authService: AuthService,
     private flashMessagesService: FlashMessagesService) {
 
     //redirect to home if already logged in
-    // if (this.userService.currentUserValue) {
-    //   this.router.navigate(['/']);
-    // }
+    if (this._authService.currentUserValue) {
+      this.router.navigate(['/']);
+    }
 
   }
 
@@ -68,7 +69,7 @@ export class LogInComponent implements OnInit {
     }
     let user = new AuthModel(this.f.username.value, this.f.password.value);
     this.loading = true;
-    this.userService.login(user)
+    this._authService.login(user)
       .subscribe(res => {
           if (res) {
             this.router.navigate([this.returnUrl]);

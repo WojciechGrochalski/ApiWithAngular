@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {UserService} from "../../Services/User.service";
 import {FlashMessagesService} from "angular2-flash-messages";
+import {AuthService} from "../../Services/auth.service";
 
 @Component({
   selector: 'app-register',
@@ -16,12 +17,12 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   constructor( private formBuilder: FormBuilder,
                private router: Router,
-               private userService: UserService,
+               private _authService: AuthService,
                private flashMessagesService: FlashMessagesService ) {
 
-    // if (this.userService.currentUserValue) {
-    //   this.router.navigate(['/']);
-    // }
+    if (this._authService.currentUserValue) {
+      this.router.navigate(['/']);
+    }
   }
 
   ngOnInit() {
@@ -42,7 +43,7 @@ export class RegisterComponent implements OnInit {
       }
 
       this.loading = true;
-      this.userService.register(this.registerForm.value)
+      this._authService.register(this.registerForm.value)
         .subscribe(
           data => {
             this.router.navigate(['/login/'+data.message]);

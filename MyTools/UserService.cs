@@ -56,12 +56,18 @@ namespace angularapi.MyTools
             }
 
             // authentication successful
-            RefreshToken newToken = new RefreshToken();
-            newToken.Token = TokenManager.GenerateRefreshToken(user.Name, RandomTokenString());
-            //newToken.UserID = user.ID;
-            //_context.refreshTokens.Add(newToken);
-            //_context.SaveChanges();
-            return (user, newToken.Token);
+            var rows = _context.refreshTokens.Where(x => x.UserID == user.ID).ToList();
+            foreach (RefreshToken item in rows)
+            {
+                _context.refreshTokens.Remove(item);
+            }
+            _context.SaveChanges();
+   
+            var newToken = TokenManager.GenerateRefreshToken(user.Name);
+            RefreshToken refreshToken = new RefreshToken(newToken.refreshTokenKey,user.ID);
+            _context.refreshTokens.Add(refreshToken);
+            _context.SaveChanges();
+            return (user, newToken.jwt);
         }
         public UserDBModel CreateAsync(UserDBModel user)
         {
@@ -85,7 +91,7 @@ namespace angularapi.MyTools
             user.Pass = PasswordHash;
             user.Created = DateTime.Now;
             user.IsVerify = false;
-            user.VeryficationToken = RandomTokenString();
+            user.VeryficationToken = TokenManager.RandomTokenString();
             _context.userDBModels.Add(user);
             _context.SaveChanges();
 
@@ -126,14 +132,7 @@ namespace angularapi.MyTools
             }
 
         }
-        public string RandomTokenString()
-        {
-            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
-            var randomBytes = new byte[40];
-            rngCryptoServiceProvider.GetBytes(randomBytes);
-            // convert random bytes to hex string
-            return BitConverter.ToString(randomBytes).Replace("-", "");
-        }
+    
 
         public Tokens Refresh(Claim userClaim, Claim refreshClaim)
         {
@@ -146,17 +145,19 @@ namespace angularapi.MyTools
 
             if (token != null)
             {
-                RefreshToken newToken = new RefreshToken();
-                newToken.Token = TokenManager.GenerateRefreshToken(user.Name, RandomTokenString());
-                newToken.UserID = user.ID;
-                _context.refreshTokens.Add(newToken);
+                
+                var newToken= TokenManager.GenerateRefreshToken(user.Name);
+                RefreshToken refreshToken = new RefreshToken(newToken.refreshTokenKey, user.ID);
 
-                user.RefreshTokens.Remove(token);
+                _context.refreshTokens.Add(refreshToken);
+
+                _context.refreshTokens.Remove(token);
+                _context.SaveChanges();
 
                 return new Tokens
                 {
                     AccessToken = TokenManager.GenerateAccessToken(user.Name),
-                    RefreshToken = newToken.Token
+                    RefreshToken = newToken.jwt
                 };
             }
             else

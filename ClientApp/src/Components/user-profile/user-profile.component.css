@@ -201,18 +201,50 @@ img{
 
   }
   .card{
-    width: 20%;
+    margin :50px !important;
+    padding :50px !important;
     display: block;
   }
   .card-body{
-
+    padding-right: -30px !important;
     justify-content: center;
     align-items: center;
     text-align: center;
   }
+
 }
 .container{
   margin-top: 5rem;
 }
+.vline{
+  margin-right: 10px;
+  margin-bottom: -10px;
+  width: 2px;
+  height: 40px;
+  position: relative;
+  background-color: red;
 
+  /*left: 50%;*/
+  /*top: 50%;*/
 
+}
+d-inline-block{
+  margin-top: -10px;
+}
+card-title{
+
+  margin-bottom: 0 !important;
+}
+.card-columns{
+  column-gap: 3rem;
+}
+
+.card-text:hover{
+  cursor: pointer;
+}
+@media screen and (max-width:1324px ) {
+  .vline{
+ display:none !important;
+
+  }
+}

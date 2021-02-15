@@ -26,7 +26,7 @@ export class SetAlertComponent implements OnInit {
 
       this.iso = this.route.snapshot.paramMap.get('iso');
        let price= this.route.snapshot.paramMap.get('price');
-       if(price=='less'){
+       if(price=='More'){
          this.priceLessThan=false;
        }
        else{

@@ -18,6 +18,7 @@ import {RegisterComponent} from "../Components/register/register.component";
 import {SetAlertComponent} from "../Components/set-alert/set-alert.component";
 import {HttpInterceptorService} from "../Services/http-interceptor.service";
 import {ErrorInterceptorService} from "../Services/error-interceptor.service";
+import {VerifyUserComponent} from "../Components/verify-user/verify-user.component";
 
 
 
@@ -31,7 +32,8 @@ import {ErrorInterceptorService} from "../Services/error-interceptor.service";
     ForgetPasswordComponent,
     LogInComponent,
     RegisterComponent,
-    SetAlertComponent
+    SetAlertComponent,
+    VerifyUserComponent
 
   ],
   imports: [
@@ -54,7 +56,8 @@ import {ErrorInterceptorService} from "../Services/error-interceptor.service";
     ]),
     BrowserAnimationsModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true },
   ],
   bootstrap: [AppComponent]

@@ -62,8 +62,7 @@ namespace AngularApi.MyTools
                             listOfCash.Add(_update.DownloadActualCurrency(iso));
                         }
                         _update.SendCurrencyToDataBase(listOfCash, _context);
-                    }
-                   
+                    }          
                 }
             }
         }

@@ -12,5 +12,11 @@ namespace angularapi.Models
         public string Token { get; set; }
         public int UserID { get; set; }
 
-    }
+        public RefreshToken(string token, int userID)
+        {
+            Token = token;
+            UserID = userID;
+        }
+
+    }   
 }

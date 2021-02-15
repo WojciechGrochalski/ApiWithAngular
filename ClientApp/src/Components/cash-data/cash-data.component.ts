@@ -104,20 +104,5 @@ export class CashDataComponent {
 
 }
 
-//interface Cash {
-
-//  name: string;
-//  code: string;
-//  bidPrice: number;
-//  askPrice: number;
-//  data: string;
-//}
-
-//interface Chart {
-
-//  data: string;
-//  askPrice: number;
-//}
-
 
 

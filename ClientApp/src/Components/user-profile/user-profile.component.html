@@ -21,27 +21,28 @@
   <div class="main-panel">
     <flash-messages></flash-messages>
     <div class="container" *ngIf="alert">
-      <div class="row">
+
         <div class="albums">
           <div class="card-columns">
             <div class="card" *ngFor="let item of cash_list" >
               <div class="card-body" >
-                <h5 class="card-title"> {{item.Code}}/ PLN </h5>
-                <div class="d-inline-block" (click)="SetPriceAlert(item.Code,'less')">
-                <span class="card-text"> Sprzedaj za: {{item.BidPrice}} &nbsp;</span>
+                <h5 class="card-title"> {{item.Code}} / PLN </h5>
+                <div class="d-inline-block" (click)="SetPriceAlert(item.Code,'More')">
+                <span class="card-text"> Sprzedaj za: {{item.BidPrice.toFixed(4)}} &nbsp;</span>
                 </div>
-                <div class="d-inline-block" (click)="SetPriceAlert(item.Code,'more')">
-                <span class="card-text"> Kup za {{item.AskPrice}}</span>
+                <div class="vline d-inline-block"></div>
+                <div class="d-inline-block" (click)="SetPriceAlert(item.Code,'Less')">
+                <span class="card-text"> Kup za {{item.AskPrice.toFixed(4)}}</span>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+
       </div>
     </div>
     <div *ngIf="subscription">
        <h3>Dodaj subskrybcje codziennego kursu waluty</h3>
-        <input type="submit" (click)="GetSubscription()" >
+        <input type="submit" (click)="AddSubscription()" >
         <label>Akceptuj subskrybcje</label>
     </div>
 <!--    <router-outlet></router-outlet>-->

@@ -15,7 +15,6 @@ namespace AngularApi.Repository
         UserDBModel CreateAsync(UserDBModel user);
         bool VerifyEmail(string token);
 
-       string RandomTokenString();
         Tokens Refresh(Claim username, Claim refreshtoken);
         //void Update(User user, string password = null);
         //void Delete(int id);

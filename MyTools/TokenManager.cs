@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,14 +30,15 @@ namespace angularapi.MyTools
             return new JwtBuilder()
                 .WithAlgorithm(new HMACSHA256Algorithm())
                 .WithSecret(Encoding.ASCII.GetBytes(_secret))
-                .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(30).ToUnixTimeSeconds())
+                .AddClaim("exp", DateTimeOffset.UtcNow.AddSeconds(10).ToUnixTimeSeconds())
                 .AddClaim("user", user)
-                  .Audience("access")
+                .Audience("access")
                 .Encode();
         }
-        public static string GenerateRefreshToken(string user, string key)
+        public static (string refreshTokenKey, string jwt) GenerateRefreshToken(string user)
         {
-            return new JwtBuilder()
+            string key = RandomTokenString();
+            string jwt= new JwtBuilder()
                 .WithAlgorithm(new HMACSHA256Algorithm())
                 .WithSecret(Encoding.ASCII.GetBytes(_secret))
                 .AddClaim("exp", DateTimeOffset.UtcNow.AddHours(2).ToUnixTimeSeconds())
@@ -44,6 +46,7 @@ namespace angularapi.MyTools
                 .AddClaim("user", user)
                 .Audience("refresh")
                 .Encode();
+            return (key, jwt);
         }
 
         public static IDictionary<string, object> VerifyToken(string token)
@@ -80,6 +83,15 @@ namespace angularapi.MyTools
                 // return null if validation fails
                 return null;
             }
+        }
+
+        public static string RandomTokenString()
+        {
+            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            var randomBytes = new byte[38];
+            rngCryptoServiceProvider.GetBytes(randomBytes);
+            // convert random bytes to hex string
+            return BitConverter.ToString(randomBytes).Replace("-", "");
         }
 
     }

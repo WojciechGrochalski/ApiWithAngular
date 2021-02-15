@@ -113,7 +113,7 @@ namespace AngularApi.MyTools
             var alerts = _context.Remainders.ToList();
             foreach (Remainder item in alerts )
             {
-                if (item.Price == "less")
+                if (item.Price == "Less")
                 {
                     CurrencyDBModel todayPrice = listOfCash.FirstOrDefault(s => s.Code == item.Code);
                     if (item.BidPrice > todayPrice.BidPrice)
@@ -125,7 +125,7 @@ namespace AngularApi.MyTools
                         }
                     }
                 }
-                if (item.Price == "more")
+                if (item.Price == "More")
                 {
                     CurrencyDBModel todayPrice = listOfCash.FirstOrDefault(s => s.Code == item.Code);
                     if (item.AskPrice < todayPrice.AskPrice)

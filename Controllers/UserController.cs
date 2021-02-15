@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace angularapi.Controllers
 {
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+   [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
@@ -65,14 +65,14 @@ namespace angularapi.Controllers
             });
         }
         [Authorize(AuthenticationSchemes = "refresh")]
-        [HttpPut("refreshToken", Name = "refresh")]
+        [HttpGet("refreshToken", Name = "refresh")]
         public IActionResult RefreshToken()
         {
-            Claim refreshtoken = User.Claims.FirstOrDefault(x => x.Type == "refresh");
+            Claim refreshToken = User.Claims.FirstOrDefault(x => x.Type == "refresh");
             Claim username = User.Claims.FirstOrDefault(x => x.Type == "user");
             try
             {
-                Tokens tokens = _userService.Refresh(username, refreshtoken);
+                Tokens tokens = _userService.Refresh(username, refreshToken);
                 return Ok(new
                 {
                     AccessToken = tokens.AccessToken,

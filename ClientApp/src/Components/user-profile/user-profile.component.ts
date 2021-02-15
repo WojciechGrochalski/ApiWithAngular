@@ -5,6 +5,9 @@ import {FlashMessagesService} from "angular2-flash-messages";
 import {Cash} from "../../Models/Cash";
 import {CashService} from "../../Services/cash.service";
 import {AuthService} from "../../Services/auth.service";
+import {error} from "@angular/compiler/src/util";
+import {pipe, throwError} from "rxjs";
+import {catchError, tap} from "rxjs/operators";
 
 
 @Component({
@@ -34,14 +37,6 @@ export class UserProfileComponent implements OnInit {
       console.error(e);
 
     }
-    // let token= this.route.snapshot.queryParamMap.get('token');
-    //   console.log("token: ",token);
-    //
-    //   this.userService.VerifyUser(token).subscribe(res => {
-    //     this.message=res;
-    //     this.router.navigate([''])
-    //     this.flashMessagesService.show('Profil został zaktualizowany', {cssClass: 'alert-success', timeout: 3000})
-    //     });
   }
 
   SetAlert(){
@@ -53,14 +48,14 @@ export class UserProfileComponent implements OnInit {
     this.alert=false;
   }
 
-  GetSubscription(){
+  AddSubscription(){
     let user=JSON.parse(localStorage.getItem('currentUser'));
-    console.log(user);
-    this.userService.GetSubscription(user.id).subscribe(res =>
-    {
-      this.flashMessagesService.show(res.message, {cssClass: 'alert-success', timeout: 3000})
-    });
+      this.userService.GetSubscription(user.id).subscribe(res => {
+        this.flashMessagesService.show(res.message, {cssClass: 'alert-success', timeout: 3000})
+      });
   }
+
+
   SetPriceAlert(iso: string, price:string){
     this.router.navigate(['/set-alert/'+iso+'/'+price]);
   }

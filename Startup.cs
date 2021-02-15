@@ -67,7 +67,7 @@ namespace AngularApi
                     ValidateAudience = true,
                     ValidAudience = audience,
                     ValidateLifetime = true, //validate the expiration and not before values in the token
-                    ClockSkew = TimeSpan.FromMinutes(1) //1 minute tolerance for the expiration date
+                    ClockSkew = TimeSpan.FromMinutes(0) //1 minute tolerance for the expiration date
                 };
                 if (audience == "access")
                 {
@@ -77,12 +77,13 @@ namespace AngularApi
                         {
                             if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                             {
-                                context.Response.Headers.Add("Token-Expired", "true");
+                                context.Response.Headers.Add("Token-Expired", "true");   
                             }
                             return Task.CompletedTask;
                         }
                     };
                 }
+              
                 return jwtBearerOptions;
             }
 
@@ -92,7 +93,7 @@ namespace AngularApi
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(jwtBearerOptions => options(jwtBearerOptions, "access"))
-            .AddJwtBearer("refresh", jwtBearerOptions => options(jwtBearerOptions, "refresh"));
+            .AddJwtBearer ("refresh",jwtBearerOptions => options(jwtBearerOptions, "refresh"));
 
 
 

@@ -6,7 +6,7 @@ import {Cash} from "../../Models/Cash";
 import {CashService} from "../../Services/cash.service";
 import {AuthService} from "../../Services/auth.service";
 import {error} from "@angular/compiler/src/util";
-import {pipe, throwError} from "rxjs";
+import {EMPTY, pipe, throwError} from "rxjs";
 import {catchError, tap} from "rxjs/operators";
 
 
@@ -33,6 +33,10 @@ export class UserProfileComponent implements OnInit {
   async ngOnInit() {
     try {
       this.cash_list = await this.cashService.GetDataOnInit().toPromise();
+      let message = this.route.snapshot.paramMap.get('message');
+      if(message) {
+        this.flashMessagesService.show(message, {cssClass: 'alert-success', timeout: 5000})
+      }
     } catch (e) {
       console.error(e);
 
@@ -52,8 +56,9 @@ export class UserProfileComponent implements OnInit {
     let user=JSON.parse(localStorage.getItem('currentUser'));
       this.userService.GetSubscription(user.id).subscribe(res => {
         this.flashMessagesService.show(res.message, {cssClass: 'alert-success', timeout: 3000})
-      });
-  }
+      })
+    }
+
 
 
   SetPriceAlert(iso: string, price:string){
@@ -61,6 +66,7 @@ export class UserProfileComponent implements OnInit {
   }
 Logout(){
     this._authService.logout();
+  this.router.navigate(['/']);
 }
 
 

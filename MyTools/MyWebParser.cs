@@ -50,7 +50,9 @@ namespace AngularApi.MyTools
                 }
                 _context.SaveChanges();
                 SendTodayCurrencyToSubscribers(_context, _mailService, _listOfValue);
-            } 
+                CheckAndSendAlert(_context, _mailService, _listOfValue);
+            }
+           
         }
 
         // Verify IF database was already updated today
@@ -116,24 +118,30 @@ namespace AngularApi.MyTools
                 if (item.Price == "Less")
                 {
                     CurrencyDBModel todayPrice = listOfCash.FirstOrDefault(s => s.Code == item.Code);
-                    if (item.BidPrice > todayPrice.BidPrice)
+                    if (todayPrice != null)
                     {
-                        var user = _context.userDBModels.FirstOrDefault(s => s.ID == item.UserID);
-                        if (user != null)
+                        if (item.BidPrice > todayPrice.BidPrice)
                         {
-                            _mailService.SendMail(user.Email, "Alert kursu", MakeMessageForAlert(todayPrice.Code, "sprzedaży", todayPrice.BidPrice));
+                            var user = _context.userDBModels.FirstOrDefault(s => s.ID == item.UserID);
+                            if (user != null)
+                            {
+                                _mailService.SendMail(user.Email, "Alert kursu", MakeMessageForAlert(todayPrice.Code, "sprzedaży", todayPrice.BidPrice));
+                            }
                         }
                     }
                 }
                 if (item.Price == "More")
                 {
                     CurrencyDBModel todayPrice = listOfCash.FirstOrDefault(s => s.Code == item.Code);
-                    if (item.AskPrice < todayPrice.AskPrice)
+                    if (todayPrice != null)
                     {
-                        var user = _context.userDBModels.FirstOrDefault(s => s.ID == item.UserID);
-                        if (user != null)
+                        if (item.AskPrice < todayPrice.AskPrice)
                         {
-                            _mailService.SendMail(user.Email, "Alert kursu", MakeMessageForAlert(todayPrice.Code, "kupna", todayPrice.AskPrice));
+                            var user = _context.userDBModels.FirstOrDefault(s => s.ID == item.UserID);
+                            if (user != null)
+                            {
+                                _mailService.SendMail(user.Email, "Alert kursu", MakeMessageForAlert(todayPrice.Code, "kupna", todayPrice.AskPrice));
+                            }
                         }
                     }
                 }

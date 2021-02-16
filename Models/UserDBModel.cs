@@ -16,6 +16,7 @@ namespace angularapi.Models
         public string Email { get; set; }
         public string Pass { get; set; }
         public string VeryficationToken { get; set; }
+        public string ResetPasswordToken { get; set; }
         public bool IsVerify { get; set; }
         public DateTime Created { get; set; }
         public bool? Subscriptions { get; set; }

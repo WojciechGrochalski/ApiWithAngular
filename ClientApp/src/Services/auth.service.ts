@@ -6,6 +6,7 @@ import {CreatedUser} from "../Models/CreatedUser";
 
 import {AuthModel} from "../Models/AuthModel";
 import {LoginResult} from "../Models/LoginResult";
+import {NewPassword} from "../Models/NewPassword";
 
 
 
@@ -30,9 +31,19 @@ export class AuthService {
   }
 
 
-  register(user: CreatedUser) {
+  Register(user: CreatedUser) {
     return this.http.post<any>(this.BaseUrl + 'User', user);
   }
+
+  ResetPassword(Email: string) {
+    let data =new NewPassword("",Email);
+    return this.http.post<any>(this.BaseUrl + 'User/resetPassword', data);
+  }
+  SetNewPassword(data: NewPassword) {
+
+    return this.http.post<any>(this.BaseUrl + 'User/setPassword', data);
+  }
+
 
   login(user: AuthModel) {
     return this.http.post<LoginResult>(this.BaseUrl + 'User/login', user)

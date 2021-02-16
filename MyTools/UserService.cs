@@ -96,7 +96,7 @@ namespace angularapi.MyTools
             _context.SaveChanges();
 
             string message = $@"<p>Please use the below token to verify your email address with the <code>/accounts/verify-email</code> api route:</p>
-                             <p> <a href=""{UserController.BaseUrl}user-profile?token={TokenManager.GenerateRegisterToken(user.VeryficationToken)}""> link <a/> </p>";
+                             <p> <a href=""{UserController.BaseUrl}verify-user?token={TokenManager.GenerateRegisterToken(user.VeryficationToken)}""> link <a/> </p>";
 
             _mailService.SendMail(user.Email, subject, message);
             BackgroundTask task = new BackgroundTask(_logger, _scopeFactory);
@@ -132,7 +132,34 @@ namespace angularapi.MyTools
             }
 
         }
-    
+        public bool VerifyPasswordToken(string token)
+        {
+            try
+            {
+                string verifyToken = TokenManager.ValidateJwtToken(token);
+                if (verifyToken == null)
+                {
+                    return false;
+                }
+                var account = _context.userDBModels.SingleOrDefault(x => x.ResetPasswordToken == verifyToken);
+
+                if (account == null)
+                {
+                    return false;
+                }
+                account.ResetPasswordToken = null;
+
+                _context.userDBModels.Update(account);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (ApplicationException e)
+            {
+                throw new ApplicationException(e.Message);
+            }
+
+        }
+
 
         public Tokens Refresh(Claim userClaim, Claim refreshClaim)
         {

@@ -19,6 +19,7 @@ import {SetAlertComponent} from "../Components/set-alert/set-alert.component";
 import {HttpInterceptorService} from "../Services/http-interceptor.service";
 import {ErrorInterceptorService} from "../Services/error-interceptor.service";
 import {VerifyUserComponent} from "../Components/verify-user/verify-user.component";
+import {NewPasswordComponent} from "../Components/new-password/new-password.component";
 
 
 
@@ -33,7 +34,8 @@ import {VerifyUserComponent} from "../Components/verify-user/verify-user.compone
     LogInComponent,
     RegisterComponent,
     SetAlertComponent,
-    VerifyUserComponent
+    VerifyUserComponent,
+    NewPasswordComponent
 
   ],
   imports: [
@@ -48,9 +50,11 @@ import {VerifyUserComponent} from "../Components/verify-user/verify-user.compone
       { path: '', component: HomeComponent },
       { path: 'cash-data', component: CashDataComponent },
       { path: 'user-profile', component: UserProfileComponent },
+      { path: 'user-profile/:message', component: UserProfileComponent },
       { path: 'login', component: LogInComponent},
       { path: 'login/:confirm', component: LogInComponent},
       { path: 'register', component: RegisterComponent},
+      { path: 'new-password', component: NewPasswordComponent},
       { path: 'forgot-password', component: ForgetPasswordComponent},
       {path: 'set-alert/:iso/:price', component: SetAlertComponent}
     ]),

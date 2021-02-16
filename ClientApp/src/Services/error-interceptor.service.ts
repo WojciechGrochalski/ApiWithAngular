@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import {Observable,  throwError} from 'rxjs';
+import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse} from '@angular/common/http';
+import {EMPTY, Observable, throwError} from 'rxjs';
 import {catchError, switchMap} from 'rxjs/operators';
 import {UserService} from "./User.service";
 
@@ -13,19 +13,19 @@ export class ErrorInterceptorService implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(catchError( err => {
+    return next.handle(request).pipe(catchError( err =>{
 
-      if (err.status === 401) {
+      if (err.status=== 401) {
         console.log("err 401");
         return this.userService.RefreshToken()
-          .pipe(switchMap((newAccessToken:any)=>{
-              newAccessToken= localStorage.getItem('accessToken');
-              return next.handle(this.addToken(request,newAccessToken));
-            }));
-          }
-      return throwError(err.status);
+          .pipe(switchMap((newAccessToken: any) => {
+            newAccessToken = localStorage.getItem('accessToken');
+            return next.handle(this.addToken(request, newAccessToken));
+          }));
+      }
+      return throwError(err);
 
-    }));
+    }))
   }
 
 

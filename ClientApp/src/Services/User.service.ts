@@ -37,7 +37,11 @@ export class UserService {
   }
   VerifyUser(token: string): Observable<any> {
     let jwtToken = new Token(token);
-    return this.http.post(this.BaseUrl + 'User/verify-email', jwtToken, {responseType: 'text'});
+    return this.http.post(this.BaseUrl + 'User/verify-email', jwtToken);
+  }
+  VerifyPasswordToken(token: string): Observable<any> {
+   let jwtToken = new Token(token);
+    return this.http.post(this.BaseUrl + 'User/verify-resetpassword', jwtToken);
   }
  RefreshToken() {
     return this.http.get<NewTokens>(this.BaseUrl + 'User/refreshToken').pipe(tap

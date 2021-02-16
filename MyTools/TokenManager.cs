@@ -24,13 +24,23 @@ namespace angularapi.MyTools
                 .AddClaim("token", token)
                 .Encode();
         }
+        public static string GenerateResetPassToken(string token,string email)
+        {
+            return new JwtBuilder()
+                .WithAlgorithm(new HMACSHA256Algorithm())
+                .WithSecret(Encoding.ASCII.GetBytes(_secret))
+                .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(10).ToUnixTimeSeconds())
+                .AddClaim("token", token)
+                .AddClaim("email",email)
+                .Encode();
+        }
 
         public static string GenerateAccessToken(string user)
         {
             return new JwtBuilder()
                 .WithAlgorithm(new HMACSHA256Algorithm())
                 .WithSecret(Encoding.ASCII.GetBytes(_secret))
-                .AddClaim("exp", DateTimeOffset.UtcNow.AddSeconds(10).ToUnixTimeSeconds())
+                .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(10).ToUnixTimeSeconds())
                 .AddClaim("user", user)
                 .Audience("access")
                 .Encode();
@@ -74,6 +84,34 @@ namespace angularapi.MyTools
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 string randomToken = jwtToken.Claims.First(x => x.Type == "token").Value;
+
+                // return account id from JWT token if validation successful
+                return randomToken;
+            }
+            catch
+            {
+                // return null if validation fails
+                return null;
+            }
+        }
+        public static string ValidateJwtToken(string token,string claim)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_secret);
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                string randomToken = jwtToken.Claims.First(x => x.Type == claim).Value;
 
                 // return account id from JWT token if validation successful
                 return randomToken;

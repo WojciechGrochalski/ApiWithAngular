@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
 import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {UserService} from "./User.service";
+import {Observable, throwError} from 'rxjs';
+
 
 
 @Injectable({
@@ -9,17 +9,9 @@ import {UserService} from "./User.service";
 })
 export class HttpInterceptorService implements HttpInterceptor {
 
-  BaseUrl: string = '';
-
-  constructor(
-    private http: HttpClient,
-    @Inject('BASE_URL') baseUrl: string,
-    private userService: UserService) {
-    this.BaseUrl = baseUrl;
-  }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log(request.url);
+
     if (request.url.includes("cash") || request.url.includes("baseUrl") ||request.url.includes("login")) {
       return next.handle(request);
     } else {
@@ -34,7 +26,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         return next.handle(request);
       }
       else {
-        console.log("acc")
+        console.log("access")
         let accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
           request = request.clone({
@@ -42,10 +34,11 @@ export class HttpInterceptorService implements HttpInterceptor {
               Authorization: `Bearer ${accessToken}`,
             }
           });
-          return next.handle(request);
         }
+        return next.handle(request);
       }
     }
+
 
   }
 }

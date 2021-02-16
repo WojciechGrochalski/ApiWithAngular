@@ -123,6 +123,9 @@ namespace angularapi.Migrations
                     b.Property<string>("Pass")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ResetPasswordToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("Subscriptions")
                         .HasColumnType("bit");
 

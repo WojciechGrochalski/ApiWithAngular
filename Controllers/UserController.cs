@@ -11,11 +11,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace angularapi.Controllers
 {
     [ApiController]
-   [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
@@ -23,13 +24,14 @@ namespace angularapi.Controllers
         private readonly ILogger<UserController> _logger;
         private IUserService _userService;
         public static string BaseUrl;
-
+        private IMailService _mailService;
         public UserController(CashDBContext context, IUserService userService,
-            ILogger<UserController> logger)
+            ILogger<UserController> logger, IMailService mailService)
         {
             _context = context;
             _userService = userService;
             _logger = logger;
+            _mailService = mailService;
         }
 
         [HttpPost]
@@ -77,7 +79,7 @@ namespace angularapi.Controllers
                 {
                     AccessToken = tokens.AccessToken,
                     RefreshToken = tokens.RefreshToken
-                }) ;
+                });
             }
             catch (Exception e)
             {
@@ -93,34 +95,60 @@ namespace angularapi.Controllers
             return Ok();
         }
 
-        //[HttpPost("ForgotPassword")]
-        //public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    var user = await _userManager.FindByEmailAsync(forgotPasswordDto.Email);
-        //    if (user == null)
-        //    {
-        //        return BadRequest("Invalid Request");
-        //    }
-        //    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-        //    var param = new Dictionary<string, string>
-        //    {
-        //         {"token", token },
-        //         {"email", forgotPasswordDto.Email }
-        //     };
-        //    var callback = QueryHelpers.AddQueryString(forgotPasswordDto.ClientURI, param);
-        //    //var message = new Message(new string[] { "codemazetest@gmail.com" }, "Reset password token", callback, null);
-        //    //await _emailSender.SendEmailAsync(message);
-        //    return Ok(
-        //       new
-        //       {
-        //           callback = callback
-        //       }); ;
-        //}
+        [HttpPost("resetPassword")]
+        [AllowAnonymous]
+        public IActionResult ResetPassword([FromBody] NewPassword newPassword)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var user = _context.userDBModels.FirstOrDefault(s => s.Email == newPassword.Email);
+            if (user == null)
+            {
+                return BadRequest(new { message = "Nie istnieje użytkownik o takim emailu" });
+            }
+            user.ResetPasswordToken = TokenManager.RandomTokenString();
+            
+            string resetPasswordtoken = TokenManager.GenerateResetPassToken(user.ResetPasswordToken,user.Email);
+            _context.userDBModels.Update(user);
+            _context.SaveChanges();
+            string message = $@"<p>Wysłano powiadomienie o zresetowaniu hasła</p>
+                                <p>Kliknij link aby dokończyć resetowanie</p>
+                             <p> <a href=""{BaseUrl}new-password?token={resetPasswordtoken}""> link <a/> </p>";
+            _mailService.SendMail(newPassword.Email, "Resetowanie Hasła", message);
+            return Ok(new { message = "Link do zresetowania hasło został wysłany na twój e-mail" });
+
+        }
+        [HttpPost("verify-resetpassword")]
+        [AllowAnonymous]
+        public IActionResult VerifyPaswordToken([FromBody] VerifyEmailRequest token)
+        {
+            bool result = _userService.VerifyPasswordToken(token.Token);
+            string email = TokenManager.ValidateJwtToken(token.Token, "email");
+            
+            if (result)
+            {
+                return Ok(new {email=email });
+            }
+            return BadRequest(new { message = "Token wygasł lub jest nieprawidłowy" });
+        }
+        [HttpPost("setPassword")]
+        [AllowAnonymous]
+        public IActionResult SetNewPassword([FromBody] NewPassword data)
+        {
+            var user = _context.userDBModels.FirstOrDefault(s => s.Email == data.Email);
+            if (user != null)
+            {
+                user.Pass = data.Password;
+                _context.userDBModels.Update(user);
+                _context.SaveChanges();
+                return Ok(new { message = "Zmieniono hasło" });
+            }
+            return BadRequest(new { message = "Coś poszło nie tak, spróbuj ponownie" });
+        }
         [HttpPost("verify-email")]
+        [AllowAnonymous]
         public IActionResult VerifyEmail([FromBody] VerifyEmailRequest verifyEmail)
         {
             bool result = _userService.VerifyEmail(verifyEmail.Token);
@@ -140,7 +168,6 @@ namespace angularapi.Controllers
         }
 
         [HttpGet("sub/{userID}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult AddSubscriptions(int userID)
         {
             var user = _context.userDBModels.FirstOrDefault(s => s.ID == userID);

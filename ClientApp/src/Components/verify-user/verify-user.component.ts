@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../Services/User.service";
 import {FlashMessagesService} from "angular2-flash-messages";
+import {EMPTY} from "rxjs";
 
 
 @Component({
@@ -20,13 +21,13 @@ export class VerifyUserComponent implements OnInit {
 
     let token= this.route.snapshot.queryParamMap.get('token');
 
-      this.userService.VerifyUser(token).subscribe(res => {
+    this.userService.VerifyUser(token).subscribe(res => {
         this.flashMessagesService.show(res.message, {cssClass: 'alert-success', timeout: 3000})
-          this.router.navigate(['']);
-        },
-        error => {
-          this.flashMessagesService.show(error.error.message, {cssClass: 'alert-danger', timeout: 3000})
-        });
+        this.router.navigate(['/user-profile']);
+      },
+      error => {
+        this.flashMessagesService.show(error.error.message, {cssClass: 'alert-danger', timeout: 3000})
+      });
   }
 
 }

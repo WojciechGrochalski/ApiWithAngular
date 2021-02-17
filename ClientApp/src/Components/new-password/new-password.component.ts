@@ -53,7 +53,7 @@ export class NewPasswordComponent implements OnInit {
     this._authService.SetNewPassword(newPassword)
       .subscribe(
         data => {
-          this.router.navigate(['/user-profile/'+data.message]);
+          this.router.navigate(['/login/'+data.message]);
         },
         error => {
           this.flashMessagesService.show(error.error.message, {cssClass: 'alert-danger', timeout: 3000})

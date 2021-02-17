@@ -7,6 +7,7 @@ import {CreatedUser} from "../Models/CreatedUser";
 import {AuthModel} from "../Models/AuthModel";
 import {LoginResult} from "../Models/LoginResult";
 import {NewPassword} from "../Models/NewPassword";
+import {JwtHelperService} from "@auth0/angular-jwt";
 
 
 
@@ -18,9 +19,10 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<LoginResult>;
   public currentUser: Observable<LoginResult>;
   BaseUrl: string = '';
+  helper = new JwtHelperService();
 
-
-  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+  constructor(private http: HttpClient,
+              @Inject('BASE_URL') baseUrl: string) {
     this.BaseUrl = baseUrl;
     this.currentUserSubject = new BehaviorSubject<LoginResult>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
@@ -30,7 +32,15 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-
+  public isAuthenticated(): boolean {
+    const token = localStorage.getItem('accessToken');
+    if(token) {
+      // Check whether the token is expired and return
+      // true or false
+      return !this.helper.isTokenExpired(token);
+    }
+    return false;
+  }
   Register(user: CreatedUser) {
     return this.http.post<any>(this.BaseUrl + 'User', user);
   }

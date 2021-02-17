@@ -20,7 +20,7 @@ import {HttpInterceptorService} from "../Services/http-interceptor.service";
 import {ErrorInterceptorService} from "../Services/error-interceptor.service";
 import {VerifyUserComponent} from "../Components/verify-user/verify-user.component";
 import {NewPasswordComponent} from "../Components/new-password/new-password.component";
-
+import {AuthGuard} from "../Services/auth-guard.service";
 
 
 @NgModule({
@@ -49,14 +49,14 @@ import {NewPasswordComponent} from "../Components/new-password/new-password.comp
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: '', component: HomeComponent },
       { path: 'cash-data', component: CashDataComponent },
-      { path: 'user-profile', component: UserProfileComponent },
-      { path: 'user-profile/:message', component: UserProfileComponent },
+      { path: 'user-profile', component: UserProfileComponent , canActivate: [AuthGuard] },
+      { path: 'user-profile/:message', component: UserProfileComponent, canActivate: [AuthGuard] },
       { path: 'login', component: LogInComponent},
       { path: 'login/:confirm', component: LogInComponent},
       { path: 'register', component: RegisterComponent},
       { path: 'new-password', component: NewPasswordComponent},
       { path: 'forgot-password', component: ForgetPasswordComponent},
-      {path: 'set-alert/:iso/:price', component: SetAlertComponent}
+      {path: 'set-alert/:iso/:price', component: SetAlertComponent, canActivate: [AuthGuard]}
     ]),
     BrowserAnimationsModule
   ],

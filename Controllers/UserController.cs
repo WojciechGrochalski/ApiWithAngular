@@ -140,7 +140,8 @@ namespace angularapi.Controllers
             var user = _context.userDBModels.FirstOrDefault(s => s.Email == data.Email);
             if (user != null)
             {
-                user.Pass = data.Password;
+                string passwordHash = SecurePasswordHasher.Hash(data.Password);
+                user.Pass = passwordHash;
                 _context.userDBModels.Update(user);
                 _context.SaveChanges();
                 return Ok(new { message = "Zmieniono hasło" });

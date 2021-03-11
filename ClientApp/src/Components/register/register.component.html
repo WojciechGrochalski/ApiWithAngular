@@ -1,36 +1,38 @@
 <div class="container">
-<h2>Register</h2>
-<flash-messages></flash-messages>
+  <div class="wrapper fadeInDown">
+    <div id="formContent">
+      <h2 class="active"> Zarejestruj się </h2>
+
+      <flash-messages></flash-messages>
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
-    <label attr.for="firstName"> Name</label>
-    <input type="text" formControlName="Name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Name.errors }" />
+    <input type="text" formControlName="Name" placeholder="Nazwa" class="fadeIn second" [ngClass]="{ 'is-invalid': submitted && f.Name.errors }" />
     <div *ngIf="submitted && f.Name.errors" class="invalid-feedback">
       <div *ngIf="f.Name.errors.required"> Name is required</div>
     </div>
   </div>
   <div class="form-group">
-    <label attr.for="Email">Email>
-      <input type="text" formControlName="Email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Email.errors }" />
-    </label>
+      <input type="text" formControlName="Email" placeholder="E-mail" class="fadeIn third" [ngClass]="{ 'is-invalid': submitted && f.Email.errors }" />
     <div *ngIf="submitted && f.Email.errors" class="invalid-feedback">
       <div *ngIf="f.Email.errors.required">Email is required</div>
     </div>
   </div>
   <div class="form-group">
-    <label attr.for="pass">Password</label>
-    <input type="password" formControlName="Pass" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Pass.errors }" />
+
+    <input type="password" formControlName="Pass" placeholder="Hasło" class="fadeIn fourth" [ngClass]="{ 'is-invalid': submitted && f.Pass.errors }" />
     <div *ngIf="submitted && f.Pass.errors" class="invalid-feedback">
       <div *ngIf="f.Pass.errors.required">Password is required</div>
       <div *ngIf="f.Pass.errors.minlength">Password must be at least 6 characters</div>
     </div>
   </div>
   <div class="form-group">
-    <button [disabled]="loading" class="btn btn-primary">
+    <input [disabled]="loading" type="submit"  class="fadeIn fifth " value="Zarejestruj">
       <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-      Register
-    </button>
-    <a routerLink="/login" class="btn btn-link">Cancel</a>
+
+
+<!--    <a routerLink="/login" class="btn btn-link">Cancel</a>-->
   </div>
 </form>
+</div>
+  </div>
 </div>
